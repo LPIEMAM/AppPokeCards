@@ -29,18 +29,23 @@ import com.squareup.picasso.Picasso
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
-    lateinit var callbackManager: CallbackManager
-    lateinit var mGoogleSignInClient: GoogleSignInClient
+
+
     lateinit var tvLoggedInUserName: TextView
     lateinit var ivLoggedInUserPicture: ImageView
-    var isUserLoggedOnGoogle = false
-    var isUserLoggedOnFacebook = false
-    lateinit var signInButton: GoogleSignInButton
     lateinit var texteEntrezId: EditText
     lateinit var buttonValidate: Button
     lateinit var tvUserName: TextView
     lateinit var loggedUser: UserInfo
+
+    lateinit var callbackManager: CallbackManager
+
+    lateinit var googleSignInButton: GoogleSignInButton
+    lateinit var mGoogleSignInClient: GoogleSignInClient
+    var isUserLoggedOnGoogle = false
+
     lateinit var facebook_login_button: LoginButton
+    var isUserLoggedOnFacebook = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,21 +57,21 @@ class MainActivity : AppCompatActivity() {
         texteEntrezId = findViewById(R.id.texteEntrerId)
         buttonValidate = findViewById(R.id.boutonValiderId)
         tvUserName = findViewById(R.id.tvPseudoUser)
-        signInButton = findViewById(R.id.sign_in_button)
+        googleSignInButton = findViewById(R.id.sign_in_button)
         facebook_login_button = findViewById(R.id.login_button);
 
         loggedUser = UserInfo()
 
-        signInButton.setOnClickListener {
+        googleSignInButton.setOnClickListener {
             Log.d(TAG, "onClick: Test")
             if (!isUserLoggedOnGoogle && !isUserLoggedOnFacebook) {
                 signIn()
-                signInButton.text = "Sign Out"
+                googleSignInButton.text = "Sign Out"
                 LoginManager.getInstance().unregisterCallback(callbackManager)
                 isUserLoggedOnGoogle = true
             } else if (!isUserLoggedOnFacebook) {
                 signOut()
-                signInButton.text = "Sign In"
+                googleSignInButton.text = "Sign In"
                 isUserLoggedOnGoogle = false
             }
         }
@@ -186,7 +191,7 @@ class MainActivity : AppCompatActivity() {
             Picasso.get().load(loggedUser.googlePhoto).into(ivLoggedInUserPicture)
             isUserLoggedOnGoogle = true
 
-            signInButton!!.text = "Sign Out"
+            googleSignInButton!!.text = "Sign Out"
         }
 
     }
