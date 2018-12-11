@@ -31,11 +31,7 @@ import java.util.*
 class MainActivity : AppCompatActivity() {
 
 
-    lateinit var tvLoggedInUserName: TextView
-    lateinit var ivLoggedInUserPicture: ImageView
-    lateinit var texteEntrezId: EditText
     lateinit var buttonValidate: Button
-    lateinit var tvUserName: TextView
     lateinit var loggedUser: UserInfo
 
     lateinit var callbackManager: CallbackManager
@@ -51,14 +47,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        tvLoggedInUserName = findViewById(R.id.tvLoggedInUserName)
-        ivLoggedInUserPicture = findViewById(R.id.ivLoggedInUserPicture)
-
-        texteEntrezId = findViewById(R.id.texteEntrerId)
         buttonValidate = findViewById(R.id.boutonValiderId)
-        tvUserName = findViewById(R.id.tvPseudoUser)
         googleSignInButton = findViewById(R.id.sign_in_button)
-        facebook_login_button = findViewById(R.id.login_button);
+        facebook_login_button = findViewById(R.id.login_button)
 
         loggedUser = UserInfo()
 
@@ -88,9 +79,9 @@ class MainActivity : AppCompatActivity() {
 
         facebook_login_button.setReadPermissions(Arrays.asList("user_status"))
 
-        LoginManager.getInstance().logInWithReadPermissions(
-                this,
-                Arrays.asList("email"))
+//        LoginManager.getInstance().logInWithReadPermissions(
+//                this,
+//                Arrays.asList("email"))
 
         LoginManager.getInstance().registerCallback(callbackManager,
                 object : FacebookCallback<LoginResult> {
@@ -108,8 +99,7 @@ class MainActivity : AppCompatActivity() {
                                 loggedUser.facebookPhoto = infos.getJSONObject("picture").getJSONObject("data").getString("url")
 
                                 if (infos.has("id")) {
-                                    tvLoggedInUserName.setText(loggedUser.firstName + " " + loggedUser.lastName)
-                                    Picasso.get().load(loggedUser.facebookPhoto).into(ivLoggedInUserPicture)
+                                    Log.d("TAG", loggedUser.firstName + " " + loggedUser.lastName)
                                 } else {
                                     Log.e("FBLOGIN_FAILD", infos.toString())
                                 }
@@ -161,8 +151,7 @@ class MainActivity : AppCompatActivity() {
                     loggedUser.facebookPhoto = infos.getJSONObject("picture").getJSONObject("data").getString("url")
 
                     if (infos.has("id")) {
-                        tvLoggedInUserName.setText(loggedUser.firstName + " " + loggedUser.lastName)
-                        Picasso.get().load(loggedUser.facebookPhoto).into(ivLoggedInUserPicture)
+                        Log.d("TAG", loggedUser.firstName + " " + loggedUser.lastName)
                     } else {
                         Log.e("FBLOGIN_FAILD", infos.toString())
                     }
@@ -187,8 +176,8 @@ class MainActivity : AppCompatActivity() {
             loggedUser.eMail = googleAccount.email
             loggedUser.googleId = googleAccount.id
             loggedUser.googlePhoto = googleAccount.photoUrl.toString()
-            tvLoggedInUserName.text = loggedUser.firstName + " " + loggedUser.lastName
-            Picasso.get().load(loggedUser.googlePhoto).into(ivLoggedInUserPicture)
+
+            Log.d("TAG", loggedUser.firstName + " " + loggedUser.lastName)
             isUserLoggedOnGoogle = true
 
             googleSignInButton!!.text = "Sign Out"
@@ -225,8 +214,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun signOut() {
         mGoogleSignInClient.signOut().addOnCompleteListener(this) {
-            tvLoggedInUserName.text = ""
-            Picasso.get().load("@drawable/ic_launcher_background").into(ivLoggedInUserPicture)
+            Log.d("TAG", "Sign Out Google")
         }
     }
 
@@ -241,9 +229,7 @@ class MainActivity : AppCompatActivity() {
                 val personEmail = account.email
                 val personId = account.id
                 val personPhoto = account.photoUrl
-                tvLoggedInUserName.text = personName
-                Picasso.get().load(personPhoto).into(ivLoggedInUserPicture)
-                Log.d(TAG, "handleSignInResult: " + personName!!)
+                Log.d("TAG", loggedUser.firstName + " " + loggedUser.lastName)
             }
 
         } catch (e: ApiException) {
@@ -257,14 +243,15 @@ class MainActivity : AppCompatActivity() {
     fun onClick(view: View) {
         when (view.id) {
             R.id.boutonValiderId -> {
-                val user = UserPokeCards(Integer.parseInt(texteEntrezId.text.toString()), this)
-                user.start()
+                //val user = UserPokeCards(Integer.parseInt(texteEntrezId.text.toString()), this)
+                //user.start()
             }
         }
     }
 
     fun callBack(user: UserInfo) {
-        tvUserName.text = user.pseudo
+
+        Log.d("TAG", user.pseudo)
     }
 
     companion object {
