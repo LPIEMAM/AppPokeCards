@@ -4,7 +4,6 @@ import android.os.Build
 import android.support.annotation.RequiresApi
 import android.util.Log
 
-import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 
 import retrofit2.Call
@@ -14,7 +13,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.Serializable
 
-class UserPokeCards(private val userId: Int, private val mainActivity: MainActivity) : Callback<List<UserInfo>>, Serializable     {
+class UserPokeCards(private val userId: Int, private val loginActivity: LoginActivity) : Callback<List<UserInfo>>, Serializable     {
 
     val TAG = "Client"
     val BASE_URL = "http://10.0.2.2:8888/"
@@ -41,7 +40,7 @@ class UserPokeCards(private val userId: Int, private val mainActivity: MainActiv
     override fun onResponse(call: Call<List<UserInfo>>, response: Response<List<UserInfo>>) {
         if (response.isSuccessful) {
             val infoUserList = response.body()
-            mainActivity.callBack(infoUserList!![0]!!)
+            loginActivity.callBack(infoUserList!![0]!!)
             for (userInfo in infoUserList) {
                 Log.d(TAG, "onResponse:  " + userInfo.pseudo!!)
             }

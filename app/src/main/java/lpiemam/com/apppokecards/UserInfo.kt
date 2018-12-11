@@ -1,5 +1,7 @@
 package lpiemam.com.apppokecards
 
+import java.io.Serializable
+
 class UserInfo(var idUser: Int? = null,
                var pseudo: String? = null,
                var passwd: String? = null,
@@ -11,7 +13,7 @@ class UserInfo(var idUser: Int? = null,
                var facebookPhoto: String? = null,
                var googlePhoto: String? = null
 
-) {
+) : Serializable {
     override fun toString(): String {
         return "UserInfo(idUser=$idUser, pseudo=$pseudo, passwd=$passwd, eMail=$eMail, facebookId=$facebookId, googleId=$googleId, firstName=$firstName, lastName=$lastName, facebookPhoto=$facebookPhoto, googlePhoto=$googlePhoto)"
     }
