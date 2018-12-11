@@ -1,7 +1,6 @@
 package lpiemam.com.apppokecards
 
 import android.content.Intent
-import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -16,89 +15,48 @@ import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
 import com.facebook.GraphRequest
-import com.facebook.GraphResponse
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
+import com.facebook.login.widget.LoginButton
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.shobhitpuri.custombuttons.GoogleSignInButton
 import com.squareup.picasso.Picasso
-
-import org.json.JSONException
-import org.json.JSONObject
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
     lateinit var callbackManager: CallbackManager
     lateinit var mGoogleSignInClient: GoogleSignInClient
-    lateinit var tvName: TextView
-    lateinit var ivImage: ImageView
+    lateinit var tvLoggedInUserName: TextView
+    lateinit var ivLoggedInUserPicture: ImageView
     var isUserLoggedOnGoogle = false
     var isUserLoggedOnFacebook = false
-    lateinit  var signInButton: GoogleSignInButton
+    lateinit var signInButton: GoogleSignInButton
     lateinit var texteEntrezId: EditText
     lateinit var buttonValidate: Button
     lateinit var tvUserName: TextView
+    lateinit var loggedUser: UserInfo
+    lateinit var facebook_login_button: LoginButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        tvName = findViewById(R.id.tvName)
-        ivImage = findViewById(R.id.ivImage)
+        tvLoggedInUserName = findViewById(R.id.tvLoggedInUserName)
+        ivLoggedInUserPicture = findViewById(R.id.ivLoggedInUserPicture)
 
         texteEntrezId = findViewById(R.id.texteEntrerId)
         buttonValidate = findViewById(R.id.boutonValiderId)
         tvUserName = findViewById(R.id.tvPseudoUser)
-
-        /** Facebook Configuration  */
-
-        val accessToken = AccessToken.getCurrentAccessToken()
-
-        val acct = GoogleSignIn.getLastSignedInAccount(this)
-
-        initLogIns(accessToken, acct)
-
-        callbackManager = CallbackManager.Factory.create()
-
-        LoginManager.getInstance().registerCallback(callbackManager,
-                object : FacebookCallback<LoginResult> {
-                    override fun onSuccess(loginResult: LoginResult) {
-                        val request = GraphRequest.newMeRequest(accessToken) { `object`, response ->
-                            try {
-                                tvName.text = `object`.getString("id")
-                                Picasso.get().load("https://graph.facebook.com/" + `object`.getString("id") + "/picture?type=large").into(ivImage)
-
-                            } catch (e: JSONException) {
-                                e.printStackTrace()
-                            }
-                        }
-                        isUserLoggedOnFacebook = true
-                    }
-
-                    override fun onCancel() {
-                        isUserLoggedOnFacebook = false
-                    }
-
-                    override fun onError(exception: FacebookException) {
-                        // App code
-                    }
-                })
-
-        LoginManager.getInstance().unregisterCallback(callbackManager)
-        /** End Facebook Configuration  */
-
-        // Configure sign-in to request the user's ID, email address, and basic
-        // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build()
-        // Build a GoogleSignInClient with the options specified by gso.
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
-        // Set the dimensions of the sign-in button.
         signInButton = findViewById(R.id.sign_in_button)
+        facebook_login_button = findViewById(R.id.login_button);
+
+        loggedUser = UserInfo()
+
         signInButton.setOnClickListener {
             Log.d(TAG, "onClick: Test")
             if (!isUserLoggedOnGoogle && !isUserLoggedOnFacebook) {
@@ -113,33 +71,122 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        /** Facebook Configuration  */
+
+        val accessToken = AccessToken.getCurrentAccessToken()
+
+        val acct = GoogleSignIn.getLastSignedInAccount(this)
+
+        initLogIns(accessToken, acct)
+
+        callbackManager = CallbackManager.Factory.create()
+
+        facebook_login_button.setReadPermissions(Arrays.asList("user_status"))
+
+        LoginManager.getInstance().logInWithReadPermissions(
+                this,
+                Arrays.asList("email"))
+
+        LoginManager.getInstance().registerCallback(callbackManager,
+                object : FacebookCallback<LoginResult> {
+                    override fun onSuccess(loginResult: LoginResult) {
+                        Log.d("FBLOGIN", loginResult.accessToken.token.toString())
+                        Log.d("FBLOGIN", loginResult.recentlyDeniedPermissions.toString())
+                        Log.d("FBLOGIN", loginResult.recentlyGrantedPermissions.toString())
+
+
+                        val request = GraphRequest.newMeRequest(loginResult.accessToken) { infos, response ->
+                            try {
+                                //here is the data that you want
+                                loggedUser.firstName = infos.getString("first_name")
+                                loggedUser.lastName = infos.getString("last_name")
+                                loggedUser.facebookPhoto = infos.getJSONObject("picture").getJSONObject("data").getString("url")
+
+                                if (infos.has("id")) {
+                                    tvLoggedInUserName.setText(loggedUser.firstName + " " + loggedUser.lastName)
+                                    Picasso.get().load(loggedUser.facebookPhoto).into(ivLoggedInUserPicture)
+                                } else {
+                                    Log.e("FBLOGIN_FAILD", infos.toString())
+                                }
+
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                                //dismissDialogLogin()
+                            }
+                        }
+
+                        val parameters = Bundle()
+                        parameters.putString("fields", "first_name,last_name,email,id,picture.type(large)")
+                        request.parameters = parameters
+                        request.executeAsync()
+
+                    }
+
+                    override fun onCancel() {
+                        Log.e("FBLOGIN_FAILD", "Cancel")
+                    }
+
+                    override fun onError(error: FacebookException) {
+                        Log.e("FBLOGIN_FAILD", "ERROR", error)
+                    }
+                })
+
+        //LoginManager.getInstance().unregisterCallback(callbackManager)
+        /** End Facebook Configuration  */
+
+        // Configure sign-in to request the user's ID, email address, and basic
+        // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build()
+        // Build a GoogleSignInClient with the options specified by gso.
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
+        // Set the dimensions of the sign-in button.
+
+
     }
 
-    private fun initLogIns(accessToken: AccessToken?, acct: GoogleSignInAccount?) {
+    private fun initLogIns(accessToken: AccessToken?, googleAccount: GoogleSignInAccount?) {
         if (accessToken != null && !accessToken.isExpired) {
-            val request = GraphRequest.newMeRequest(accessToken) { `object`, response ->
-                try {
-                    tvName.text = `object`.getString("id")
-                    Picasso.get().load("https://graph.facebook.com/" + `object`.getString("id") + "/picture?type=large").into(ivImage)
+            Log.d("FBLOGIN", accessToken.token.toString())
 
-                } catch (e: JSONException) {
+            val request = GraphRequest.newMeRequest(accessToken) { infos, response ->
+                try {
+                    //here is the data that you want
+                    loggedUser.firstName = infos.getString("first_name")
+                    loggedUser.lastName = infos.getString("last_name")
+                    loggedUser.facebookPhoto = infos.getJSONObject("picture").getJSONObject("data").getString("url")
+
+                    if (infos.has("id")) {
+                        tvLoggedInUserName.setText(loggedUser.firstName + " " + loggedUser.lastName)
+                        Picasso.get().load(loggedUser.facebookPhoto).into(ivLoggedInUserPicture)
+                    } else {
+                        Log.e("FBLOGIN_FAILD", infos.toString())
+                    }
+
+                } catch (e: Exception) {
                     e.printStackTrace()
+                    //dismissDialogLogin()
                 }
             }
-            isUserLoggedOnFacebook = true
-        } else if (acct != null) {
 
-            val personName = acct.displayName
-            val personGivenName = acct.givenName
-            val personFamilyName = acct.familyName
-            val personEmail = acct.email
-            val personId = acct.id
-            val personPhoto = acct.photoUrl
-            tvName.text = personName
-            Picasso.get().load(personPhoto).into(ivImage)
+            val parameters = Bundle()
+            parameters.putString("fields", "first_name,last_name,email,id,picture.type(large)")
+            request.parameters = parameters
+            request.executeAsync()
+
+            isUserLoggedOnFacebook = true
+        } else if (googleAccount != null) {
+
+
+            loggedUser.firstName = googleAccount.givenName
+            loggedUser.lastName = googleAccount.familyName
+            loggedUser.eMail = googleAccount.email
+            loggedUser.googleId = googleAccount.id
+            loggedUser.googlePhoto = googleAccount.photoUrl.toString()
+            tvLoggedInUserName.text = loggedUser.firstName + " " + loggedUser.lastName
+            Picasso.get().load(loggedUser.googlePhoto).into(ivLoggedInUserPicture)
             isUserLoggedOnGoogle = true
 
-            signInButton.text = "Sign Out"
+            signInButton!!.text = "Sign Out"
         }
 
     }
@@ -173,8 +220,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun signOut() {
         mGoogleSignInClient.signOut().addOnCompleteListener(this) {
-            tvName.text = ""
-            Picasso.get().load("@drawable/ic_launcher_background").into(ivImage)
+            tvLoggedInUserName.text = ""
+            Picasso.get().load("@drawable/ic_launcher_background").into(ivLoggedInUserPicture)
         }
     }
 
@@ -189,8 +236,8 @@ class MainActivity : AppCompatActivity() {
                 val personEmail = account.email
                 val personId = account.id
                 val personPhoto = account.photoUrl
-                tvName.text = personName
-                Picasso.get().load(personPhoto).into(ivImage)
+                tvLoggedInUserName.text = personName
+                Picasso.get().load(personPhoto).into(ivLoggedInUserPicture)
                 Log.d(TAG, "handleSignInResult: " + personName!!)
             }
 
@@ -211,8 +258,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun callBack(idUser: String) {
-        tvUserName.text = idUser
+    fun callBack(user: UserInfo) {
+        tvUserName.text = user.pseudo
     }
 
     companion object {
