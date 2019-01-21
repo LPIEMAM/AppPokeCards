@@ -1,6 +1,7 @@
 package lpiemam.com.apppokecards.model
 
-class Card(private val pokemonName : String, private val pokedexNumber : Int, private val url : String, private val type : String, private val description : String) {
+class Card(val pokemonName : String, val pokedexNumber : Int, val url : String, val type : String, val description : String) {
+
     val version : String = when(pokedexNumber) {
         in 1..151 -> "Première génération"
         in 152..251 -> "Seconde génération"
