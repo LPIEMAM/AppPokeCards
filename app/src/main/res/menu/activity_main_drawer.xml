@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:showIn="navigation_view">
+
+    <item
+            android:id="@+id/collection"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Collection"/>
+    <item
+            android:id="@+id/shop"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Shop"/>
+    <item
+            android:id="@+id/quizz"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Quizz"/>
+    <item
+            android:id="@+id/achievements"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Achievements"/>
+    <item
+            android:id="@+id/allCards"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="All Cards"/>
+
+</menu>
