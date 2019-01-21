@@ -10,6 +10,8 @@ import android.view.Menu
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
+import lpiemam.com.apppokecards.model.Card
+import lpiemam.com.apppokecards.model.User
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -17,6 +19,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
+
+        initializeData()
 
         val toggle = ActionBarDrawerToggle(
             this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close
@@ -97,5 +101,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    fun initializeData() {
+        val siam = User("Annabelle", "Braye", "Siam", "annabelle.braye@gmail.com", "")
+        val pikachuCard = Card("Pikachu", 25, "https://www.google.com/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwjexNqog__fAhWz5OAKHaKlBWkQjRx6BAgBEAU&url=https%3A%2F%2Fwww.amazon.fr%2Fcarte-pikachu-Cartes-%25C3%25A0-collectionner-Pok%25C3%25A9mon%2Fs%3Fie%3DUTF8%26page%3D1%26rh%3Dn%253A363600031%252Ck%253Acarte%2520pikachu%252Cp_n_featured_character_browse-bin%253A374090011&psig=AOvVaw0epwHCYCz2OQBqgN_yqrhD&ust=1548165297395426", "Electrik", "Pikachu est surnommé Souris électrique...")
+        val miewCard = Card("Mew", 150, "https://www.google.com/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwiSi7bDg__fAhXN6eAKHXAnCGYQjRx6BAgBEAU&url=https%3A%2F%2Fwww.pinterest.fr%2Fpin%2F337418197061977264%2F&psig=AOvVaw2C9-l6ZHAxbIvK3NGLLK2P&ust=1548165332119194", "Psy", "Mais qu'il est mignon ce pokemon !")
+        val hericendreCard = Card("Héricendre", 155, "https://www.google.com/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwjIo82lhP_fAhVD6uAKHQOmAsEQjRx6BAgBEAU&url=https%3A%2F%2Fwww.pokepedia.fr%2FH%25C3%25A9ricendre_(EX_Forces_Cach%25C3%25A9es_54)&psig=AOvVaw3ycyyP7nwEdcVwkMj8o3c5&ust=1548165560939302", "Feu", "Lui aussi il est chou...")
+        val goeliseCard = Card("Goélise", 278, "https://www.google.com/url?sa=i&source=images&cd=&ved=2ahUKEwiB6_jlhP_fAhWdD2MBHT3lDy4QjRx6BAgBEAU&url=https%3A%2F%2Fwww.coleka.com%2Ffr%2Fcartes-de-collection%2Fcartes-pokemon%2Fpokemon-xy%2Fpokemon-xy-ciel-rugissant%2Fgoelise_i8576&psig=AOvVaw0anVzxC--dukhqIDh_9Vca&ust=1548165697519755", "Feu", "Je veux mon shiny !")
+        val corbossCard = Card("Corboss", 430, "https://www.google.com/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwjIo82lhP_fAhVD6uAKHQOmAsEQjRx6BAgBEAU&url=https%3A%2F%2Fwww.pokepedia.fr%2FH%25C3%25A9ricendre_(EX_Forces_Cach%25C3%25A9es_54)&psig=AOvVaw3ycyyP7nwEdcVwkMj8o3c5&ust=1548165560939302", "Feu", "Lui je l'ai en shiny =D")
+
+        siam.userCardsList.add(pikachuCard)
+        siam.userCardsList.add(miewCard)
+        siam.userCardsList.add(hericendreCard)
+        siam.userCardsList.add(goeliseCard)
+        siam.userCardsList.add(corbossCard)
     }
 }
