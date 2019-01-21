@@ -4,6 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/AppPokeCards.iml" filepath="$PROJECT_DIR$/AppPokeCards.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/carousel/carousel.iml" filepath="$PROJECT_DIR$/carousel/carousel.iml" />
+      <module fileurl="file://$PROJECT_DIR$/carousel-debug/carousel-debug.iml" filepath="$PROJECT_DIR$/carousel-debug/carousel-debug.iml" />
     </modules>
   </component>
 </project>

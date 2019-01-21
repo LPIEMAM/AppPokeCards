@@ -87,10 +87,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 //                .commit()
             }
             R.id.menuItemAchievements -> {
-//                supportFragmentManager
-//                    .beginTransaction()
-//                    .add(R.id.mainActivityContainer, AchievementsFragment.newInstance(), "collectionFragment")
-//                    .commit()
+                supportFragmentManager
+                    .beginTransaction()
+                    .add(R.id.mainActivityContainer, UserCardDetailFragment.newInstance(), "collectionFragment")
+                    .commit()
             }
             R.id.menuItemAllCards -> {
                 supportFragmentManager
@@ -239,7 +239,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 
         for(card in cardsList) {
-            Toast.makeText(this, card.version, Toast.LENGTH_LONG).show()
             println("carte " + card.pokemonName + " : " + card.version)
         }
     }
