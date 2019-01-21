@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.menuItemCollection -> {
                 supportFragmentManager
                     .beginTransaction()
-                    .add(R.id.mainActivityContainer, CollectionFragment.newInstance(), "collectionFragment")
+                    .replace(R.id.mainActivityContainer, CollectionFragment.newInstance(), "collectionFragment")
                     .commit()
             }
             R.id.menuItemShop -> {
@@ -90,7 +90,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.menuItemAllCards -> {
                 supportFragmentManager
                     .beginTransaction()
-                    .add(R.id.mainActivityContainer, AllCardsFragment.newInstance(), "allCardsFragment")
+                    .replace(R.id.mainActivityContainer, AllCardsFragment.newInstance(), "allCardsFragment")
                     .commit()
             }
         }
