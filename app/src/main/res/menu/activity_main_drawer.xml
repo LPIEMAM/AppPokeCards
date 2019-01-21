@@ -4,23 +4,23 @@
       tools:showIn="navigation_view">
 
     <item
-            android:id="@+id/collection"
+            android:id="@+id/menuItemCollection"
             android:icon="@drawable/ic_menu_camera"
             android:title="Collection"/>
     <item
-            android:id="@+id/shop"
+            android:id="@+id/menuItemShop"
             android:icon="@drawable/ic_menu_gallery"
             android:title="Shop"/>
     <item
-            android:id="@+id/quizz"
+            android:id="@+id/menuItemQuizz"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="Quizz"/>
     <item
-            android:id="@+id/achievements"
+            android:id="@+id/menuItemAchievements"
             android:icon="@drawable/ic_menu_manage"
             android:title="Achievements"/>
     <item
-            android:id="@+id/allCards"
+            android:id="@+id/menuItemAllCards"
             android:icon="@drawable/ic_menu_manage"
             android:title="All Cards"/>
 

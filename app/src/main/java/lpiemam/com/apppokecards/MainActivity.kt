@@ -24,6 +24,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
 
+
+        if (savedInstanceState == null) {
+            supportFragmentManager
+                .beginTransaction()
+                .add(R.id.mainActivityContainer, CollectionFragment.newInstance(), "collectionFragment")
+                .commit()
+        }
+
+
         nav_view.setNavigationItemSelectedListener(this)
     }
 
@@ -54,20 +63,35 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         when (item.itemId) {
-            R.id.collection -> {
-                // Handle the camera action
+            R.id.menuItemCollection -> {
+                supportFragmentManager
+                    .beginTransaction()
+                    .add(R.id.mainActivityContainer, CollectionFragment.newInstance(), "collectionFragment")
+                    .commit()
             }
-            R.id.shop -> {
-
+            R.id.menuItemShop -> {
+//                supportFragmentManager
+//                .beginTransaction()
+//                .add(R.id.mainActivityContainer, ShopFragment.newInstance(), "collectionFragment")
+//                .commit()
             }
-            R.id.quizz -> {
-
+            R.id.menuItemQuizz -> {
+//                supportFragmentManager
+//                .beginTransaction()
+//                .add(R.id.mainActivityContainer, QuizzFragment.newInstance(), "collectionFragment")
+//                .commit()
             }
-            R.id.achievements -> {
-
+            R.id.menuItemAchievements -> {
+//                supportFragmentManager
+//                    .beginTransaction()
+//                    .add(R.id.mainActivityContainer, AchievementsFragment.newInstance(), "collectionFragment")
+//                    .commit()
             }
-            R.id.allCards -> {
-
+            R.id.menuItemAllCards -> {
+                supportFragmentManager
+                    .beginTransaction()
+                    .add(R.id.mainActivityContainer, AllCardsFragment.newInstance(), "allCardsFragment")
+                    .commit()
             }
         }
 

@@ -19,6 +19,13 @@ private const val ARG_PARAM2 = "param2"
  */
 class AllCardsFragment : Fragment() {
 
+    companion object {
+
+        fun newInstance(): AllCardsFragment {
+            return AllCardsFragment()
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
