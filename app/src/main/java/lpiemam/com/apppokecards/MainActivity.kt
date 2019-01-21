@@ -3,6 +3,7 @@ package lpiemam.com.apppokecards
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.design.widget.NavigationView
+import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
@@ -14,12 +15,20 @@ import kotlinx.android.synthetic.main.app_bar_main.*
 import lpiemam.com.apppokecards.model.Card
 import lpiemam.com.apppokecards.model.User
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+
+    lateinit var allCardsList: ArrayList<Card>
+    lateinit var userSiam : User
+    lateinit var collectionFragment : Fragment
+    lateinit var allCardsFragment : Fragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
+
+        collectionFragment = CollectionFragment()
+        allCardsFragment = AllCardsFragment()
 
         initializeData()
 
@@ -105,7 +114,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     fun initializeData() {
-        val siam = User("Annabelle", "Braye", "Siam", "annabelle.braye@gmail.com", "")
+        userSiam = User("Annabelle", "Braye", "Siam", "annabelle.braye@gmail.com", "")
         val pikachuCard = Card(
             "Pikachu",
             25,
@@ -234,12 +243,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             "Lui je l'ai en shiny =D"
         )
 
-        val cardsList = arrayListOf<Card>(dracaufeCard, arckoCard, rozboutonCard, tenefixCard, tiploufCard, tortipoussCard, tortankCard, ouisticramCard, pikachuCard, poussifeuCard, florizarreCard, germignonCard, gobouCard, goeliseCard, hericendreCard, kaiminusCard, miewCard, corbossCard)
-        siam.userCardsList = arrayListOf(pikachuCard, miewCard, hericendreCard, goeliseCard, corbossCard, tortankCard, dracaufeCard)
+        allCardsList = arrayListOf<Card>(dracaufeCard, arckoCard, rozboutonCard, tenefixCard, tiploufCard, tortipoussCard, tortankCard, ouisticramCard, pikachuCard, poussifeuCard, florizarreCard, germignonCard, gobouCard, goeliseCard, hericendreCard, kaiminusCard, miewCard, corbossCard)
+        userSiam.userCardsList = arrayListOf(pikachuCard, miewCard, hericendreCard, goeliseCard, corbossCard, tortankCard, dracaufeCard)
 
 
-        for(card in cardsList) {
-            Toast.makeText(this, card.version, Toast.LENGTH_LONG).show()
+        for(card in allCardsList!!) {
             println("carte " + card.pokemonName + " : " + card.version)
         }
     }
