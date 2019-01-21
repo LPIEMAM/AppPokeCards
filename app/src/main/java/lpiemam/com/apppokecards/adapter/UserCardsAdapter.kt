@@ -41,7 +41,7 @@ class UserCardsAdapter(val userCardsList: ArrayList<Card>) : RecyclerView.Adapte
 
                         // name match condition. this might differ depending on your requirement
                         // here we are looking for name or phone number match
-                        if (card.pokemonName.toLowerCase().contains(charString.toLowerCase())) {
+                        if (card.name.toLowerCase().contains(charString.toLowerCase())) {
                             filteredList.add(card)
                         }
                     }

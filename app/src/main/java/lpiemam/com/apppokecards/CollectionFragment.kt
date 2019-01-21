@@ -14,7 +14,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import kotlinx.android.synthetic.main.fragment_collection.*
+import kotlinx.android.synthetic.main.rv_row_collection.*
 import lpiemam.com.apppokecards.adapter.UserCardsAdapter
+import lpiemam.com.apppokecards.model.Card
+import lpiemam.com.apppokecards.model.Pokemon
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -91,7 +94,13 @@ class CollectionFragment : Fragment() {
     }
 
     private fun setUpRecyclerView() {
-        userCardsAdapter = UserCardsAdapter(mainActivity.userSiam.userCardsList)
+        val cardList = ArrayList<Card>()
+        for(pokemon in mainActivity.userSiam.userPokemonList) {
+            cardList.addAll(pokemon.pokemonCardsList)
+        }
+
+        //Peut-être passer une map pour avoir le nom du pokemon pour le filtre ?
+        userCardsAdapter = UserCardsAdapter(cardList)
 
         collectionRecyclerView!!.layoutManager = GridLayoutManager(context, 4)
         collectionRecyclerView!!.adapter = userCardsAdapter
