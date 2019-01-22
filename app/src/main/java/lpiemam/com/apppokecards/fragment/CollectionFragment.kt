@@ -2,6 +2,7 @@ package lpiemam.com.apppokecards.fragment
 
 
 import android.os.Bundle
+import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
@@ -10,6 +11,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import kotlinx.android.synthetic.main.fragment_collection.*
 import lpiemam.com.apppokecards.MainActivity
 import lpiemam.com.apppokecards.R
@@ -31,7 +33,8 @@ class CollectionFragment : Fragment() {
 
     private lateinit var mainActivity : MainActivity
     private var userCardsAdapter: UserCardsAdapter? = null
-    //private lateinit var addCardButton : Button
+    private lateinit var addNewCardFragment : AddNewCardFragment
+    private lateinit var addCardButton : FloatingActionButton
 
     companion object {
 
@@ -48,10 +51,9 @@ class CollectionFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_collection, container, false)
 
         mainActivity = (context as MainActivity?)!!
-        setHasOptionsMenu(true)
-        //addCardButton = view.findViewById(R.id.buttonAddCard)
 
-        //addCardButton.setOnClickListener(View.OnClickListener { mainActivity.replaceFragment(allCardsFragment) })
+        setHasOptionsMenu(true)
+
 
         // Inflate the layout for this fragment
         return view
@@ -59,9 +61,10 @@ class CollectionFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        addNewCardFragment = mainActivity.addNewCardFragment as AddNewCardFragment
+
         floatingActionButtonAddPokemon.setOnClickListener { view ->
-            Snackbar.make(view, "Add a new Card", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+            mainActivity.replaceFragment(addNewCardFragment)
         }
 
         collectionSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {

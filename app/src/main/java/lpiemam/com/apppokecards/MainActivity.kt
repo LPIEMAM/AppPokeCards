@@ -10,6 +10,7 @@ import android.view.Menu
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
+import lpiemam.com.apppokecards.fragment.AddNewCardFragment
 import lpiemam.com.apppokecards.fragment.AllCardsFragment
 import lpiemam.com.apppokecards.fragment.CollectionFragment
 import lpiemam.com.apppokecards.model.Card
@@ -23,7 +24,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     lateinit var userSiam : User
     lateinit var collectionFragment : Fragment
     lateinit var allCardsFragment : Fragment
+    lateinit var addNewCardFragment : Fragment
     lateinit var allCardsUserNeeds: ArrayList<Card>
+    private var wasInitialized = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,6 +36,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         collectionFragment = CollectionFragment()
         allCardsFragment = AllCardsFragment()
+        addNewCardFragment = AddNewCardFragment()
 
         initializeData()
 
@@ -115,6 +119,26 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    // Replace current Fragment with the destination Fragment.
+    fun replaceFragment(destFragment: Fragment) {
+        // First get FragmentManager object.
+        val fragmentManager = this.supportFragmentManager
+
+        // Begin Fragment transaction.
+        val fragmentTransaction = fragmentManager.beginTransaction()
+
+        // Replace the layout holder with the required Fragment object.
+        if (!wasInitialized) {
+            wasInitialized = true
+            fragmentTransaction.replace(R.id.mainActivityContainer, destFragment)
+        } else {
+            fragmentTransaction.replace(R.id.mainActivityContainer, destFragment)
+        }
+
+        // Commit the Fragment replace action.
+        fragmentTransaction.commit()
     }
 
     fun initializeData() {
