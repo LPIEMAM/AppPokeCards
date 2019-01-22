@@ -3,6 +3,7 @@ package lpiemam.com.apppokecards
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.design.widget.NavigationView
+import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
@@ -12,14 +13,24 @@ import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import lpiemam.com.apppokecards.model.Card
+import lpiemam.com.apppokecards.model.Pokemon
 import lpiemam.com.apppokecards.model.User
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+
+    lateinit var allCardsList: List<Card>
+    lateinit var allPokemonList : List<Pokemon>
+    lateinit var userSiam : User
+    lateinit var collectionFragment : Fragment
+    lateinit var allCardsFragment : Fragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
+
+        collectionFragment = CollectionFragment()
+        allCardsFragment = AllCardsFragment()
 
         initializeData()
 
@@ -105,141 +116,199 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     fun initializeData() {
-        val siam = User("Annabelle", "Braye", "Siam", "annabelle.braye@gmail.com", "")
+        userSiam = User("Annabelle", "Braye", "Siam", "annabelle.braye@gmail.com", "")
         val pikachuCard = Card(
-            "Pikachu",
-            25,
-            "https://www.google.com/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwjexNqog__fAhWz5OAKHaKlBWkQjRx6BAgBEAU&url=https%3A%2F%2Fwww.amazon.fr%2Fcarte-pikachu-Cartes-%25C3%25A0-collectionner-Pok%25C3%25A9mon%2Fs%3Fie%3DUTF8%26page%3D1%26rh%3Dn%253A363600031%252Ck%253Acarte%2520pikachu%252Cp_n_featured_character_browse-bin%253A374090011&psig=AOvVaw0epwHCYCz2OQBqgN_yqrhD&ust=1548165297395426",
-            "Electrik",
-            "Pikachu est surnommé Souris électrique..."
+                "Pikachu",
+                "https://cdn1.pokemoncarte.com/1589/carte-pokemon-ex-pikachu-ex-130-pv-xy-84.jpg",
+                "Pikachu est surnommé Souris électrique...",
+                "génération 1"
         )
-        val miewCard = Card(
-            "Mew",
-            150,
-            "https://www.google.com/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwiSi7bDg__fAhXN6eAKHXAnCGYQjRx6BAgBEAU&url=https%3A%2F%2Fwww.pinterest.fr%2Fpin%2F337418197061977264%2F&psig=AOvVaw2C9-l6ZHAxbIvK3NGLLK2P&ust=1548165332119194",
-            "Psy",
-            "Mais qu'il est mignon ce pokemon !"
+        val mewCard = Card(
+                "Mew",
+                "https://www.pokepedia.fr/images/thumb/0/06/Carte_Promo_Mew_Antique.png/250px-Carte_Promo_Mew_Antique.png",
+                "Mais qu'il est mignon ce pokemon !",
+                "génération 1"
         )
         val florizarreCard = Card(
             "Florizarre",
-            3,
-            "https://www.google.com/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwj_m77xif_fAhWiAGMBHYTTDN0QjRx6BAgBEAU&url=https%3A%2F%2Fwww.pokemon.com%2Ffr%2Fjcc-pokemon%2Fcartes-pokemon%2Fplatinum-series%2Fpl3%2F13%2F&psig=AOvVaw34B6QgYx8Q47F_ZUmNbI91&ust=1548167058814917",
-            "Plante",
-            "Raaaaaaah !"
+                "https://assets.pokemon.com/assets/cms2-fr-fr/img/cards/web/PL3/PL3_FR_13.png",
+                "Raaaaaaah !",
+                "génération 2"
         )
         val tortankCard = Card(
             "Tortank",
-            9,
-            "https://www.google.com/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwjz1ZmDiv_fAhVJ8OAKHcLwBPkQjRx6BAgBEAU&url=https%3A%2F%2Fwww.pokemon.com%2Ffr%2Fjcc-pokemon%2Fcartes-pokemon%2Fdiamond-pearl-series%2Fdp3%2F2%2F&psig=AOvVaw2pFdT7sKC-E528e4Me_X17&ust=1548167100847774",
-            "Eau",
-            "Taaaaaank !"
+            "https://assets.pokemon.com/assets/cms2-fr-fr/img/cards/web/DP3/DP3_FR_2.png",
+            "Taaaaaank !",
+            "génération 3"
         )
         val dracaufeCard = Card(
             "Dracaufeu",
-            6,
-            "https://www.google.com/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwi0xaqPiv_fAhWPlhQKHQxmBScQjRx6BAgBEAU&url=%2Furl%3Fsa%3Di%26source%3Dimages%26cd%3D%26ved%3D%26url%3Dhttps%253A%252F%252Fwww.amazon.fr%252Fcarte-Pok%2525C3%2525A9mon-108-Dracaufeu-Niv-76%252Fdp%252FB01NB1U8WQ%26psig%3DAOvVaw2OaYX0nNeHfFUV0-nqnZww%26ust%3D1548167122948881&psig=AOvVaw2OaYX0nNeHfFUV0-nqnZww&ust=1548167122948881",
-            "Feu",
-            "*Crache des flammes*"
+            "https://cdn1.pokemoncarte.com/1690/carte-pokemon-ex-carte-pokemon-ex-full-art-dracaufeu-ex-pv-180-xy121.jpg",
+            "*Crache des flammes*",
+                "génération 2"
         )
         val hericendreCard = Card(
             "Héricendre",
-            155,
-            "https://www.google.com/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwjIo82lhP_fAhVD6uAKHQOmAsEQjRx6BAgBEAU&url=https%3A%2F%2Fwww.pokepedia.fr%2FH%25C3%25A9ricendre_(EX_Forces_Cach%25C3%25A9es_54)&psig=AOvVaw3ycyyP7nwEdcVwkMj8o3c5&ust=1548165560939302",
-            "Feu",
-            "Lui aussi il est chou..."
+            "https://www.pokepedia.fr/images/thumb/0/04/Carte_L%27Appel_des_Légendes_55.png/250px-Carte_L%27Appel_des_Légendes_55.png",
+            "Lui aussi il est chou...",
+                "génération 5"
         )
         val germignonCard = Card(
             "Germignon",
-            152,
-            "https://www.google.com/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwiY1s_liv_fAhUR4OAKHfmzByIQjRx6BAgBEAU&url=https%3A%2F%2Fwww.pokemon.com%2Ffr%2Fjcc-pokemon%2Fcartes-pokemon%2Fhgss-series%2Fcol1%2F53%2F&psig=AOvVaw3943WOl_96Ou-HPOK-Dq6U&ust=1548167307843757",
-            "Plante",
-            "La peluche est choupi !"
+            "https://www.pokepedia.fr/images/3/37/Carte_HeartGold_SoulSilver_59.png",
+            "La peluche est choupi !",
+                "génération 4"
         )
         val kaiminusCard = Card(
             "Kaiminus",
-            158,
-            "https://www.google.com/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwj2_P70iv_fAhUKnhQKHZaPCxIQjRx6BAgBEAU&url=https%3A%2F%2Fwww.pokepedia.fr%2FKaiminus_(L%2527Appel_des_L%25C3%25A9gendes_74)&psig=AOvVaw04B-ZW7ezse8QGVvBY3q5l&ust=1548167340460726",
-            "Eau",
-            "IV 100 <3"
+            "https://assets.pokemon.com/assets/cms2-fr-fr/img/cards/web/XY4/XY4_FR_15.png",
+            "IV 100 <3",
+                "génération 5"
+        )
+        val mentaliCard = Card(
+                "Mentali",
+                "https://assets.pokemon.com/assets/cms2-fr-fr/img/cards/web/DP5/DP5_FR_18.png",
+                "Evolution d'évoli",
+                "génération 5"
+        )
+        val noctaliCard = Card(
+                "Noctali",
+                "https://images-na.ssl-images-amazon.com/images/I/A1jfIm67P-L._SY450_.jpg",
+                "Evolution d'évoli",
+                "génération 6"
         )
         val goeliseCard = Card(
             "Goélise",
-            278,
-            "https://www.google.com/url?sa=i&source=images&cd=&ved=2ahUKEwiB6_jlhP_fAhWdD2MBHT3lDy4QjRx6BAgBEAU&url=https%3A%2F%2Fwww.coleka.com%2Ffr%2Fcartes-de-collection%2Fcartes-pokemon%2Fpokemon-xy%2Fpokemon-xy-ciel-rugissant%2Fgoelise_i8576&psig=AOvVaw0anVzxC--dukhqIDh_9Vca&ust=1548165697519755",
-            "Vol, Eau",
-            "Je veux mon shiny !"
+            "https://www.coleka.com/media/item/20160416/pokemon-xy-ciel-rugissant-goelise-18-108.jpg",
+            "Je veux mon shiny !",
+                "génération 6"
         )
 
         val arckoCard = Card(
             "Arcko",
-            252,
-            "https://www.google.com/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwjiuu6zi__fAhXzDmMBHXlVBN4QjRx6BAgBEAU&url=https%3A%2F%2Fwww.pokemon.com%2Ffr%2Fjcc-pokemon%2Fcartes-pokemon%2Fxy-series%2Fxyp%2FXY36%2F&psig=AOvVaw2Ef1DiSo722Vl6sec2R0ek&ust=1548167471902814",
-            "Plante",
-            "Il s'y croit un peu là, non ?"
+            "https://assets.pokemon.com/assets/cms2-fr-fr/img/cards/web/XYP/XYP_FR_XY36.png",
+            "Il s'y croit un peu là, non ?",
+                "génération 7"
         )
         val poussifeuCard = Card(
             "Poussifeu",
-            255,
-            "https://www.google.com/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwi5kZvEi__fAhVw1eAKHaveDuoQjRx6BAgBEAU&url=https%3A%2F%2Fwww.pokemon.com%2Ffr%2Fjcc-pokemon%2Fcartes-pokemon%2Fxy-series%2Fxy5%2F25%2F&psig=AOvVaw1kjKO5rjzZbvPAhfLtOajE&ust=1548167506499756",
-            "Feu",
-            "Encore une mignonnerie !"
+            "https://www.pokepedia.fr/images/thumb/6/63/Carte_Platine_99.png/250px-Carte_Platine_99.png",
+            "Encore une mignonnerie !",
+                "génération 7"
         )
         val gobouCard = Card(
             "Gobou",
-            258,
-            "https://www.google.com/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwjMzbnRi__fAhV18OAKHdjTAkkQjRx6BAgBEAU&url=https%3A%2F%2Fwww.pokepedia.fr%2FGobou_(Promo_Nintendo_010)&psig=AOvVaw36l7sS1boZMx5j4sOfFmyz&ust=1548167533634543",
-            "Eau",
-            "Blurp Blurp..."
+            "https://www.pokepedia.fr/images/3/37/Carte_Promo_XY_XY38.png",
+            "Blurp Blurp...",
+                "génération 7"
         )
         val tenefixCard = Card(
             "Ténéfix",
-            302,
-            "https://www.google.com/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwjCl_eWjf_fAhVSA2MBHXSeCxEQjRx6BAgBEAU&url=%2Furl%3Fsa%3Di%26source%3Dimages%26cd%3D%26ved%3D%26url%3Dhttps%253A%252F%252Fwww.pokepedia.fr%252FT%2525C3%2525A9n%2525C3%2525A9fix_(XY_68)%26psig%3DAOvVaw1D7AYPPtHyU2iSDNrqcpec%26ust%3D1548167941126265&psig=AOvVaw1D7AYPPtHyU2iSDNrqcpec&ust=1548167941126265",
-            "Spectre, Ténèbres",
-            "Quelque chose en nous de Ténéfix..."
+            "https://i.ebayimg.com/images/g/zEgAAOSwgQ9V1d9b/s-l300.jpg",
+            "Quelque chose en nous de Ténéfix...",
+                "génération 8"
         )
         val tortipoussCard = Card(
             "Tortipouss",
-            387,
-            "https://www.google.com/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwi69ennjf_fAhWOERQKHeuqC_AQjRx6BAgBEAU&url=https%3A%2F%2Fwww.pokepedia.fr%2FTortipouss_(Promo_DP_01)&psig=AOvVaw1g7OpfyhVCUAxEkn-sCGLC&ust=1548168118363163",
-            "Plante",
-            "Choupinou"
+            "https://www.pokepedia.fr/images/thumb/e/e1/Carte_Promo_DP_DP01.png/250px-Carte_Promo_DP_DP01.png",
+            "Choupinou",
+                "génération 8"
         )
         val ouisticramCard = Card(
             "Ouisticram",
-            390,
-            "https://www.google.com/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwic55KGjv_fAhUMmBQKHZCBD_UQjRx6BAgBEAU&url=https%3A%2F%2Fwww.pokepedia.fr%2FOuisticram_(Platine_70)&psig=AOvVaw2dIK5QTggAjezyjEREKX7H&ust=1548168179833582",
-            "Feu",
-            "Encore un pokémon inutile..."
+            "https://www.pokepedia.fr/images/thumb/2/21/Carte_Platine_Vainqueurs_Suprêmes_97.png/250px-Carte_Platine_Vainqueurs_Suprêmes_97.png",
+            "Encore un pokémon inutile...",
+                "génération 1"
         )
         val tiploufCard = Card(
             "Tiplouf",
-            393,
-            "https://www.google.com/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwjH3syfjv_fAhVE2OAKHREuCuQQjRx6BAgBEAU&url=https%3A%2F%2Fwww.ebay.fr%2Fitm%2FCARTE-POKEMON-TIPLOUF-32-156-SOLEIL-ET-LUNE-5-ULTRA-PRISME-%2F292442024318&psig=AOvVaw30pK3gnq9kindJiZF0Glwu&ust=1548168235247487",
-            "Eau",
-            "PLOUF !"
+            "https://assets.pokemon.com/assets/cms2-fr-fr/img/cards/web/DP1/DP1_FR_93.png",
+            "PLOUF !",
+                "génération 2"
         )
         val rozboutonCard = Card(
             "Rozbouton",
-            406,
-            "https://www.google.com/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwjkvL7Jjv_fAhWPkhQKHdvxBDEQjRx6BAgBEAU&url=http%3A%2F%2Fwww.mypokecard.com%2Ffr%2FGalerie%2FPokemon-Rozbouton-15&psig=AOvVaw0Yszai0gcOsO4mDBUsDiLR&ust=1548168322668923",
-            "Plante, Poison",
-            "Evolué avec la pierre Sinnoh !"
+            "http://www.mypokecard.com/my/galery/0pcE8RMO9tcy.jpg",
+            "Evolué avec la pierre Sinnoh !",
+                "génération 3"
         )
         val corbossCard = Card(
             "Corboss",
-            430,
-            "https://www.google.com/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwjIo82lhP_fAhVD6uAKHQOmAsEQjRx6BAgBEAU&url=https%3A%2F%2Fwww.pokepedia.fr%2FH%25C3%25A9ricendre_(EX_Forces_Cach%25C3%25A9es_54)&psig=AOvVaw3ycyyP7nwEdcVwkMj8o3c5&ust=1548165560939302",
-            "Feu",
-            "Lui je l'ai en shiny =D"
+            "https://www.pokepedia.fr/images/thumb/d/de/Carte_Noir_%26_Blanc_Dragons_Exaltés_73.png/250px-Carte_Noir_%26_Blanc_Dragons_Exaltés_73.png",
+            "Lui je l'ai en shiny =D",
+                "génération 4"
         )
 
-        val cardsList = arrayListOf<Card>(dracaufeCard, arckoCard, rozboutonCard, tenefixCard, tiploufCard, tortipoussCard, tortankCard, ouisticramCard, pikachuCard, poussifeuCard, florizarreCard, germignonCard, gobouCard, goeliseCard, hericendreCard, kaiminusCard, miewCard, corbossCard)
-        siam.userCardsList = arrayListOf(pikachuCard, miewCard, hericendreCard, goeliseCard, corbossCard, tortankCard, dracaufeCard)
+        var pikachu = Pokemon("Pikachu", 25, "Electrik", arrayListOf<Card>(pikachuCard))
+        var mew = Pokemon("Mew", 150, "Psy", arrayListOf<Card>(mewCard))
+        var tortank = Pokemon("Tortank", 9, "Eau", arrayListOf<Card>(tortankCard))
+        var dracaufeu = Pokemon("Dracaufeu", 6, "Feu", arrayListOf<Card>(dracaufeCard))
+        var florizarre = Pokemon("Florizarre", 3, "Plante", arrayListOf<Card>(florizarreCard))
+        var hericendre = Pokemon("Héricendre", 155, "Feu", arrayListOf<Card>(hericendreCard))
+        var germignon = Pokemon("Germignon", 152, "Plante", arrayListOf<Card>(germignonCard))
+        var kaiminus = Pokemon("Kaiminus", 158, "Eau", arrayListOf<Card>(kaiminusCard))
+        var mentali = Pokemon("Mentali", 196, "Psy", arrayListOf<Card>(mentaliCard))
+        var noctali = Pokemon("Noctali", 197, "Ténèbres", arrayListOf<Card>(noctaliCard))
+        var arcko = Pokemon("Arcko", 252, "Plante", arrayListOf<Card>(arckoCard))
+        var poussifeu = Pokemon("Poussifeu", 255, "Feu", arrayListOf<Card>(poussifeuCard))
+        var gobou = Pokemon("Gobou", 258, "Eau", arrayListOf<Card>(gobouCard))
+        var tenefix = Pokemon("Ténéfix", 302, "Ténèbres", arrayListOf<Card>(tenefixCard))
+        var goelise = Pokemon("Goélise", 278, "Eau, Vol", arrayListOf<Card>(goeliseCard))
+        var ouisticram = Pokemon("Ouisticram", 390, "Feu", arrayListOf<Card>(ouisticramCard))
+        var tortipouss = Pokemon("Tortipouss", 387, "Plante", arrayListOf<Card>(tortipoussCard))
+        var tiplouf = Pokemon("Tiplouf", 393, "Eau", arrayListOf<Card>(tiploufCard))
+        var corboss = Pokemon("Corboss", 430, "Ténèbres, Vol", arrayListOf<Card>(corbossCard))
+        var rozbouton = Pokemon("Rozbouton", 406, "Plante, Poison", arrayListOf<Card>(rozboutonCard))
 
 
-        for(card in cardsList) {
-            println("carte " + card.pokemonName + " : " + card.version)
+        allPokemonList = arrayListOf(arcko, rozbouton, tenefix, tiplouf, tortipouss, tortank, ouisticram, pikachu, poussifeu, mentali, mew, kaiminus, hericendre, germignon, gobou, goelise, florizarre, dracaufeu, corboss, noctali)
+        allPokemonList = allPokemonList.sortedWith(compareBy({it.pokedexNumber}))
+
+
+        userSiam.userPokemonList = arrayListOf(pikachu, mew, hericendre, goelise, corboss, tortank, dracaufeu, mentali, noctali)
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        //userSiam.userPokemonList = userSiam.userPokemonList.sortedWith(compareBy({it.pokedexNumber}))
+
+
+        //allCardsList = arrayListOf<Card>(mentaliCard, noctaliCard, dracaufeCard, arckoCard, rozboutonCard, tenefixCard, tiploufCard, tortipoussCard, tortankCard, ouisticramCard, pikachuCard, poussifeuCard, florizarreCard, germignonCard, gobouCard, goeliseCard, hericendreCard, kaiminusCard, mewCard, corbossCard)
+        var userCardsList = ArrayList<Card>()
+
+        for(pokemon in userSiam.userPokemonList) {
+            userCardsList.addAll(pokemon.pokemonCardsList)
+        }
+
+        for(card in userCardsList) {
+            println("carte " + card.name + " : " + card.version)
         }
     }
 }

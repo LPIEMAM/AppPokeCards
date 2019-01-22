@@ -40,27 +40,9 @@ class UserCardDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        for (stubItem in initStubItems()) {
-            userCardDetailCarousel.addView(stubItem)
-        }
 
-        userCardDetailCarousel.notifyDataSetChanged()
     }
 
-    private fun initStubItems(): List<View> {
-        val result = ArrayList<View>()
-
-
-        var imagePanel : ImagePanel
-        for (i in 0..15) {
-            imagePanel = ImagePanel(context!!)
-            imagePanel.setImageResId(R.drawable.pokemon_card_back)
-            result.add(imagePanel)
-        }
-
-
-        return result
-    }
 
 
 }
