@@ -52,7 +52,7 @@ class UserCardDetailFragment : Fragment() {
 
 
         var imagePanel : ImagePanel
-        for (i in 0..10) {
+        for (i in 0..15) {
             imagePanel = ImagePanel(context!!)
             imagePanel.setImageResId(R.drawable.pokemon_card_back)
             result.add(imagePanel)

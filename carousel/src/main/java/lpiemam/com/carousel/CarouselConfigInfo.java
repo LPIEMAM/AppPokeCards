@@ -11,7 +11,7 @@ class CarouselConfigInfo {
     /**
      * Default min quantity of views.
      */
-    static final int MIN_QUANTITY = 5;
+    static final int MIN_QUANTITY = 2;
 
     /**
      * Default max quantity of views.
@@ -21,13 +21,13 @@ class CarouselConfigInfo {
     /**
      * Set diameter distortion, 1.0 = perfect circle
      */
-    static final float DIAMETER_SCALE = 0.2f;
+    static final float DIAMETER_SCALE = 0f;
     
     /**
      * Rate to shrink objects as they appear further back in the depth field. Typical values 1.0,
      * linear, 2.0 twice as fast.
      */
-    static  final float DEPTH_SCALE = 0.1f;
+    static  final float DEPTH_SCALE = 0f;
     
     /**
      * Tilt angle, negative lifts up back, positive lowers back.
@@ -68,7 +68,7 @@ class CarouselConfigInfo {
     /**
      * Default min alpha value.
      */
-    static final int MIN_ALPHA = -10000000;
+    static final int MIN_ALPHA = 0;
 
     /**
      * Defines default selected item.
