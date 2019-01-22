@@ -5,19 +5,15 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SearchView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import kotlinx.android.synthetic.main.fragment_collection.*
-import kotlinx.android.synthetic.main.rv_row_collection.*
 import lpiemam.com.apppokecards.adapter.UserCardsAdapter
 import lpiemam.com.apppokecards.model.Card
-import lpiemam.com.apppokecards.model.Pokemon
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -35,6 +31,7 @@ class CollectionFragment : Fragment() {
     private lateinit var collectionFragment: CollectionFragment
     private var recyclerView: RecyclerView? = null
     private var userCardsAdapter: UserCardsAdapter? = null
+    private lateinit var userCardDetailFragment: UserCardDetailFragment
     //private lateinit var addCardButton : Button
 
     companion object {
@@ -68,6 +65,11 @@ class CollectionFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        (context as MainActivity).setDrawerEnabled(false)
+        (context as MainActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+
+
         floatingActionButtonAddPokemon.setOnClickListener { view ->
             Snackbar.make(view, "Add a new Card", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
@@ -87,6 +89,8 @@ class CollectionFragment : Fragment() {
                 return false
             }
         })
+
+
 
         setUpRecyclerView()
 
@@ -112,15 +116,27 @@ class CollectionFragment : Fragment() {
                 collectionRecyclerView!!,
                 object : RecyclerTouchListener.ClickListener {
                     override fun onClick(view: View, position: Int) {
-                        /*val userCard = userCardsAdapter!!.userCardsList.get(position)
-                        (plantDetailsFragment as PlantDetailsFragment).setUserPlant(userPlant)
-                        mainActivity.replaceFragment(plantDetailsFragment)*/
+
+                        val pokemon = userCardsAdapter!!.pokemonList.get(position)
+                        Snackbar.make(view, pokemon.name, Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show()
+                        userCardDetailFragment = UserCardDetailFragment.newInstance()
+                        userCardDetailFragment.pokemon = pokemon
+
+                        fragmentManager!!
+                            .beginTransaction()
+                            .replace(R.id.mainActivityContainer, userCardDetailFragment, "userCardDetailFragment")
+                            .commit()
                     }
 
                     override fun onLongClick(view: View?, position: Int) {
-                        /*val userPlant = userPlantViewAdapter.getUserPlantList().get(position)
-                        (plantDetailsFragment as PlantDetailsFragment).setUserPlant(userPlant)
-                        mainActivity.replaceFragment(plantDetailsFragment)*/
+                        val pokemon = userCardsAdapter!!.pokemonList.get(position)
+                        userCardDetailFragment = UserCardDetailFragment.newInstance()
+                        userCardDetailFragment.pokemon = pokemon
+                        fragmentManager!!
+                            .beginTransaction()
+                            .replace(R.id.mainActivityContainer, userCardDetailFragment, "userCardDetailFragment")
+                            .commit()
                     }
                 })
         )

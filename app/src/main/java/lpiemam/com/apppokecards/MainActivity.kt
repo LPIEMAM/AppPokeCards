@@ -15,6 +15,10 @@ import kotlinx.android.synthetic.main.app_bar_main.*
 import lpiemam.com.apppokecards.model.Card
 import lpiemam.com.apppokecards.model.Pokemon
 import lpiemam.com.apppokecards.model.User
+import android.R.id.toggle
+import android.support.v4.widget.DrawerLayout
+
+
 
 class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -23,6 +27,8 @@ class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelec
     lateinit var userSiam : User
     lateinit var collectionFragment : Fragment
     lateinit var allCardsFragment : Fragment
+    lateinit var toggle : ActionBarDrawerToggle
+    lateinit var drawer : DrawerLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +40,8 @@ class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelec
 
         initializeData()
 
-        val toggle = ActionBarDrawerToggle(
+        drawer = drawer_layout
+        toggle = ActionBarDrawerToggle(
             this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close
         )
         drawer_layout.addDrawerListener(toggle)
@@ -98,10 +105,10 @@ class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelec
 //                .commit()
             }
             R.id.menuItemAchievements -> {
-                supportFragmentManager
-                    .beginTransaction()
-                    .add(R.id.mainActivityContainer, UserCardDetailFragment.newInstance(), "collectionFragment")
-                    .commit()
+//                supportFragmentManager
+//                    .beginTransaction()
+//                    .add(R.id.mainActivityContainer, UserCardDetailFragment.newInstance(), "collectionFragment")
+//                    .commit()
             }
             R.id.menuItemAllCards -> {
                 supportFragmentManager
@@ -310,5 +317,14 @@ class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         for(card in userCardsList) {
             println("carte " + card.name + " : " + card.version)
         }
+    }
+
+    fun setDrawerEnabled(enabled: Boolean) {
+        val lockMode = if (enabled)
+            DrawerLayout.LOCK_MODE_UNLOCKED
+        else
+            DrawerLayout.LOCK_MODE_LOCKED_CLOSED
+        drawer.setDrawerLockMode(lockMode)
+        toggle.isDrawerIndicatorEnabled = enabled
     }
 }

@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_user_card_detail.*
+import lpiemam.com.apppokecards.model.GlideApp
+import lpiemam.com.apppokecards.model.Pokemon
 import lpiemam.com.carousel.CarouselView
 import java.util.ArrayList
 
@@ -22,6 +24,8 @@ private const val ARG_PARAM2 = "param2"
  */
 class UserCardDetailFragment : Fragment() {
 
+    lateinit var pokemon: Pokemon
+
     companion object {
 
         fun newInstance(): UserCardDetailFragment {
@@ -34,15 +38,24 @@ class UserCardDetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+
         return inflater.inflate(R.layout.fragment_user_card_detail, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (context as MainActivity).setDrawerEnabled(false)
+        (context as MainActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+
+        userCardDetailCardVersion.text = pokemon.pokemonCardsList[0].version
+        userCardDetailPokedexNumber.text = pokemon.pokedexNumber.toString()
+        userCardDetailPokemonDescription.text = pokemon.pokemonCardsList[0].description
+        userCardDetailPokemonName.text = pokemon.name
+        userCardDetailPokemonType.text = pokemon.type
+        GlideApp.with(view).load(pokemon.pokemonCardsList[0].url).placeholder(R.drawable.pokemon_card_back).into(userCardDetailImageViewCard)
 
 
     }
-
 
 
 }

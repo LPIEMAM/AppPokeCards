@@ -7,6 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import lpiemam.com.apppokecards.R
+import lpiemam.com.apppokecards.RecyclerTouchListener
 import lpiemam.com.apppokecards.model.Card
 import lpiemam.com.apppokecards.model.GlideApp
 import lpiemam.com.apppokecards.model.MyGlideAppModule

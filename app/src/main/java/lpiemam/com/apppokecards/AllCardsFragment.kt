@@ -34,5 +34,10 @@ class AllCardsFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_all_cards, container, false)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
+        (context as MainActivity).setDrawerEnabled(false)
+        (context as MainActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        super.onViewCreated(view, savedInstanceState)
+    }
 }
