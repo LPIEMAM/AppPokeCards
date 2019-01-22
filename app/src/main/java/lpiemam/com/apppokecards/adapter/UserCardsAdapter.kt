@@ -8,10 +8,11 @@ import lpiemam.com.apppokecards.R
 import lpiemam.com.apppokecards.model.Card
 import lpiemam.com.apppokecards.viewholder.UserCardsViewHolder
 import android.widget.Filterable
+import lpiemam.com.apppokecards.model.Pokemon
 
-class UserCardsAdapter(val userCardsList: ArrayList<Card>) : RecyclerView.Adapter<UserCardsViewHolder>(), Filterable {
+class UserCardsAdapter(val userCardsList: ArrayList<Pokemon>) : RecyclerView.Adapter<UserCardsViewHolder>(), Filterable {
 
-    private var userCardsListFiltered: MutableList<Card>? = null
+    private var userCardsListFiltered: ArrayList<Pokemon>? = userCardsList
 
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): UserCardsViewHolder {
@@ -20,12 +21,12 @@ class UserCardsAdapter(val userCardsList: ArrayList<Card>) : RecyclerView.Adapte
     }
 
     override fun getItemCount(): Int {
-        return userCardsList.size
+        return userCardsListFiltered!!.size
     }
 
     override fun onBindViewHolder(userCardsViewHolder: UserCardsViewHolder, i: Int) {
-        val card = userCardsList.get(i)
-        userCardsViewHolder.bind(card)
+        val pokemon = userCardsListFiltered!![i]
+        userCardsViewHolder.bind(pokemon)
     }
 
     override fun getFilter(): Filter? {
@@ -36,7 +37,7 @@ class UserCardsAdapter(val userCardsList: ArrayList<Card>) : RecyclerView.Adapte
                     userCardsListFiltered?.clear()
                     userCardsListFiltered?.addAll(userCardsList)
                 } else {
-                    val filteredList = java.util.ArrayList<Card>()
+                    val filteredList = java.util.ArrayList<Pokemon>()
                     for (card in userCardsList) {
 
                         // name match condition. this might differ depending on your requirement
@@ -55,7 +56,7 @@ class UserCardsAdapter(val userCardsList: ArrayList<Card>) : RecyclerView.Adapte
             }
 
             override fun publishResults(charSequence: CharSequence, filterResults: Filter.FilterResults) {
-                userCardsListFiltered = filterResults.values as java.util.ArrayList<Card>
+                userCardsListFiltered = filterResults.values as java.util.ArrayList<Pokemon>
 
                 // refresh the list with filtered data
                 this@UserCardsAdapter.notifyDataSetChanged()

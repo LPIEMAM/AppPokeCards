@@ -264,8 +264,40 @@ class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         allPokemonList = arrayListOf(arcko, rozbouton, tenefix, tiplouf, tortipouss, tortank, ouisticram, pikachu, poussifeu, mentali, mew, kaiminus, hericendre, germignon, gobou, goelise, florizarre, dracaufeu, corboss, noctali)
         allPokemonList = allPokemonList.sortedWith(compareBy({it.pokedexNumber}))
 
+
         userSiam.userPokemonList = arrayListOf(pikachu, mew, hericendre, goelise, corboss, tortank, dracaufeu, mentali, noctali)
-        userSiam.userPokemonList = userSiam.userPokemonList.sortedWith(compareBy({it.pokedexNumber}))
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        userSiam.userPokemonList.add(pikachu);
+        //userSiam.userPokemonList = userSiam.userPokemonList.sortedWith(compareBy({it.pokedexNumber}))
 
 
         //allCardsList = arrayListOf<Card>(mentaliCard, noctaliCard, dracaufeCard, arckoCard, rozboutonCard, tenefixCard, tiploufCard, tortipoussCard, tortankCard, ouisticramCard, pikachuCard, poussifeuCard, florizarreCard, germignonCard, gobouCard, goeliseCard, hericendreCard, kaiminusCard, mewCard, corbossCard)

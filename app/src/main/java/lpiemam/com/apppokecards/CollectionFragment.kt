@@ -99,8 +99,9 @@ class CollectionFragment : Fragment() {
             cardList.addAll(pokemon.pokemonCardsList)
         }
 
+
         //Peut-être passer une map pour avoir le nom du pokemon pour le filtre ?
-        userCardsAdapter = UserCardsAdapter(cardList)
+        userCardsAdapter = UserCardsAdapter(mainActivity.userSiam.userPokemonList)
 
         collectionRecyclerView!!.layoutManager = GridLayoutManager(context, 4)
         collectionRecyclerView!!.adapter = userCardsAdapter
