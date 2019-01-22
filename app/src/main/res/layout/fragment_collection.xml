@@ -4,7 +4,7 @@
                                              xmlns:tools="http://schemas.android.com/tools"
                                              android:layout_width="match_parent"
                                              android:layout_height="match_parent"
-                                             tools:context=".CollectionFragment" android:id="@+id/collectionConstraintLayout">
+                                             tools:context=".fragment.CollectionFragment" android:id="@+id/collectionConstraintLayout">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -29,6 +29,7 @@
             android:clickable="true" android:id="@+id/floatingActionButtonAddPokemon"
             app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp" android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:backgroundTint="@color/colorAccent" android:tint="@android:color/white" android:focusable="true"/>
+            app:backgroundTint="@color/colorAccent" android:tint="@android:color/white" android:focusable="true"
+            app:useCompatPadding="false"/>
 
 </android.support.constraint.ConstraintLayout>

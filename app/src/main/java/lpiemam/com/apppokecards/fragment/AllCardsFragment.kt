@@ -1,23 +1,20 @@
-package lpiemam.com.apppokecards
+package lpiemam.com.apppokecards.fragment
 
 
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SearchView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import kotlinx.android.synthetic.main.fragment_collection.*
-import kotlinx.android.synthetic.main.rv_row_collection.*
-import lpiemam.com.apppokecards.adapter.UserCardsAdapter
-import lpiemam.com.apppokecards.model.Card
-import lpiemam.com.apppokecards.model.Pokemon
+import lpiemam.com.apppokecards.MainActivity
+import lpiemam.com.apppokecards.R
+import lpiemam.com.apppokecards.RecyclerTouchListener
+import lpiemam.com.apppokecards.adapter.AllCardsAdapter
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -29,23 +26,17 @@ private const val ARG_PARAM2 = "param2"
  * A simple [Fragment] subclass.
  *
  */
-class CollectionFragment : Fragment() {
+class AllCardsFragment : Fragment() {
 
     private lateinit var mainActivity : MainActivity
-    private lateinit var collectionFragment: CollectionFragment
-    private var recyclerView: RecyclerView? = null
-    private var userCardsAdapter: UserCardsAdapter? = null
-    //private lateinit var addCardButton : Button
+    private var allCardsAdapter: AllCardsAdapter? = null
 
     companion object {
 
-        fun newInstance(): CollectionFragment {
-            return CollectionFragment()
+        fun newInstance(): AllCardsFragment {
+            return AllCardsFragment()
         }
     }
-
-
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,15 +47,8 @@ class CollectionFragment : Fragment() {
 
         mainActivity = (context as MainActivity?)!!
         setHasOptionsMenu(true)
-        //addCardButton = view.findViewById(R.id.buttonAddCard)
-
-        //addCardButton.setOnClickListener(View.OnClickListener { mainActivity.replaceFragment(allCardsFragment) })
-
-
-
         // Inflate the layout for this fragment
         return view
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -76,14 +60,14 @@ class CollectionFragment : Fragment() {
         collectionSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(s: String): Boolean {
                 Log.d("", "onQueryTextChange: $s")
-                userCardsAdapter!!.filter!!.filter(s)
+                allCardsAdapter!!.filter!!.filter(s)
                 return false
             }
 
             override fun onQueryTextChange(s: String): Boolean {
                 //CharSequence charSequence = searchView.getQuery();
                 Log.d("", "onQueryTextChange: $s")
-                userCardsAdapter!!.filter!!.filter(s)
+                allCardsAdapter!!.filter!!.filter(s)
                 return false
             }
         })
@@ -94,17 +78,10 @@ class CollectionFragment : Fragment() {
     }
 
     private fun setUpRecyclerView() {
-        val cardList = ArrayList<Card>()
-        for(pokemon in mainActivity.userSiam.userPokemonList) {
-            cardList.addAll(pokemon.pokemonCardsList)
-        }
-
-
-        //Peut-être passer une map pour avoir le nom du pokemon pour le filtre ?
-        userCardsAdapter = UserCardsAdapter(mainActivity.userSiam.userPokemonList)
+        allCardsAdapter = AllCardsAdapter(mainActivity.allCardsList)
 
         collectionRecyclerView!!.layoutManager = GridLayoutManager(context, 4)
-        collectionRecyclerView!!.adapter = userCardsAdapter
+        collectionRecyclerView!!.adapter = allCardsAdapter
 
         collectionRecyclerView!!.addOnItemTouchListener(
             RecyclerTouchListener(
@@ -125,4 +102,5 @@ class CollectionFragment : Fragment() {
                 })
         )
     }
+
 }

@@ -1,7 +1,6 @@
 package lpiemam.com.apppokecards
 
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.design.widget.NavigationView
 import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
@@ -9,20 +8,23 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
+import lpiemam.com.apppokecards.fragment.AllCardsFragment
+import lpiemam.com.apppokecards.fragment.CollectionFragment
 import lpiemam.com.apppokecards.model.Card
 import lpiemam.com.apppokecards.model.Pokemon
 import lpiemam.com.apppokecards.model.User
 
-class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
-    lateinit var allCardsList: List<Card>
-    lateinit var allPokemonList : List<Pokemon>
+    lateinit var allCardsList: ArrayList<Card>
+    lateinit var allPokemonList : ArrayList<Pokemon>
     lateinit var userSiam : User
     lateinit var collectionFragment : Fragment
     lateinit var allCardsFragment : Fragment
+    lateinit var allCardsUserNeeds: ArrayList<Card>
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -122,6 +124,12 @@ class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelec
                 "https://cdn1.pokemoncarte.com/1589/carte-pokemon-ex-pikachu-ex-130-pv-xy-84.jpg",
                 "Pikachu est surnommé Souris électrique...",
                 "génération 1"
+        )
+        val pikachuCard2 = Card(
+            "Pikachu",
+            "https://www.pokepedia.fr/images/thumb/9/9f/Carte_Set_de_Base_58.png/250px-Carte_Set_de_Base_58.png",
+            "Pikachu est obèse =/",
+            "génération 1"
         )
         val mewCard = Card(
                 "Mew",
@@ -239,7 +247,7 @@ class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelec
                 "génération 4"
         )
 
-        var pikachu = Pokemon("Pikachu", 25, "Electrik", arrayListOf<Card>(pikachuCard))
+        var pikachu = Pokemon("Pikachu", 25, "Electrik", arrayListOf<Card>(pikachuCard, pikachuCard2))
         var mew = Pokemon("Mew", 150, "Psy", arrayListOf<Card>(mewCard))
         var tortank = Pokemon("Tortank", 9, "Eau", arrayListOf<Card>(tortankCard))
         var dracaufeu = Pokemon("Dracaufeu", 6, "Feu", arrayListOf<Card>(dracaufeCard))
@@ -261,54 +269,36 @@ class MainActivity() : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         var rozbouton = Pokemon("Rozbouton", 406, "Plante, Poison", arrayListOf<Card>(rozboutonCard))
 
 
+        //Liste de TOUS les pokémons
         allPokemonList = arrayListOf(arcko, rozbouton, tenefix, tiplouf, tortipouss, tortank, ouisticram, pikachu, poussifeu, mentali, mew, kaiminus, hericendre, germignon, gobou, goelise, florizarre, dracaufeu, corboss, noctali)
-        allPokemonList = allPokemonList.sortedWith(compareBy({it.pokedexNumber}))
+        allPokemonList = ArrayList(allPokemonList.sortedWith(compareBy({it.pokedexNumber})))
 
+        //Liste de TOUTES les cartes de TOUS les pokémons
+        allCardsList = ArrayList()
+        for(pokemon in allPokemonList) {
+            allCardsList.addAll(pokemon.pokemonCardsList)
+        }
 
+        //Liste des pokémons dont l'utilisateur possède une carte
         userSiam.userPokemonList = arrayListOf(pikachu, mew, hericendre, goelise, corboss, tortank, dracaufeu, mentali, noctali)
-        userSiam.userPokemonList.add(pikachu);
-        userSiam.userPokemonList.add(pikachu);
-        userSiam.userPokemonList.add(pikachu);
-        userSiam.userPokemonList.add(pikachu);
-        userSiam.userPokemonList.add(pikachu);
-        userSiam.userPokemonList.add(pikachu);
-        userSiam.userPokemonList.add(pikachu);
-        userSiam.userPokemonList.add(pikachu);
-        userSiam.userPokemonList.add(pikachu);
-        userSiam.userPokemonList.add(pikachu);
-        userSiam.userPokemonList.add(pikachu);
-        userSiam.userPokemonList.add(pikachu);
-        userSiam.userPokemonList.add(pikachu);
-        userSiam.userPokemonList.add(pikachu);
-        userSiam.userPokemonList.add(pikachu);
-        userSiam.userPokemonList.add(pikachu);
-        userSiam.userPokemonList.add(pikachu);
-        userSiam.userPokemonList.add(pikachu);
-        userSiam.userPokemonList.add(pikachu);
-        userSiam.userPokemonList.add(pikachu);
-        userSiam.userPokemonList.add(pikachu);
-        userSiam.userPokemonList.add(pikachu);
-        userSiam.userPokemonList.add(pikachu);
-        userSiam.userPokemonList.add(pikachu);
-        userSiam.userPokemonList.add(pikachu);
-        userSiam.userPokemonList.add(pikachu);
-        userSiam.userPokemonList.add(pikachu);
-        userSiam.userPokemonList.add(pikachu);
-        userSiam.userPokemonList.add(pikachu);
-        userSiam.userPokemonList.add(pikachu);
-        userSiam.userPokemonList.add(pikachu);
-        //userSiam.userPokemonList = userSiam.userPokemonList.sortedWith(compareBy({it.pokedexNumber}))
+        userSiam.userPokemonList = ArrayList(userSiam.userPokemonList.sortedWith(compareBy({it.pokedexNumber})))
 
-
-        //allCardsList = arrayListOf<Card>(mentaliCard, noctaliCard, dracaufeCard, arckoCard, rozboutonCard, tenefixCard, tiploufCard, tortipoussCard, tortankCard, ouisticramCard, pikachuCard, poussifeuCard, florizarreCard, germignonCard, gobouCard, goeliseCard, hericendreCard, kaiminusCard, mewCard, corbossCard)
         var userCardsList = ArrayList<Card>()
-
         for(pokemon in userSiam.userPokemonList) {
             userCardsList.addAll(pokemon.pokemonCardsList)
         }
 
-        for(card in userCardsList) {
-            println("carte " + card.name + " : " + card.version)
+        //Liste des cartes pokémons que l'utilisateur n'a pas
+        allCardsUserNeeds = ArrayList()
+        for(card in allCardsList) {
+            for(userCard in userCardsList) {
+                if(!card.toString().equals(userCard.toString())) {
+                    allCardsUserNeeds.add(card)
+                }
+            }
         }
+
+
+
     }
 }
