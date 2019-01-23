@@ -5,7 +5,7 @@ import android.support.v7.util.SortedList
 /**
  * Created by lpiem on 21/01/2019.
  */
-class Pokemon (val name : String, val pokedexNumber : Int, val type : String, val pokemonCardsList : ArrayList<Card>)  {
+class Pokemon (val name : String, val pokedexNumber : Int, val type : String)  {
 
     val generation : String = when(pokedexNumber) {
         in 1..151 -> "Première génération"

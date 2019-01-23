@@ -14,6 +14,7 @@ import lpiemam.com.carousel.CarouselView
 import java.util.ArrayList
 import lpiemam.com.apppokecards.R
 import lpiemam.com.apppokecards.ReplaceFragmentListener
+import lpiemam.com.apppokecards.model.Card
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -27,7 +28,7 @@ private const val ARG_PARAM2 = "param2"
  */
 class UserCardDetailFragment : Fragment() {
 
-    lateinit var pokemon: Pokemon
+    lateinit var card: Card
     var replaceFragmentListener: ReplaceFragmentListener? = null
 
     companion object {
@@ -69,19 +70,14 @@ class UserCardDetailFragment : Fragment() {
         replaceFragmentListener!!.setDrawerEnabled(false)
         replaceFragmentListener!!.setUpBackButton(true)
 
-        userCardDetailCardVersion.text = pokemon.pokemonCardsList[0].version
-        userCardDetailPokedexNumber.text = pokemon.pokedexNumber.toString()
-        userCardDetailPokemonDescription.text = pokemon.pokemonCardsList[0].description
-        userCardDetailPokemonName.text = pokemon.name
-        userCardDetailPokemonType.text = pokemon.type
-        GlideApp.with(view).load(pokemon.pokemonCardsList[0].url).placeholder(R.drawable.pokemon_card_back).into(userCardDetailImageViewCard)
+        userCardDetailCardVersion.text = card.version
+        userCardDetailPokedexNumber.text = card.pokemon.pokedexNumber.toString()
+        userCardDetailPokemonDescription.text = card.description
+        userCardDetailPokemonName.text = card.pokemon.name
+        userCardDetailPokemonType.text = card.pokemon.type
+        GlideApp.with(view).load(card.url).placeholder(R.drawable.pokemon_card_back).into(userCardDetailImageViewCard)
 
 
     }
 
-    override fun onResume() {
-
-
-        super.onResume()
-    }
 }

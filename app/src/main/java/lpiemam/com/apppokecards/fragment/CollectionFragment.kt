@@ -69,28 +69,25 @@ class CollectionFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val view = inflater.inflate(R.layout.fragment_collection, container, false)
-
-        setHasOptionsMenu(true)
-        mainActivity = (context as MainActivity?)!!
+        mainActivity = context as MainActivity
 
         setHasOptionsMenu(true)
 
 
         // Inflate the layout for this fragment
-        return view
+        return inflater.inflate(R.layout.fragment_collection, container, false)
 
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
 
-        mainActivity = context as MainActivity
+        setUpRecyclerView()
 
         floatingActionButtonAddPokemon.setOnClickListener { view ->
             fragmentManager!!
                 .beginTransaction()
-                .add(R.id.mainActivityContainer, mainActivity.addNewCardFragment, "addNewCardFragment")
+                .add(R.id.mainActivityContainer, mainActivity.addNewCardFragment, "addNewCardFragment").addToBackStack("addNewCardFragment")
                 .commit()
         }
 
@@ -115,21 +112,9 @@ class CollectionFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
     }
 
-    override fun onResume() {
-
-        setUpRecyclerView()
-        super.onResume()
-    }
 
     private fun setUpRecyclerView() {
-        val cardList = ArrayList<Card>()
-        for(pokemon in mainActivity.userSiam.userPokemonList) {
-            cardList.addAll(pokemon.pokemonCardsList)
-        }
-
-
-        //Peut-être passer une map pour avoir le nom du pokemon pour le filtre ?
-        userCardsAdapter = UserCardsAdapter(mainActivity.userSiam.userPokemonList)
+        userCardsAdapter = UserCardsAdapter(ArrayList(mainActivity.userSiam.userCardList))
 
         collectionRecyclerView!!.layoutManager = GridLayoutManager(context, 4)
         collectionRecyclerView!!.adapter = userCardsAdapter
@@ -141,15 +126,15 @@ class CollectionFragment : Fragment() {
                 object : RecyclerTouchListener.ClickListener {
                     override fun onClick(view: View, position: Int) {
 
-                        val pokemon = userCardsAdapter!!.pokemonList[position]
+                        val card = userCardsAdapter!!.cardList[position]
 
-                        replaceFragmentListener!!.showUserCardDetail(pokemon)
+                        replaceFragmentListener!!.showUserCardDetail(card)
                     }
 
                     override fun onLongClick(view: View?, position: Int) {
-                        val pokemon = userCardsAdapter!!.pokemonList[position]
+                        val card = userCardsAdapter!!.cardList[position]
 
-                        replaceFragmentListener!!.showUserCardDetail(pokemon)
+                        replaceFragmentListener!!.showUserCardDetail(card)
                     }
                 })
         )

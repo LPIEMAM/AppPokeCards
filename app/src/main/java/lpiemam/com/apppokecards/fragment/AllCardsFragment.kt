@@ -90,7 +90,7 @@ class AllCardsFragment : Fragment() {
     }
 
     private fun setUpRecyclerView() {
-        allCardsAdapter = AllCardsAdapter(mainActivity.allCardsList)
+        allCardsAdapter = AllCardsAdapter(ArrayList(mainActivity.allCardsList))
 
         collectionRecyclerView!!.layoutManager = GridLayoutManager(context, 4)
         collectionRecyclerView!!.adapter = allCardsAdapter

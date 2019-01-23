@@ -16,7 +16,7 @@ class UserCardsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     private var ivCard  : ImageView = itemView.findViewById(R.id.collectionImageViewCard)
 
-    fun bind(pokemon: Pokemon) {
-        GlideApp.with(itemView).load(pokemon.pokemonCardsList[0].url).placeholder(R.drawable.pokemon_card_back).into(ivCard)
+    fun bind(card: Card) {
+        GlideApp.with(itemView).load(card.url).placeholder(R.drawable.pokemon_card_back).into(ivCard)
     }
 }

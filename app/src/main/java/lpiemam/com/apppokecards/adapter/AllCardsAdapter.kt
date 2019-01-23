@@ -13,7 +13,7 @@ import lpiemam.com.apppokecards.viewholder.AllCardsViewHolder
 class AllCardsAdapter(val allCardsList: ArrayList<Card>) : RecyclerView.Adapter<AllCardsViewHolder>(),
     Filterable {
 
-    private var allCardsListFiltered: ArrayList<Card> = allCardsList
+    private var allCardsListFiltered: ArrayList<Card> = ArrayList(allCardsList)
 
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): AllCardsViewHolder {
@@ -43,7 +43,7 @@ class AllCardsAdapter(val allCardsList: ArrayList<Card>) : RecyclerView.Adapter<
 
                         // name match condition. this might differ depending on your requirement
                         // here we are looking for name or phone number match
-                        if (card.name.toLowerCase().contains(charString.toLowerCase())) {
+                        if (card.pokemon.name.toLowerCase().contains(charString.toLowerCase())) {
                             filteredList.add(card)
                         }
                     }

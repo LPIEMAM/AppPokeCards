@@ -1,6 +1,7 @@
 package lpiemam.com.apppokecards.fragment
 
 
+import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
@@ -14,6 +15,7 @@ import kotlinx.android.synthetic.main.fragment_collection.*
 import lpiemam.com.apppokecards.MainActivity
 import lpiemam.com.apppokecards.R
 import lpiemam.com.apppokecards.RecyclerTouchListener
+import lpiemam.com.apppokecards.ReplaceFragmentListener
 import lpiemam.com.apppokecards.adapter.AddNewCardAdapter
 
 
@@ -30,6 +32,7 @@ class AddNewCardFragment : Fragment() {
 
     private lateinit var mainActivity : MainActivity
     private var addNewCardAdapter: AddNewCardAdapter? = null
+    var replaceFragmentListener: ReplaceFragmentListener? = null
 
 
     companion object {
@@ -38,6 +41,25 @@ class AddNewCardFragment : Fragment() {
             return AddNewCardFragment()
         }
     }
+
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        replaceFragmentListener = context as? ReplaceFragmentListener
+        if (replaceFragmentListener == null) {
+            throw ClassCastException("$context must implement OnCardSelectedListener")
+        }
+    }
+
+    override fun onDetach() {
+
+        replaceFragmentListener!!.setUpBackButton(false)
+        replaceFragmentListener!!.setDrawerEnabled(true)
+
+        replaceFragmentListener = null
+        super.onDetach()
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,7 +75,11 @@ class AddNewCardFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        replaceFragmentListener!!.setDrawerEnabled(false)
+        replaceFragmentListener!!.setUpBackButton(true)
         addNewCardSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+
             override fun onQueryTextSubmit(s: String): Boolean {
                 Log.d("", "onQueryTextChange: $s")
                 addNewCardAdapter!!.filter!!.filter(s)
@@ -74,7 +100,7 @@ class AddNewCardFragment : Fragment() {
     }
 
     private fun setUpRecyclerView() {
-        addNewCardAdapter = AddNewCardAdapter(mainActivity.allCardsUserNeeds)
+        addNewCardAdapter = AddNewCardAdapter(ArrayList(mainActivity.allCardsUserNeeds))
 
         addNewCardRecyclerView!!.layoutManager = GridLayoutManager(context, 4)
         addNewCardRecyclerView!!.adapter = addNewCardAdapter
@@ -86,7 +112,9 @@ class AddNewCardFragment : Fragment() {
                         object : RecyclerTouchListener.ClickListener {
                             override fun onClick(view: View, position: Int) {
                                 val userCard = addNewCardAdapter!!.allCardsUserNeeds.get(position)
-                                mainActivity.userCardsList.add(userCard)
+                                mainActivity.userSiam.userCardList.add(userCard)
+                                mainActivity.allCardsUserNeeds.remove(userCard)
+                                mainActivity.userSiam.userCardList = ArrayList(mainActivity.userSiam.userCardList.sortedWith(compareBy{it.pokemon.pokedexNumber}))
                                 mainActivity.collectionFragment.userCardsAdapter!!.notifyDataSetChanged()
                                 mainActivity.supportFragmentManager
                                     .beginTransaction()
@@ -96,8 +124,14 @@ class AddNewCardFragment : Fragment() {
 
                             override fun onLongClick(view: View?, position: Int) {
                                 val userCard = addNewCardAdapter!!.allCardsUserNeeds.get(position)
-                                mainActivity.userCardsList.add(userCard)
-                                mainActivity.supportFragmentManager.popBackStack()
+                                mainActivity.userSiam.userCardList.add(userCard)
+                                mainActivity.allCardsUserNeeds.remove(userCard)
+                                mainActivity.userSiam.userCardList = ArrayList(mainActivity.userSiam.userCardList.sortedWith(compareBy{it.pokemon.pokedexNumber}))
+                                mainActivity.collectionFragment.userCardsAdapter!!.notifyDataSetChanged()
+                                mainActivity.supportFragmentManager
+                                    .beginTransaction()
+                                    .replace(R.id.mainActivityContainer, CollectionFragment.newInstance(), "collectionFragment")
+                                    .commit()
                             }
                         })
         )
