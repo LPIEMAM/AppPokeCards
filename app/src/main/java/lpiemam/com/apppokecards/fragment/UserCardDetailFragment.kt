@@ -1,4 +1,4 @@
-package lpiemam.com.apppokecards
+package lpiemam.com.apppokecards.fragment
 
 
 import android.content.Context
@@ -12,6 +12,8 @@ import lpiemam.com.apppokecards.model.GlideApp
 import lpiemam.com.apppokecards.model.Pokemon
 import lpiemam.com.carousel.CarouselView
 import java.util.ArrayList
+import lpiemam.com.apppokecards.R
+import lpiemam.com.apppokecards.ReplaceFragmentListener
 
 
 // TODO: Rename parameter arguments, choose names that match

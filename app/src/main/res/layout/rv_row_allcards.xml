@@ -20,7 +20,8 @@
     <View
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#c0000000" android:visibility="visible">
+            android:background="#c0000000" android:id="@+id/filter" android:visibility="visible"
+            android:backgroundTint="@android:color/background_dark">
 
     </View>
 </FrameLayout>

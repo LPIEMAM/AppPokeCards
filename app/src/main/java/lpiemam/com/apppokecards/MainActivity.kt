@@ -11,26 +11,34 @@ import android.view.Menu
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
+import lpiemam.com.apppokecards.fragment.AddNewCardFragment
+import lpiemam.com.apppokecards.fragment.AllCardsFragment
+import lpiemam.com.apppokecards.fragment.CollectionFragment
 import lpiemam.com.apppokecards.model.Card
 import lpiemam.com.apppokecards.model.Pokemon
 import lpiemam.com.apppokecards.model.User
 import android.support.v4.widget.DrawerLayout
 import android.view.View
 import kotlinx.android.synthetic.main.fragment_collection.*
+import lpiemam.com.apppokecards.fragment.UserCardDetailFragment
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
     ReplaceFragmentListener {
 
 
-    lateinit var allCardsList: List<Card>
-
-    lateinit var allPokemonList: List<Pokemon>
-    lateinit var userSiam: User
-    lateinit var collectionFragment: Fragment
-    lateinit var allCardsFragment: Fragment
     lateinit var toggle: ActionBarDrawerToggle
     lateinit var drawer: DrawerLayout
+
+    lateinit var allCardsList: ArrayList<Card>
+    lateinit var allPokemonList : ArrayList<Pokemon>
+    lateinit var userSiam : User
+    lateinit var collectionFragment : CollectionFragment
+    lateinit var allCardsFragment : AllCardsFragment
+    lateinit var addNewCardFragment : AddNewCardFragment
+    lateinit var allCardsUserNeeds: ArrayList<Card>
+    lateinit var userCardsList: ArrayList<Card>
+    private var wasInitialized = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,8 +46,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        collectionFragment = CollectionFragment()
-        allCardsFragment = AllCardsFragment()
+        collectionFragment = CollectionFragment.newInstance()
+        allCardsFragment = AllCardsFragment.newInstance()
+        addNewCardFragment = AddNewCardFragment.newInstance()
 
         initializeData()
 
@@ -54,7 +63,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (savedInstanceState == null) {
             supportFragmentManager
                 .beginTransaction()
-                .add(R.id.mainActivityContainer, CollectionFragment.newInstance(), "collectionFragment")
+                .add(R.id.mainActivityContainer, collectionFragment, "collectionFragment")
                 .commit()
         }
 
@@ -116,7 +125,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.menuItemCollection -> {
                 supportFragmentManager
                     .beginTransaction()
-                    .add(R.id.mainActivityContainer, CollectionFragment.newInstance(), "collectionFragment")
+                    .replace(R.id.mainActivityContainer, collectionFragment, "collectionFragment")
                     .commit()
             }
             R.id.menuItemShop -> {
@@ -140,7 +149,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.menuItemAllCards -> {
                 supportFragmentManager
                     .beginTransaction()
-                    .add(R.id.mainActivityContainer, AllCardsFragment.newInstance(), "allCardsFragment")
+                    .replace(R.id.mainActivityContainer, allCardsFragment, "allCardsFragment")
                     .commit()
             }
         }
@@ -155,6 +164,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             "Pikachu",
             "https://cdn1.pokemoncarte.com/1589/carte-pokemon-ex-pikachu-ex-130-pv-xy-84.jpg",
             "Pikachu est surnommé Souris électrique...",
+            "génération 1"
+        )
+        val pikachuCard2 = Card(
+            "Pikachu",
+            "https://www.pokepedia.fr/images/thumb/9/9f/Carte_Set_de_Base_58.png/250px-Carte_Set_de_Base_58.png",
+            "Pikachu est obèse =/",
             "génération 1"
         )
         val mewCard = Card(
@@ -273,7 +288,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             "génération 4"
         )
 
-        var pikachu = Pokemon("Pikachu", 25, "Electrik", arrayListOf<Card>(pikachuCard))
+        var pikachu = Pokemon("Pikachu", 25, "Electrik", arrayListOf<Card>(pikachuCard, pikachuCard2))
         var mew = Pokemon("Mew", 150, "Psy", arrayListOf<Card>(mewCard))
         var tortank = Pokemon("Tortank", 9, "Eau", arrayListOf<Card>(tortankCard))
         var dracaufeu = Pokemon("Dracaufeu", 6, "Feu", arrayListOf<Card>(dracaufeCard))
@@ -295,78 +310,51 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         var rozbouton = Pokemon("Rozbouton", 406, "Plante, Poison", arrayListOf<Card>(rozboutonCard))
 
 
-        allPokemonList = arrayListOf(
-            arcko,
-            rozbouton,
-            tenefix,
-            tiplouf,
-            tortipouss,
-            tortank,
-            ouisticram,
-            pikachu,
-            poussifeu,
-            mentali,
-            mew,
-            kaiminus,
-            hericendre,
-            germignon,
-            gobou,
-            goelise,
-            florizarre,
-            dracaufeu,
-            corboss,
-            noctali
-        )
-        allPokemonList = allPokemonList.sortedWith(compareBy({ it.pokedexNumber }))
 
+        //Liste de TOUS les pokémons
+        allPokemonList = arrayListOf(arcko, rozbouton, tenefix, tiplouf, tortipouss, tortank, ouisticram, pikachu, poussifeu, mentali, mew, kaiminus, hericendre, germignon, gobou, goelise, florizarre, dracaufeu, corboss, noctali)
+        allPokemonList = ArrayList(allPokemonList.sortedWith(compareBy({it.pokedexNumber})))
 
-        userSiam.userPokemonList =
-                arrayListOf(pikachu, mew, hericendre, goelise, corboss, tortank, dracaufeu, mentali, noctali)
-        userSiam.userPokemonList.add(pikachu)
-        userSiam.userPokemonList.add(pikachu)
-        userSiam.userPokemonList.add(pikachu)
-        userSiam.userPokemonList.add(pikachu)
-        userSiam.userPokemonList.add(pikachu)
-        userSiam.userPokemonList.add(pikachu)
-        userSiam.userPokemonList.add(pikachu)
-        userSiam.userPokemonList.add(pikachu)
-        userSiam.userPokemonList.add(pikachu)
-        userSiam.userPokemonList.add(pikachu)
-        userSiam.userPokemonList.add(pikachu)
-        userSiam.userPokemonList.add(pikachu)
-        userSiam.userPokemonList.add(pikachu)
-        userSiam.userPokemonList.add(pikachu)
-        userSiam.userPokemonList.add(pikachu)
-        userSiam.userPokemonList.add(pikachu)
-        userSiam.userPokemonList.add(pikachu)
-        userSiam.userPokemonList.add(pikachu)
-        userSiam.userPokemonList.add(pikachu)
-        userSiam.userPokemonList.add(pikachu)
-        userSiam.userPokemonList.add(pikachu)
-        userSiam.userPokemonList.add(pikachu)
-        userSiam.userPokemonList.add(pikachu)
-        userSiam.userPokemonList.add(pikachu)
-        userSiam.userPokemonList.add(pikachu)
-        userSiam.userPokemonList.add(pikachu)
-        userSiam.userPokemonList.add(pikachu)
-        userSiam.userPokemonList.add(pikachu)
-        userSiam.userPokemonList.add(pikachu)
-        userSiam.userPokemonList.add(pikachu)
-        userSiam.userPokemonList.add(pikachu)
-        //userSiam.userPokemonList = userSiam.userPokemonList.sortedWith(compareBy({it.pokedexNumber}))
+        //Liste de TOUTES les cartes de TOUS les pokémons
+        allCardsList = ArrayList()
+        for(pokemon in allPokemonList) {
+            allCardsList.addAll(pokemon.pokemonCardsList)
+        }
 
+        //Liste des pokémons dont l'utilisateur possède une carte
+        userSiam.userPokemonList = arrayListOf(pikachu, mew, hericendre, goelise, corboss, tortank, dracaufeu, mentali, noctali)
+        userSiam.userPokemonList = ArrayList(userSiam.userPokemonList.sortedWith(compareBy({it.pokedexNumber})))
 
-        //allCardsList = arrayListOf<Card>(mentaliCard, noctaliCard, dracaufeCard, arckoCard, rozboutonCard, tenefixCard, tiploufCard, tortipoussCard, tortankCard, ouisticramCard, pikachuCard, poussifeuCard, florizarreCard, germignonCard, gobouCard, goeliseCard, hericendreCard, kaiminusCard, mewCard, corbossCard)
-        var userCardsList = ArrayList<Card>()
-
-        for (pokemon in userSiam.userPokemonList) {
+        userCardsList = ArrayList()
+        for(pokemon in userSiam.userPokemonList) {
             userCardsList.addAll(pokemon.pokemonCardsList)
         }
 
         for (card in userCardsList) {
             println("carte " + card.name + " : " + card.version)
         }
+
+        //Liste des cartes pokémons que l'utilisateur n'a pas
+        allCardsUserNeeds = ArrayList()
+
+        for(card in allCardsList) {
+            var firewall = true
+            for(userCard in userCardsList) {
+                if(card.toString().equals(userCard.toString())) {
+                    firewall = false
+                }
+                /*while (card.toString() == userCard.toString()) {
+                    firewall = false
+                }*/
+            }
+            if(firewall)
+            {
+                allCardsUserNeeds.add(card)
+            }
+        }
+
     }
+
 
     override fun setDrawerEnabled(enabled: Boolean) {
         val lockMode = if (enabled) {

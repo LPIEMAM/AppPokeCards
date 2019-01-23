@@ -1,8 +1,9 @@
-package lpiemam.com.apppokecards
+package lpiemam.com.apppokecards.fragment
 
 
 import android.content.Context
 import android.os.Bundle
+import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
@@ -14,6 +15,10 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.fragment_collection.*
+import lpiemam.com.apppokecards.MainActivity
+import lpiemam.com.apppokecards.R
+import lpiemam.com.apppokecards.RecyclerTouchListener
+import lpiemam.com.apppokecards.ReplaceFragmentListener
 import lpiemam.com.apppokecards.adapter.UserCardsAdapter
 import lpiemam.com.apppokecards.model.Card
 
@@ -32,10 +37,11 @@ class CollectionFragment : Fragment() {
     private lateinit var mainActivity : MainActivity
     private lateinit var collectionFragment: CollectionFragment
     private var recyclerView: RecyclerView? = null
-    private var userCardsAdapter: UserCardsAdapter? = null
+    var userCardsAdapter: UserCardsAdapter? = null
     private lateinit var userCardDetailFragment: UserCardDetailFragment
 
     var replaceFragmentListener: ReplaceFragmentListener? = null
+    private lateinit var addNewCardFragment : AddNewCardFragment
 
 
     companion object {
@@ -66,10 +72,9 @@ class CollectionFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_collection, container, false)
 
         setHasOptionsMenu(true)
-        //addCardButton = view.findViewById(R.id.buttonAddCard)
+        mainActivity = (context as MainActivity?)!!
 
-        //addCardButton.setOnClickListener(View.OnClickListener { mainActivity.replaceFragment(allCardsFragment) })
-
+        setHasOptionsMenu(true)
 
 
         // Inflate the layout for this fragment
@@ -83,8 +88,10 @@ class CollectionFragment : Fragment() {
         mainActivity = context as MainActivity
 
         floatingActionButtonAddPokemon.setOnClickListener { view ->
-            Snackbar.make(view, "Add a new Card", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+            fragmentManager!!
+                .beginTransaction()
+                .add(R.id.mainActivityContainer, mainActivity.addNewCardFragment, "addNewCardFragment")
+                .commit()
         }
 
         collectionSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
