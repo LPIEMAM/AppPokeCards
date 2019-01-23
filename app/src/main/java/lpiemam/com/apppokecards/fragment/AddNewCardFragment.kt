@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import kotlinx.android.synthetic.main.fragment_add_new_card.*
 import kotlinx.android.synthetic.main.fragment_collection.*
 import lpiemam.com.apppokecards.MainActivity
 import lpiemam.com.apppokecards.R
@@ -29,6 +30,7 @@ class AddNewCardFragment : Fragment() {
 
     private lateinit var mainActivity : MainActivity
     private var addNewCardAdapter: AddNewCardAdapter? = null
+
 
     companion object {
 
@@ -51,7 +53,7 @@ class AddNewCardFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        collectionSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        addNewCardSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(s: String): Boolean {
                 Log.d("", "onQueryTextChange: $s")
                 addNewCardAdapter!!.filter!!.filter(s)
@@ -74,24 +76,28 @@ class AddNewCardFragment : Fragment() {
     private fun setUpRecyclerView() {
         addNewCardAdapter = AddNewCardAdapter(mainActivity.allCardsUserNeeds)
 
-        collectionRecyclerView!!.layoutManager = GridLayoutManager(context, 4)
-        collectionRecyclerView!!.adapter = addNewCardAdapter
+        addNewCardRecyclerView!!.layoutManager = GridLayoutManager(context, 4)
+        addNewCardRecyclerView!!.adapter = addNewCardAdapter
 
-        collectionRecyclerView!!.addOnItemTouchListener(
+        addNewCardRecyclerView!!.addOnItemTouchListener(
                 RecyclerTouchListener(
                         context!!,
-                        collectionRecyclerView!!,
+                    addNewCardRecyclerView!!,
                         object : RecyclerTouchListener.ClickListener {
                             override fun onClick(view: View, position: Int) {
-                                /*val userCard = userCardsAdapter!!.userCardsList.get(position)
-                                (plantDetailsFragment as PlantDetailsFragment).setUserPlant(userPlant)
-                                mainActivity.replaceFragment(plantDetailsFragment)*/
+                                val userCard = addNewCardAdapter!!.allCardsUserNeeds.get(position)
+                                mainActivity.userCardsList.add(userCard)
+                                mainActivity.collectionFragment.userCardsAdapter!!.notifyDataSetChanged()
+                                mainActivity.supportFragmentManager
+                                    .beginTransaction()
+                                    .replace(R.id.mainActivityContainer, CollectionFragment.newInstance(), "collectionFragment")
+                                    .commit()
                             }
 
                             override fun onLongClick(view: View?, position: Int) {
-                                /*val userPlant = userPlantViewAdapter.getUserPlantList().get(position)
-                                (plantDetailsFragment as PlantDetailsFragment).setUserPlant(userPlant)
-                                mainActivity.replaceFragment(plantDetailsFragment)*/
+                                val userCard = addNewCardAdapter!!.allCardsUserNeeds.get(position)
+                                mainActivity.userCardsList.add(userCard)
+                                mainActivity.supportFragmentManager.popBackStack()
                             }
                         })
         )

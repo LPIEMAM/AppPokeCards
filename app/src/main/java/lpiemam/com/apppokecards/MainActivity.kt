@@ -22,10 +22,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     lateinit var allCardsList: ArrayList<Card>
     lateinit var allPokemonList : ArrayList<Pokemon>
     lateinit var userSiam : User
-    lateinit var collectionFragment : Fragment
-    lateinit var allCardsFragment : Fragment
-    lateinit var addNewCardFragment : Fragment
+    lateinit var collectionFragment : CollectionFragment
+    lateinit var allCardsFragment : AllCardsFragment
+    lateinit var addNewCardFragment : AddNewCardFragment
     lateinit var allCardsUserNeeds: ArrayList<Card>
+    lateinit var userCardsList: ArrayList<Card>
     private var wasInitialized = false
 
 
@@ -34,9 +35,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        collectionFragment = CollectionFragment()
-        allCardsFragment = AllCardsFragment()
-        addNewCardFragment = AddNewCardFragment()
+        collectionFragment = CollectionFragment.newInstance()
+        allCardsFragment = AllCardsFragment.newInstance()
+        addNewCardFragment = AddNewCardFragment.newInstance()
 
         initializeData()
 
@@ -50,7 +51,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (savedInstanceState == null) {
             supportFragmentManager
                 .beginTransaction()
-                .add(R.id.mainActivityContainer, CollectionFragment.newInstance(), "collectionFragment")
+                .add(R.id.mainActivityContainer, collectionFragment, "collectionFragment")
                 .commit()
         }
 
@@ -88,7 +89,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.menuItemCollection -> {
                 supportFragmentManager
                     .beginTransaction()
-                    .replace(R.id.mainActivityContainer, CollectionFragment.newInstance(), "collectionFragment")
+                    .replace(R.id.mainActivityContainer, collectionFragment, "collectionFragment")
                     .commit()
             }
             R.id.menuItemShop -> {
@@ -112,33 +113,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.menuItemAllCards -> {
                 supportFragmentManager
                     .beginTransaction()
-                    .replace(R.id.mainActivityContainer, AllCardsFragment.newInstance(), "allCardsFragment")
+                    .replace(R.id.mainActivityContainer, allCardsFragment, "allCardsFragment")
                     .commit()
             }
         }
 
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
-    }
-
-    // Replace current Fragment with the destination Fragment.
-    fun replaceFragment(destFragment: Fragment) {
-        // First get FragmentManager object.
-        val fragmentManager = this.supportFragmentManager
-
-        // Begin Fragment transaction.
-        val fragmentTransaction = fragmentManager.beginTransaction()
-
-        // Replace the layout holder with the required Fragment object.
-        if (!wasInitialized) {
-            wasInitialized = true
-            fragmentTransaction.replace(R.id.mainActivityContainer, destFragment)
-        } else {
-            fragmentTransaction.replace(R.id.mainActivityContainer, destFragment)
-        }
-
-        // Commit the Fragment replace action.
-        fragmentTransaction.commit()
     }
 
     fun initializeData() {
@@ -307,22 +288,29 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         userSiam.userPokemonList = arrayListOf(pikachu, mew, hericendre, goelise, corboss, tortank, dracaufeu, mentali, noctali)
         userSiam.userPokemonList = ArrayList(userSiam.userPokemonList.sortedWith(compareBy({it.pokedexNumber})))
 
-        var userCardsList = ArrayList<Card>()
+        userCardsList = ArrayList<Card>()
         for(pokemon in userSiam.userPokemonList) {
             userCardsList.addAll(pokemon.pokemonCardsList)
         }
 
         //Liste des cartes pokémons que l'utilisateur n'a pas
         allCardsUserNeeds = ArrayList()
+
         for(card in allCardsList) {
+            var firewall = true
             for(userCard in userCardsList) {
-                if(!card.toString().equals(userCard.toString())) {
-                    allCardsUserNeeds.add(card)
+                if(card.toString().equals(userCard.toString())) {
+                    firewall = false
                 }
+                /*while (card.toString() == userCard.toString()) {
+                    firewall = false
+                }*/
+            }
+            if(firewall)
+            {
+                allCardsUserNeeds.add(card)
             }
         }
-
-
-
     }
+
 }

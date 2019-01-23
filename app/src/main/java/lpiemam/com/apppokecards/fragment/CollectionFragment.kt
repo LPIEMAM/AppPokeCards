@@ -32,9 +32,8 @@ private const val ARG_PARAM2 = "param2"
 class CollectionFragment : Fragment() {
 
     private lateinit var mainActivity : MainActivity
-    private var userCardsAdapter: UserCardsAdapter? = null
+    var userCardsAdapter: UserCardsAdapter? = null
     private lateinit var addNewCardFragment : AddNewCardFragment
-    private lateinit var addCardButton : FloatingActionButton
 
     companion object {
 
@@ -61,10 +60,11 @@ class CollectionFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        addNewCardFragment = mainActivity.addNewCardFragment as AddNewCardFragment
-
         floatingActionButtonAddPokemon.setOnClickListener { view ->
-            mainActivity.replaceFragment(addNewCardFragment)
+            fragmentManager!!
+                .beginTransaction()
+                .add(R.id.mainActivityContainer, mainActivity.addNewCardFragment, "addNewCardFragment")
+                .commit()
         }
 
         collectionSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
