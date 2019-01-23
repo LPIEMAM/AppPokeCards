@@ -10,10 +10,10 @@ import lpiemam.com.apppokecards.model.Card
 import lpiemam.com.apppokecards.viewholder.AllCardsViewHolder
 
 
-class AllCardsAdapter(val allCardsList: ArrayList<Card>) : RecyclerView.Adapter<AllCardsViewHolder>(),
+class AllCardAdapter(val allCardList: ArrayList<Card>) : RecyclerView.Adapter<AllCardsViewHolder>(),
     Filterable {
 
-    private var allCardsListFiltered: ArrayList<Card> = ArrayList(allCardsList)
+    private var allCardsListFiltered: ArrayList<Card> = ArrayList(allCardList)
 
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): AllCardsViewHolder {
@@ -36,10 +36,10 @@ class AllCardsAdapter(val allCardsList: ArrayList<Card>) : RecyclerView.Adapter<
                 val charString = charSequence.toString()
                 if (charString.isEmpty()) {
                     allCardsListFiltered?.clear()
-                    allCardsListFiltered?.addAll(allCardsList)
+                    allCardsListFiltered?.addAll(allCardList)
                 } else {
                     val filteredList = java.util.ArrayList<Card>()
-                    for (card in allCardsList) {
+                    for (card in allCardList) {
 
                         // name match condition. this might differ depending on your requirement
                         // here we are looking for name or phone number match
@@ -60,7 +60,7 @@ class AllCardsAdapter(val allCardsList: ArrayList<Card>) : RecyclerView.Adapter<
                 allCardsListFiltered = filterResults.values as java.util.ArrayList<Card>
 
                 // refresh the list with filtered data
-                this@AllCardsAdapter.notifyDataSetChanged()
+                this@AllCardAdapter.notifyDataSetChanged()
             }
         }
     }

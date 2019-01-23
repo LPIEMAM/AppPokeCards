@@ -3,8 +3,6 @@ package lpiemam.com.apppokecards.fragment
 
 import android.content.Context
 import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
-import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -13,14 +11,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.fragment_collection.*
 import lpiemam.com.apppokecards.MainActivity
 import lpiemam.com.apppokecards.R
 import lpiemam.com.apppokecards.RecyclerTouchListener
 import lpiemam.com.apppokecards.ReplaceFragmentListener
 import lpiemam.com.apppokecards.adapter.UserCardsAdapter
-import lpiemam.com.apppokecards.model.Card
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -37,7 +33,7 @@ class CollectionFragment : Fragment() {
     private lateinit var mainActivity : MainActivity
     private lateinit var collectionFragment: CollectionFragment
     private var recyclerView: RecyclerView? = null
-    var userCardsAdapter: UserCardsAdapter? = null
+    var userCardAdapter: UserCardsAdapter? = null
     private lateinit var userCardDetailFragment: UserCardDetailFragment
 
     var replaceFragmentListener: ReplaceFragmentListener? = null
@@ -64,6 +60,13 @@ class CollectionFragment : Fragment() {
         super.onDetach()
     }
 
+    override fun onResume() {
+
+        replaceFragmentListener!!.setUpBackButton(false)
+        replaceFragmentListener!!.setDrawerEnabled(true)
+        super.onResume()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -85,23 +88,20 @@ class CollectionFragment : Fragment() {
         setUpRecyclerView()
 
         floatingActionButtonAddPokemon.setOnClickListener { view ->
-            fragmentManager!!
-                .beginTransaction()
-                .add(R.id.mainActivityContainer, mainActivity.addNewCardFragment, "addNewCardFragment").addToBackStack("addNewCardFragment")
-                .commit()
+            replaceFragmentListener!!.replaceWithAddNewCardFragment()
         }
 
         collectionSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(s: String): Boolean {
                 Log.d("", "onQueryTextChange: $s")
-                userCardsAdapter!!.filter!!.filter(s)
+                userCardAdapter!!.filter!!.filter(s)
                 return false
             }
 
             override fun onQueryTextChange(s: String): Boolean {
                 //CharSequence charSequence = searchView.getQuery();
                 Log.d("", "onQueryTextChange: $s")
-                userCardsAdapter!!.filter!!.filter(s)
+                userCardAdapter!!.filter!!.filter(s)
                 return false
             }
         })
@@ -114,10 +114,10 @@ class CollectionFragment : Fragment() {
 
 
     private fun setUpRecyclerView() {
-        userCardsAdapter = UserCardsAdapter(ArrayList(mainActivity.userSiam.userCardList))
+        userCardAdapter = UserCardsAdapter(ArrayList(mainActivity.userSiam.userCardList))
 
         collectionRecyclerView!!.layoutManager = GridLayoutManager(context, 4)
-        collectionRecyclerView!!.adapter = userCardsAdapter
+        collectionRecyclerView!!.adapter = userCardAdapter
 
         collectionRecyclerView!!.addOnItemTouchListener(
             RecyclerTouchListener(
@@ -126,15 +126,15 @@ class CollectionFragment : Fragment() {
                 object : RecyclerTouchListener.ClickListener {
                     override fun onClick(view: View, position: Int) {
 
-                        val card = userCardsAdapter!!.cardList[position]
+                        val card = userCardAdapter!!.cardList[position]
 
-                        replaceFragmentListener!!.showUserCardDetail(card)
+                        replaceFragmentListener!!.replaceWithUserDetailFragment(card)
                     }
 
                     override fun onLongClick(view: View?, position: Int) {
-                        val card = userCardsAdapter!!.cardList[position]
+                        val card = userCardAdapter!!.cardList[position]
 
-                        replaceFragmentListener!!.showUserCardDetail(card)
+                        replaceFragmentListener!!.replaceWithUserDetailFragment(card)
                     }
                 })
         )

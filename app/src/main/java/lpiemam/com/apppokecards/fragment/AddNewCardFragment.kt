@@ -11,7 +11,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_add_new_card.*
-import kotlinx.android.synthetic.main.fragment_collection.*
 import lpiemam.com.apppokecards.MainActivity
 import lpiemam.com.apppokecards.R
 import lpiemam.com.apppokecards.RecyclerTouchListener
@@ -115,11 +114,9 @@ class AddNewCardFragment : Fragment() {
                                 mainActivity.userSiam.userCardList.add(userCard)
                                 mainActivity.allCardsUserNeeds.remove(userCard)
                                 mainActivity.userSiam.userCardList = ArrayList(mainActivity.userSiam.userCardList.sortedWith(compareBy{it.pokemon.pokedexNumber}))
-                                mainActivity.collectionFragment.userCardsAdapter!!.notifyDataSetChanged()
-                                mainActivity.supportFragmentManager
-                                    .beginTransaction()
-                                    .replace(R.id.mainActivityContainer, CollectionFragment.newInstance(), "collectionFragment")
-                                    .commit()
+                                mainActivity.collectionFragment.userCardAdapter!!.notifyDataSetChanged()
+                                replaceFragmentListener!!.popBackStack()
+//                                replaceFragmentListener!!.replaceWithFragment(collectionFragment!!, null)
                             }
 
                             override fun onLongClick(view: View?, position: Int) {
@@ -127,11 +124,8 @@ class AddNewCardFragment : Fragment() {
                                 mainActivity.userSiam.userCardList.add(userCard)
                                 mainActivity.allCardsUserNeeds.remove(userCard)
                                 mainActivity.userSiam.userCardList = ArrayList(mainActivity.userSiam.userCardList.sortedWith(compareBy{it.pokemon.pokedexNumber}))
-                                mainActivity.collectionFragment.userCardsAdapter!!.notifyDataSetChanged()
-                                mainActivity.supportFragmentManager
-                                    .beginTransaction()
-                                    .replace(R.id.mainActivityContainer, CollectionFragment.newInstance(), "collectionFragment")
-                                    .commit()
+                                mainActivity.collectionFragment.userCardAdapter!!.notifyDataSetChanged()
+                                replaceFragmentListener!!.popBackStack()
                             }
                         })
         )

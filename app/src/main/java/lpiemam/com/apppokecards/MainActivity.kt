@@ -3,6 +3,7 @@ package lpiemam.com.apppokecards
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
+import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
@@ -70,8 +71,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 
     override fun onBackPressed() {
-        Snackbar.make(mainActivityContainer, "Add a new Card", Snackbar.LENGTH_LONG)
-            .setAction("Action", null).show()
         if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
             drawer_layout.closeDrawer(GravityCompat.START)
         } else if (supportFragmentManager.backStackEntryCount > 0)
@@ -82,12 +81,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
 
-//    override fun onSupportNavigateUp(): Boolean {
-//        Snackbar.make(mainActivityContainer, "Add a new Card", Snackbar.LENGTH_LONG)
-//            .setAction("Action", null).show()
-//        supportFragmentManager.popBackStack()
-//        return super.onSupportNavigateUp()
-//    }
 
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -102,10 +95,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // as you specify a parent activity in AndroidManifest.xml.
         when (item.itemId) {
             R.id.action_settings -> return true
-            android.R.id.home -> {
-                supportFragmentManager.popBackStack()
-                return true
-            }
             else -> return super.onOptionsItemSelected(item)
         }
 
@@ -306,10 +295,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         //Liste de TOUS les pokémons
         allPokemonList = arrayListOf(arcko, rozbouton, tenefix, tiplouf, tortipouss, tortank, ouisticram, pikachu, poussifeu, mentali, mew, kaiminus, hericendre, germignon, gobou, goelise, florizarre, dracaufeu, corboss, noctali)
-        allPokemonList = ArrayList(allPokemonList.sortedWith(compareBy({it.pokedexNumber})))
+        allPokemonList = ArrayList(allPokemonList.sortedWith(compareBy{it.pokedexNumber}))
 
         //Liste de TOUTES les cartes de TOUS les pokémons
         allCardsList = arrayListOf(arckoCard, rozboutonCard, tenefixCard, tiploufCard, tortipoussCard, tortankCard, ouisticramCard, pikachuCard, pikachuCard2, poussifeuCard, mentaliCard, mewCard, kaiminusCard, hericendreCard, germignonCard, gobouCard, goeliseCard, florizarreCard, dracaufeuCard, corbossCard, noctaliCard)
+        allCardsList = ArrayList(allCardsList.sortedWith(compareBy{it.pokemon.pokedexNumber}))
 
         //Liste des pokémons dont l'utilisateur possède une carte
         userSiam.userCardList = arrayListOf(pikachuCard, mewCard, hericendreCard, goeliseCard, corbossCard, tortankCard, dracaufeuCard, mentaliCard, noctaliCard)
@@ -348,12 +338,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     }
 
-    override fun showUserCardDetail(card: Card) {
+    override fun replaceWithUserDetailFragment(card: Card) {
         val userCardDetailFragment = UserCardDetailFragment.newInstance()
         userCardDetailFragment.card = card
         supportFragmentManager!!
             .beginTransaction()
-            .add(R.id.mainActivityContainer, userCardDetailFragment, "userCardDetailFragment").addToBackStack("CollectionFragment")
+            .replace(R.id.mainActivityContainer, userCardDetailFragment, "userCardDetailFragment")
             .addToBackStack("userCardDetailFragment")
             .commit()
     }
@@ -366,9 +356,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     drawer_layout.closeDrawer(GravityCompat.START)
                 } else if (supportFragmentManager.backStackEntryCount > 0) {
                     supportFragmentManager.popBackStack()
-                }
-                else {
-                    super.onBackPressed()
                 }
             }
 
@@ -383,4 +370,26 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         }
     }
+
+
+    override fun replaceWithAddNewCardFragment() {
+        supportFragmentManager!!
+            .beginTransaction()
+            .replace(R.id.mainActivityContainer, AddNewCardFragment.newInstance(), "userCardDetailFragment")
+            .addToBackStack("userCardDetailFragment")
+            .commit()
+    }
+
+    override fun replaceWithFragment(fragment: Fragment, tag : String?) {
+        supportFragmentManager!!
+            .beginTransaction()
+            .replace(R.id.mainActivityContainer, fragment, tag)
+            .addToBackStack(tag)
+            .commit()
+    }
+
+    override fun popBackStack() {
+        supportFragmentManager.popBackStack()
+    }
+
 }

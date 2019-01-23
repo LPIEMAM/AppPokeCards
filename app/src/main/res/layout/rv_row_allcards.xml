@@ -15,7 +15,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:srcCompat="@drawable/pokemon_card_back"/>
+                app:srcCompat="@drawable/pokemon_card_back" android:layout_marginEnd="2dp"
+                android:layout_marginStart="2dp" android:layout_marginBottom="2dp" android:layout_marginTop="2dp"/>
     </android.support.constraint.ConstraintLayout>
     <View
             android:layout_width="match_parent"

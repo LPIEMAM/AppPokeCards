@@ -3,7 +3,6 @@ package lpiemam.com.apppokecards.fragment
 
 import android.content.Context
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.SearchView
@@ -11,9 +10,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import kotlinx.android.synthetic.main.fragment_all_cards.*
 import kotlinx.android.synthetic.main.fragment_collection.*
 import lpiemam.com.apppokecards.*
-import lpiemam.com.apppokecards.adapter.AllCardsAdapter
+import lpiemam.com.apppokecards.adapter.AllCardAdapter
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -28,7 +28,7 @@ private const val ARG_PARAM2 = "param2"
 class AllCardsFragment : Fragment() {
 
     private lateinit var mainActivity : MainActivity
-    private var allCardsAdapter: AllCardsAdapter? = null
+    private var allCardAdapter: AllCardAdapter? = null
     var replaceFragmentListener: ReplaceFragmentListener? = null
 
     companion object {
@@ -55,7 +55,7 @@ class AllCardsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val view = inflater.inflate(R.layout.fragment_collection, container, false)
+        val view = inflater.inflate(R.layout.fragment_all_cards, container, false)
 
         mainActivity = (context as MainActivity?)!!
         setHasOptionsMenu(true)
@@ -64,22 +64,19 @@ class AllCardsFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        floatingActionButtonAddPokemon.setOnClickListener { view ->
-            Snackbar.make(view, "Add a new Card", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
 
-        collectionSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+
+        allCardsSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(s: String): Boolean {
                 Log.d("", "onQueryTextChange: $s")
-                allCardsAdapter!!.filter!!.filter(s)
+                allCardAdapter!!.filter!!.filter(s)
                 return false
             }
 
             override fun onQueryTextChange(s: String): Boolean {
                 //CharSequence charSequence = searchView.getQuery();
                 Log.d("", "onQueryTextChange: $s")
-                allCardsAdapter!!.filter!!.filter(s)
+                allCardAdapter!!.filter!!.filter(s)
                 return false
             }
         })
@@ -90,26 +87,27 @@ class AllCardsFragment : Fragment() {
     }
 
     private fun setUpRecyclerView() {
-        allCardsAdapter = AllCardsAdapter(ArrayList(mainActivity.allCardsList))
+        allCardAdapter = AllCardAdapter(ArrayList(mainActivity.allCardsList))
 
-        collectionRecyclerView!!.layoutManager = GridLayoutManager(context, 4)
-        collectionRecyclerView!!.adapter = allCardsAdapter
+        allCardsRecyclerView!!.layoutManager = GridLayoutManager(context, 4)
+        allCardsRecyclerView!!.adapter = allCardAdapter
 
-        collectionRecyclerView!!.addOnItemTouchListener(
+        allCardsRecyclerView!!.addOnItemTouchListener(
             RecyclerTouchListener(
                 context!!,
-                collectionRecyclerView!!,
+                allCardsRecyclerView!!,
                 object : RecyclerTouchListener.ClickListener {
                     override fun onClick(view: View, position: Int) {
-                        /*val userCard = userCardsAdapter!!.userCardsList.get(position)
-                        (plantDetailsFragment as PlantDetailsFragment).setUserPlant(userPlant)
-                        mainActivity.replaceFragment(plantDetailsFragment)*/
+
+                        val card = allCardAdapter!!.allCardList[position]
+
+                        replaceFragmentListener!!.replaceWithUserDetailFragment(card)
                     }
 
                     override fun onLongClick(view: View?, position: Int) {
-                        /*val userPlant = userPlantViewAdapter.getUserPlantList().get(position)
-                        (plantDetailsFragment as PlantDetailsFragment).setUserPlant(userPlant)
-                        mainActivity.replaceFragment(plantDetailsFragment)*/
+                        val card = allCardAdapter!!.allCardList[position]
+
+                        replaceFragmentListener!!.replaceWithUserDetailFragment(card)
                     }
                 })
         )
