@@ -12,4 +12,6 @@ interface ReplaceFragmentListener {
     fun replaceWithAddNewCardFragment()
     fun replaceWithFragment(fragment: androidx.fragment.app.Fragment, tag : String?)
     fun popBackStack()
+    fun notifyCollectionDataSetChanged()
+
 }

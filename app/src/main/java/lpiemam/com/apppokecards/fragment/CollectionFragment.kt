@@ -17,6 +17,7 @@ import lpiemam.com.apppokecards.R
 import lpiemam.com.apppokecards.RecyclerTouchListener
 import lpiemam.com.apppokecards.ReplaceFragmentListener
 import lpiemam.com.apppokecards.adapter.UserCardsAdapter
+import lpiemam.com.apppokecards.model.Manager
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -30,14 +31,8 @@ private const val ARG_PARAM2 = "param2"
  */
 class CollectionFragment : androidx.fragment.app.Fragment() {
 
-    private lateinit var mainActivity : MainActivity
-    private lateinit var collectionFragment: CollectionFragment
-    private var recyclerView: androidx.recyclerview.widget.RecyclerView? = null
     var userCardAdapter: UserCardsAdapter? = null
-    private lateinit var userCardDetailFragment: UserCardDetailFragment
-
     var replaceFragmentListener: ReplaceFragmentListener? = null
-    private lateinit var addNewCardFragment : AddNewCardFragment
 
 
     companion object {
@@ -72,7 +67,6 @@ class CollectionFragment : androidx.fragment.app.Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        mainActivity = context as MainActivity
 
         setHasOptionsMenu(true)
 
@@ -87,7 +81,7 @@ class CollectionFragment : androidx.fragment.app.Fragment() {
 
         setUpRecyclerView()
 
-        floatingActionButtonAddPokemon.setOnClickListener { view ->
+        floatingActionButtonAddPokemon.setOnClickListener {
             replaceFragmentListener!!.replaceWithAddNewCardFragment()
         }
 
@@ -114,7 +108,7 @@ class CollectionFragment : androidx.fragment.app.Fragment() {
 
 
     private fun setUpRecyclerView() {
-        userCardAdapter = UserCardsAdapter(ArrayList(mainActivity.userSiam.userCardList))
+        userCardAdapter = UserCardsAdapter(ArrayList(Manager.userSiam.userCardList))
 
         collectionRecyclerView!!.layoutManager = androidx.recyclerview.widget.GridLayoutManager(context, 4)
         collectionRecyclerView!!.adapter = userCardAdapter

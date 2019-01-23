@@ -14,6 +14,7 @@ import kotlinx.android.synthetic.main.fragment_all_cards.*
 import kotlinx.android.synthetic.main.fragment_collection.*
 import lpiemam.com.apppokecards.*
 import lpiemam.com.apppokecards.adapter.AllCardAdapter
+import lpiemam.com.apppokecards.model.Manager
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -27,8 +28,7 @@ private const val ARG_PARAM2 = "param2"
  */
 class AllCardsFragment : androidx.fragment.app.Fragment() {
 
-    private lateinit var mainActivity : MainActivity
-    private var allCardAdapter: AllCardAdapter? = null
+    var allCardAdapter: AllCardAdapter? = null
     var replaceFragmentListener: ReplaceFragmentListener? = null
 
     companion object {
@@ -57,7 +57,6 @@ class AllCardsFragment : androidx.fragment.app.Fragment() {
 
         val view = inflater.inflate(R.layout.fragment_all_cards, container, false)
 
-        mainActivity = (context as MainActivity?)!!
         setHasOptionsMenu(true)
         // Inflate the layout for this fragment
         return view
@@ -87,7 +86,7 @@ class AllCardsFragment : androidx.fragment.app.Fragment() {
     }
 
     private fun setUpRecyclerView() {
-        allCardAdapter = AllCardAdapter(ArrayList(mainActivity.allCardsList))
+        allCardAdapter = AllCardAdapter(ArrayList(Manager.allCardsList))
 
         allCardsRecyclerView!!.layoutManager = androidx.recyclerview.widget.GridLayoutManager(context, 4)
         allCardsRecyclerView!!.adapter = allCardAdapter
