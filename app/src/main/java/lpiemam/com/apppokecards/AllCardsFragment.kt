@@ -1,6 +1,7 @@
 package lpiemam.com.apppokecards
 
 
+import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -19,11 +20,25 @@ private const val ARG_PARAM2 = "param2"
  */
 class AllCardsFragment : Fragment() {
 
+    var replaceFragmentListener: ReplaceFragmentListener? = null
+
     companion object {
 
         fun newInstance(): AllCardsFragment {
             return AllCardsFragment()
         }
+    }
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        replaceFragmentListener = context as? ReplaceFragmentListener
+        if (replaceFragmentListener == null) {
+            throw ClassCastException("$context must implement OnCardSelectedListener")
+        }
+    }
+
+    override fun onDetach() {
+        replaceFragmentListener = null
+        super.onDetach()
     }
 
     override fun onCreateView(
@@ -36,8 +51,8 @@ class AllCardsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        (context as MainActivity).setDrawerEnabled(false)
-        (context as MainActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        replaceFragmentListener!!.setDrawerEnabled(true)
+        replaceFragmentListener!!.setUpBackButton(false)
         super.onViewCreated(view, savedInstanceState)
     }
 }

@@ -57,7 +57,7 @@ class UserCardsAdapter(val pokemonList: ArrayList<Pokemon>) : RecyclerView.Adapt
             override fun publishResults(charSequence: CharSequence, filterResults: Filter.FilterResults) {
                 userCardsListFiltered = filterResults.values as java.util.ArrayList<Pokemon>
 
-                // refresh the list with filtered data
+                // refresh the replaceFragmentListener with filtered data
                 this@UserCardsAdapter.notifyDataSetChanged()
             }
         }

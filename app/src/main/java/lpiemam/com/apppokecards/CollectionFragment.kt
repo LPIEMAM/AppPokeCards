@@ -1,6 +1,7 @@
 package lpiemam.com.apppokecards
 
 
+import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
@@ -11,6 +12,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.fragment_collection.*
 import lpiemam.com.apppokecards.adapter.UserCardsAdapter
 import lpiemam.com.apppokecards.model.Card
@@ -32,17 +34,29 @@ class CollectionFragment : Fragment() {
     private var recyclerView: RecyclerView? = null
     private var userCardsAdapter: UserCardsAdapter? = null
     private lateinit var userCardDetailFragment: UserCardDetailFragment
-    //private lateinit var addCardButton : Button
+
+    var replaceFragmentListener: ReplaceFragmentListener? = null
+
 
     companion object {
-
         fun newInstance(): CollectionFragment {
             return CollectionFragment()
         }
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        replaceFragmentListener = context as? ReplaceFragmentListener
+        if (replaceFragmentListener == null) {
+            throw ClassCastException("$context must implement OnCardSelectedListener")
+        }
+    }
 
+    override fun onDetach() {
 
+        replaceFragmentListener = null
+        super.onDetach()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,7 +65,6 @@ class CollectionFragment : Fragment() {
 
         val view = inflater.inflate(R.layout.fragment_collection, container, false)
 
-        mainActivity = (context as MainActivity?)!!
         setHasOptionsMenu(true)
         //addCardButton = view.findViewById(R.id.buttonAddCard)
 
@@ -66,9 +79,8 @@ class CollectionFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        (context as MainActivity).setDrawerEnabled(false)
-        (context as MainActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
+        mainActivity = context as MainActivity
 
         floatingActionButtonAddPokemon.setOnClickListener { view ->
             Snackbar.make(view, "Add a new Card", Snackbar.LENGTH_LONG)
@@ -92,9 +104,14 @@ class CollectionFragment : Fragment() {
 
 
 
-        setUpRecyclerView()
 
         super.onViewCreated(view, savedInstanceState)
+    }
+
+    override fun onResume() {
+
+        setUpRecyclerView()
+        super.onResume()
     }
 
     private fun setUpRecyclerView() {
@@ -117,26 +134,15 @@ class CollectionFragment : Fragment() {
                 object : RecyclerTouchListener.ClickListener {
                     override fun onClick(view: View, position: Int) {
 
-                        val pokemon = userCardsAdapter!!.pokemonList.get(position)
-                        Snackbar.make(view, pokemon.name, Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show()
-                        userCardDetailFragment = UserCardDetailFragment.newInstance()
-                        userCardDetailFragment.pokemon = pokemon
+                        val pokemon = userCardsAdapter!!.pokemonList[position]
 
-                        fragmentManager!!
-                            .beginTransaction()
-                            .replace(R.id.mainActivityContainer, userCardDetailFragment, "userCardDetailFragment")
-                            .commit()
+                        replaceFragmentListener!!.showUserCardDetail(pokemon)
                     }
 
                     override fun onLongClick(view: View?, position: Int) {
-                        val pokemon = userCardsAdapter!!.pokemonList.get(position)
-                        userCardDetailFragment = UserCardDetailFragment.newInstance()
-                        userCardDetailFragment.pokemon = pokemon
-                        fragmentManager!!
-                            .beginTransaction()
-                            .replace(R.id.mainActivityContainer, userCardDetailFragment, "userCardDetailFragment")
-                            .commit()
+                        val pokemon = userCardsAdapter!!.pokemonList[position]
+
+                        replaceFragmentListener!!.showUserCardDetail(pokemon)
                     }
                 })
         )
