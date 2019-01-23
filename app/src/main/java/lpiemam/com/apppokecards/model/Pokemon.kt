@@ -1,6 +1,6 @@
 package lpiemam.com.apppokecards.model
 
-import android.support.v7.util.SortedList
+import androidx.recyclerview.widget.SortedList
 
 /**
  * Created by lpiem on 21/01/2019.

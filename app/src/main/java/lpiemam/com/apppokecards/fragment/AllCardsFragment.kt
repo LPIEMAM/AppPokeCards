@@ -3,9 +3,9 @@ package lpiemam.com.apppokecards.fragment
 
 import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.SearchView
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.appcompat.widget.SearchView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -25,7 +25,7 @@ private const val ARG_PARAM2 = "param2"
  * A simple [Fragment] subclass.
  *
  */
-class AllCardsFragment : Fragment() {
+class AllCardsFragment : androidx.fragment.app.Fragment() {
 
     private lateinit var mainActivity : MainActivity
     private var allCardAdapter: AllCardAdapter? = null
@@ -89,7 +89,7 @@ class AllCardsFragment : Fragment() {
     private fun setUpRecyclerView() {
         allCardAdapter = AllCardAdapter(ArrayList(mainActivity.allCardsList))
 
-        allCardsRecyclerView!!.layoutManager = GridLayoutManager(context, 4)
+        allCardsRecyclerView!!.layoutManager = androidx.recyclerview.widget.GridLayoutManager(context, 4)
         allCardsRecyclerView!!.adapter = allCardAdapter
 
         allCardsRecyclerView!!.addOnItemTouchListener(

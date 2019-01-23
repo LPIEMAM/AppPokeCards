@@ -3,10 +3,10 @@ package lpiemam.com.apppokecards.fragment
 
 import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.SearchView
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.appcompat.widget.SearchView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -28,11 +28,11 @@ private const val ARG_PARAM2 = "param2"
  * A simple [Fragment] subclass.
  *
  */
-class CollectionFragment : Fragment() {
+class CollectionFragment : androidx.fragment.app.Fragment() {
 
     private lateinit var mainActivity : MainActivity
     private lateinit var collectionFragment: CollectionFragment
-    private var recyclerView: RecyclerView? = null
+    private var recyclerView: androidx.recyclerview.widget.RecyclerView? = null
     var userCardAdapter: UserCardsAdapter? = null
     private lateinit var userCardDetailFragment: UserCardDetailFragment
 
@@ -116,7 +116,7 @@ class CollectionFragment : Fragment() {
     private fun setUpRecyclerView() {
         userCardAdapter = UserCardsAdapter(ArrayList(mainActivity.userSiam.userCardList))
 
-        collectionRecyclerView!!.layoutManager = GridLayoutManager(context, 4)
+        collectionRecyclerView!!.layoutManager = androidx.recyclerview.widget.GridLayoutManager(context, 4)
         collectionRecyclerView!!.adapter = userCardAdapter
 
         collectionRecyclerView!!.addOnItemTouchListener(

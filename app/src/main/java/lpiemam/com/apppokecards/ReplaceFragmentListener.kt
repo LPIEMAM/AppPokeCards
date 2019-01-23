@@ -1,6 +1,6 @@
 package lpiemam.com.apppokecards
 
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import lpiemam.com.apppokecards.model.Card
 import lpiemam.com.apppokecards.model.Pokemon
 
@@ -10,6 +10,6 @@ interface ReplaceFragmentListener {
     fun replaceWithUserDetailFragment(card: Card)
     fun setUpBackButton(enabled: Boolean)
     fun replaceWithAddNewCardFragment()
-    fun replaceWithFragment(fragment: Fragment, tag : String?)
+    fun replaceWithFragment(fragment: androidx.fragment.app.Fragment, tag : String?)
     fun popBackStack()
 }

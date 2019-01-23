@@ -1,6 +1,6 @@
 package lpiemam.com.apppokecards.adapter
 
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Filter
@@ -10,7 +10,7 @@ import android.widget.Filterable
 import lpiemam.com.apppokecards.model.Card
 import lpiemam.com.apppokecards.model.Pokemon
 
-class UserCardsAdapter(val cardList: ArrayList<Card>) : RecyclerView.Adapter<UserCardsViewHolder>(), Filterable {
+class UserCardsAdapter(val cardList: ArrayList<Card>) : androidx.recyclerview.widget.RecyclerView.Adapter<UserCardsViewHolder>(), Filterable {
 
     private var userCardsListFiltered: ArrayList<Card>? = ArrayList(cardList)
 

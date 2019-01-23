@@ -3,15 +3,12 @@ package lpiemam.com.apppokecards.fragment
 
 import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_user_card_detail.*
-import lpiemam.com.apppokecards.model.GlideApp
-import lpiemam.com.apppokecards.model.Pokemon
-import lpiemam.com.carousel.CarouselView
-import java.util.ArrayList
 import lpiemam.com.apppokecards.R
 import lpiemam.com.apppokecards.ReplaceFragmentListener
 import lpiemam.com.apppokecards.model.Card
@@ -26,7 +23,7 @@ private const val ARG_PARAM2 = "param2"
  * A simple [Fragment] subclass.
  *
  */
-class UserCardDetailFragment : Fragment() {
+class UserCardDetailFragment : androidx.fragment.app.Fragment() {
 
     lateinit var card: Card
     var replaceFragmentListener: ReplaceFragmentListener? = null
@@ -75,7 +72,7 @@ class UserCardDetailFragment : Fragment() {
         userCardDetailPokemonDescription.text = card.description
         userCardDetailPokemonName.text = card.pokemon.name
         userCardDetailPokemonType.text = card.pokemon.type
-        GlideApp.with(view).load(card.url).placeholder(R.drawable.pokemon_card_back).into(userCardDetailImageViewCard)
+        Picasso.get().load(card.url).placeholder(R.drawable.pokemon_card_back).into(userCardDetailImageViewCard)
 
 
     }

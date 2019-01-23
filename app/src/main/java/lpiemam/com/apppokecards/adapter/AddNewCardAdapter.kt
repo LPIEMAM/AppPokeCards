@@ -1,6 +1,6 @@
 package lpiemam.com.apppokecards.adapter
 
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Filter
@@ -11,7 +11,7 @@ import lpiemam.com.apppokecards.viewholder.AddNewCardViewHolder
 import lpiemam.com.apppokecards.viewholder.AllCardsViewHolder
 
 
-class AddNewCardAdapter(val allCardsUserNeeds: ArrayList<Card>) : RecyclerView.Adapter<AddNewCardViewHolder>(),
+class AddNewCardAdapter(val allCardsUserNeeds: ArrayList<Card>) : androidx.recyclerview.widget.RecyclerView.Adapter<AddNewCardViewHolder>(),
     Filterable {
 
     private var allCardsUserNeedsFiltered: ArrayList<Card> = ArrayList(allCardsUserNeeds)
@@ -23,11 +23,11 @@ class AddNewCardAdapter(val allCardsUserNeeds: ArrayList<Card>) : RecyclerView.A
     }
 
     override fun getItemCount(): Int {
-        return allCardsUserNeedsFiltered!!.size
+        return allCardsUserNeedsFiltered.size
     }
 
     override fun onBindViewHolder(addNewCardViewHolder: AddNewCardViewHolder, i: Int) {
-        val card = allCardsUserNeedsFiltered!![i]
+        val card = allCardsUserNeedsFiltered[i]
         addNewCardViewHolder.bind(card)
     }
 
@@ -36,8 +36,8 @@ class AddNewCardAdapter(val allCardsUserNeeds: ArrayList<Card>) : RecyclerView.A
             override fun performFiltering(charSequence: CharSequence): Filter.FilterResults {
                 val charString = charSequence.toString()
                 if (charString.isEmpty()) {
-                    allCardsUserNeedsFiltered?.clear()
-                    allCardsUserNeedsFiltered?.addAll(allCardsUserNeeds)
+                    allCardsUserNeedsFiltered.clear()
+                    allCardsUserNeedsFiltered.addAll(allCardsUserNeeds)
                 } else {
                     val filteredList = java.util.ArrayList<Card>()
                     for (card in allCardsUserNeeds) {

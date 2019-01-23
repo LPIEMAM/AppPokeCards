@@ -1,12 +1,12 @@
 package lpiemam.com.apppokecards
 
 import android.os.Bundle
-import android.support.design.widget.NavigationView
-import android.support.design.widget.Snackbar
-import android.support.v4.app.Fragment
-import android.support.v4.view.GravityCompat
-import android.support.v7.app.ActionBarDrawerToggle
-import android.support.v7.app.AppCompatActivity
+import com.google.android.material.navigation.NavigationView
+import com.google.android.material.snackbar.Snackbar
+import androidx.fragment.app.Fragment
+import androidx.core.view.GravityCompat
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_main.*
@@ -17,7 +17,7 @@ import lpiemam.com.apppokecards.fragment.CollectionFragment
 import lpiemam.com.apppokecards.model.Card
 import lpiemam.com.apppokecards.model.Pokemon
 import lpiemam.com.apppokecards.model.User
-import android.support.v4.widget.DrawerLayout
+import androidx.drawerlayout.widget.DrawerLayout
 import lpiemam.com.apppokecards.fragment.UserCardDetailFragment
 
 
@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 
     lateinit var toggle: ActionBarDrawerToggle
-    lateinit var drawer: DrawerLayout
+    lateinit var drawer: androidx.drawerlayout.widget.DrawerLayout
 
     lateinit var allCardsList: ArrayList<Card>
     lateinit var allPokemonList : ArrayList<Pokemon>
@@ -329,9 +329,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun setDrawerEnabled(enabled: Boolean) {
         val lockMode = if (enabled) {
-            DrawerLayout.LOCK_MODE_UNLOCKED
+            androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
         } else {
-            DrawerLayout.LOCK_MODE_LOCKED_CLOSED
+            androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_LOCKED_CLOSED
         }
         drawer.setDrawerLockMode(lockMode)
         toggle.isDrawerIndicatorEnabled = enabled
@@ -341,7 +341,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun replaceWithUserDetailFragment(card: Card) {
         val userCardDetailFragment = UserCardDetailFragment.newInstance()
         userCardDetailFragment.card = card
-        supportFragmentManager!!
+        supportFragmentManager
             .beginTransaction()
             .replace(R.id.mainActivityContainer, userCardDetailFragment, "userCardDetailFragment")
             .addToBackStack("userCardDetailFragment")
@@ -373,15 +373,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 
     override fun replaceWithAddNewCardFragment() {
-        supportFragmentManager!!
+        supportFragmentManager
             .beginTransaction()
             .replace(R.id.mainActivityContainer, AddNewCardFragment.newInstance(), "userCardDetailFragment")
             .addToBackStack("userCardDetailFragment")
             .commit()
     }
 
-    override fun replaceWithFragment(fragment: Fragment, tag : String?) {
-        supportFragmentManager!!
+    override fun replaceWithFragment(fragment: androidx.fragment.app.Fragment, tag : String?) {
+        supportFragmentManager
             .beginTransaction()
             .replace(R.id.mainActivityContainer, fragment, tag)
             .addToBackStack(tag)
