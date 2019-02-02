@@ -1,13 +1,12 @@
 package lpiemam.com.apppokecards.model
 
-import lpiemam.com.apppokecards.fragment.AllCardsFragment
-
 object Manager {
 
     lateinit var allCardsList: ArrayList<Card>
     lateinit var allPokemonList : ArrayList<Pokemon>
     lateinit var userSiam : User
     lateinit var allCardsUserNeeds: ArrayList<Card>
+    lateinit var cardsPacksList : ArrayList<CardsPack>
 
 
     fun initializeData() {
@@ -194,6 +193,13 @@ object Manager {
             }
         }
 
+        var petitPack = CardsPack("Petit", allCardsList)
+        var moyenPack = CardsPack("Moyen", allCardsList)
+        var grandPack = CardsPack("Grand", allCardsList)
+
+        cardsPacksList.add(petitPack)
+        cardsPacksList.add(moyenPack)
+        cardsPacksList.add(grandPack)
     }
 
 }
