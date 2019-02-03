@@ -58,7 +58,7 @@ class ShopFragment : androidx.fragment.app.Fragment() {
 
 
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_collection, container, false)
+        return inflater.inflate(R.layout.fragment_layout, container, false)
 
     }
 
@@ -75,7 +75,7 @@ class ShopFragment : androidx.fragment.app.Fragment() {
         shopAdapter = ShopAdapter(ArrayList(Manager.cardsPacksList))
 
         collectionRecyclerView!!.layoutManager = androidx.recyclerview.widget.GridLayoutManager(context, 4)
-        collectionRecyclerView!!.adapter = userCardAdapter
+        collectionRecyclerView!!.adapter = shopAdapter
 
         collectionRecyclerView!!.addOnItemTouchListener(
                 RecyclerTouchListener(
@@ -84,15 +84,15 @@ class ShopFragment : androidx.fragment.app.Fragment() {
                         object : RecyclerTouchListener.ClickListener {
                             override fun onClick(view: View, position: Int) {
 
-                                val card = userCardAdapter!!.cardList[position]
+                                //val card = shopAdapter!!.cardList[position]
 
-                                replaceFragmentListener!!.replaceWithUserDetailFragment(card)
+                                //replaceFragmentListener!!.replaceWithUserDetailFragment(card)
                             }
 
                             override fun onLongClick(view: View?, position: Int) {
-                                val card = userCardAdapter!!.cardList[position]
+                                //val card = userCardAdapter!!.cardList[position]
 
-                                replaceFragmentListener!!.replaceWithUserDetailFragment(card)
+                                //replaceFragmentListener!!.replaceWithUserDetailFragment(card)
                             }
                         })
         )

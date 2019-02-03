@@ -16,7 +16,7 @@ class ShopAdapter (val cardsPackList: ArrayList<CardsPack>) : androidx.recyclerv
     private var allCardPackList: ArrayList<CardsPack>? = ArrayList(cardsPackList)
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): CardsPackViewHolder {
-        val view = LayoutInflater.from(viewGroup.context).inflate(R.layout.rv_row_collection, viewGroup, false)
+        val view = LayoutInflater.from(viewGroup.context).inflate(R.layout.rv_row_cardspack, viewGroup, false)
         return CardsPackViewHolder(view)
     }
 
