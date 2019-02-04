@@ -10,7 +10,7 @@ object Manager {
 
 
     fun initializeData() {
-        userSiam = User("Annabelle", "Braye", "Siam", "annabelle.braye@gmail.com", "")
+        userSiam = User("Annabelle", "Braye", "Siam", "annabelle.braye@gmail.com", "", 3000)
 
         var pikachu = Pokemon("Pikachu", 25, "Electrik")
         var mew = Pokemon("Mew", 150, "Psy")
@@ -177,6 +177,21 @@ object Manager {
         //Liste des cartes pokémons que l'utilisateur n'a pas
         allCardsUserNeeds = ArrayList()
 
+        setAllCardsUserNeeds()
+
+        cardsPacksList = ArrayList()
+
+        var petitPack = CardsPack("Petit")
+        var moyenPack = CardsPack("Moyen")
+        var grandPack = CardsPack("Grand")
+
+        cardsPacksList.add(petitPack)
+        cardsPacksList.add(moyenPack)
+        cardsPacksList.add(grandPack)
+    }
+
+    fun setAllCardsUserNeeds() {
+        allCardsUserNeeds.clear()
         for(card in allCardsList) {
             var firewall = true
             for(userCard in userSiam.userCardList) {
@@ -192,14 +207,6 @@ object Manager {
                 allCardsUserNeeds.add(card)
             }
         }
-
-        var petitPack = CardsPack("Petit", allCardsList)
-        var moyenPack = CardsPack("Moyen", allCardsList)
-        var grandPack = CardsPack("Grand", allCardsList)
-
-        cardsPacksList.add(petitPack)
-        cardsPacksList.add(moyenPack)
-        cardsPacksList.add(grandPack)
     }
 
 }

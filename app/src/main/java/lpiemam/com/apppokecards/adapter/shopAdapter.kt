@@ -3,6 +3,7 @@ package lpiemam.com.apppokecards.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Filter
+import lpiemam.com.apppokecards.R
 import lpiemam.com.apppokecards.model.Card
 import lpiemam.com.apppokecards.model.CardsPack
 import lpiemam.com.apppokecards.viewholder.CardsPackViewHolder

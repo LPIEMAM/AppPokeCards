@@ -11,14 +11,11 @@ import android.view.Menu
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
-import lpiemam.com.apppokecards.fragment.AddNewCardFragment
-import lpiemam.com.apppokecards.fragment.AllCardsFragment
-import lpiemam.com.apppokecards.fragment.CollectionFragment
 import lpiemam.com.apppokecards.model.Card
 import lpiemam.com.apppokecards.model.Pokemon
 import lpiemam.com.apppokecards.model.User
 import androidx.drawerlayout.widget.DrawerLayout
-import lpiemam.com.apppokecards.fragment.UserCardDetailFragment
+import lpiemam.com.apppokecards.fragment.*
 import lpiemam.com.apppokecards.model.Manager
 
 
@@ -32,6 +29,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     lateinit var collectionFragment : CollectionFragment
     lateinit var allCardsFragment : AllCardsFragment
     lateinit var addNewCardFragment : AddNewCardFragment
+    lateinit var shopFragment : ShopFragment
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,6 +40,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         collectionFragment = CollectionFragment.newInstance()
         allCardsFragment = AllCardsFragment.newInstance()
         addNewCardFragment = AddNewCardFragment.newInstance()
+        shopFragment = ShopFragment.newInstance()
 
 
         drawer = drawer_layout
@@ -107,10 +106,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     .commit()
             }
             R.id.menuItemShop -> {
-//                supportFragmentManager
-//                .beginTransaction()
-//                .add(R.id.mainActivityContainer, ShopFragment.newInstance(), "collectionFragment")
-//                .commit()
+                supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.mainActivityContainer, shopFragment, "shopFragment")
+                    .commit()
             }
             R.id.menuItemQuizz -> {
 //                supportFragmentManager
