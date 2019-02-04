@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     lateinit var allCardsFragment : AllCardsFragment
     lateinit var addNewCardFragment : AddNewCardFragment
     lateinit var shopFragment : ShopFragment
+    lateinit var quizzFragment: QuizzFragment
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,6 +42,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         allCardsFragment = AllCardsFragment.newInstance()
         addNewCardFragment = AddNewCardFragment.newInstance()
         shopFragment = ShopFragment.newInstance()
+        quizzFragment = QuizzFragment.newInstance()
 
 
         drawer = drawer_layout
@@ -112,15 +114,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     .commit()
             }
             R.id.menuItemQuizz -> {
-//                supportFragmentManager
-//                .beginTransaction()
-//                .add(R.id.mainActivityContainer, QuizzFragment.newInstance(), "collectionFragment")
-//                .commit()
+                supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.mainActivityContainer, quizzFragment, "quizzFragment")
+                .commit()
             }
             R.id.menuItemAchievements -> {
 //                supportFragmentManager
 //                    .beginTransaction()
-//                    .add(R.id.mainActivityContainer, UserCardDetailFragment.newInstance(), "collectionFragment")
+//                    .replace(R.id.mainActivityContainer, UserCardDetailFragment.newInstance(), "collectionFragment")
 //                    .commit()
             }
             R.id.menuItemAllCards -> {

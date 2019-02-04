@@ -7,9 +7,9 @@ import java.lang.Exception
  */
 class CardsPack(val name : String, var listCards : ArrayList<Card> = ArrayList(), var isSelected : Boolean = false) {
     val nbCards = when (name) {
-        "Petit" -> 5
-        "Moyen" -> 9
-        "Grand" -> 15
+        "Petit" -> 3
+        "Moyen" -> 6
+        "Grand" -> 9
         else -> 0
     }
 
@@ -22,7 +22,17 @@ class CardsPack(val name : String, var listCards : ArrayList<Card> = ArrayList()
 
     fun generateRandomCards() {
         listCards.clear()
-        if(nbCards <= Manager.allCardsUserNeeds.size) {
+        if(nbCards <= Manager.allCardsList.size) {
+            val usedPositions = ArrayList<Int>()
+            for(i in 1..nbCards) {
+                var randomPosition = (0..(Manager.allCardsList.size-1)).random()
+
+                listCards.add(Manager.allCardsList[randomPosition])
+                usedPositions.add(randomPosition)
+            }
+        }
+
+        /*if(nbCards <= Manager.allCardsUserNeeds.size) {
             val usedPositions = ArrayList<Int>()
             for(i in 1..nbCards) {
                 var randomPosition = (0..(Manager.allCardsUserNeeds.size-1)).random()
@@ -34,7 +44,7 @@ class CardsPack(val name : String, var listCards : ArrayList<Card> = ArrayList()
             }
         } else {
             throw Exception("Not Enough Cards")
-        }
+        }*/
     }
 
     fun clearCardList() {
