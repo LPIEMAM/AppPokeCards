@@ -61,7 +61,7 @@ class QuizzEndedFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        System.out.println(quizzFragment.hasAnswerCorrectlyToday)
+        System.out.println(quizzFragment.hasFinishedQuizzToday)
     }
 
 }

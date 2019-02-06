@@ -23,6 +23,7 @@ import lpiemam.com.apppokecards.model.Manager
 class QuizzStartFragment : Fragment() {
 
     var replaceFragmentListener: ReplaceFragmentListener? = null
+    var quizzFragment = Manager.quizzFragment
 
     companion object {
 
@@ -64,7 +65,7 @@ class QuizzStartFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        startButton.setOnClickListener() {
+        startButton.setOnClickListener {
             replaceFragmentListener!!.replaceWithQuizzFragment()
         }
     }

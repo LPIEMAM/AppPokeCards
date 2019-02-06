@@ -1,45 +1,27 @@
 package lpiemam.com.apppokecards.fragment
 
 
+import android.annotation.SuppressLint
 import android.content.Context
-import android.content.DialogInterface
-import android.content.Intent
-import android.graphics.drawable.Drawable
-import android.os.Bundle
-import android.os.Handler
-import android.util.Log
+import android.os.*
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.Chronometer
 import android.widget.TextView
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.SearchView
-import androidx.fragment.app.DialogFragment
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.fragment_collection.*
 import kotlinx.android.synthetic.main.fragment_quizz.*
-import kotlinx.android.synthetic.main.fragment_shop.*
-import kotlinx.android.synthetic.main.fragment_shop.view.*
-import kotlinx.android.synthetic.main.pack_opening_dialog_layout.*
 import lpiemam.com.apppokecards.*
 
-import lpiemam.com.apppokecards.adapter.ShopAdapter
-import lpiemam.com.apppokecards.adapter.UserCardsAdapter
-import lpiemam.com.apppokecards.model.CardsPack
 import lpiemam.com.apppokecards.model.Manager
 import lpiemam.com.apppokecards.model.PokemonQuestions
 import lpiemam.com.apppokecards.model.Question
 import java.util.*
+import android.os.CountDownTimer
+import kotlinx.android.synthetic.main.nav_header_main.*
 
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
@@ -56,17 +38,19 @@ class QuizzFragment : androidx.fragment.app.Fragment(), View.OnClickListener {
     private var mPokemonQuestions: PokemonQuestions? = null
     private var mCurrentQuestion: Question? = null
 
-    private var mScore: Int = 0
-    private var mNumberOfQuestions: Int = 0
+
+    private var nbQuestion = 0
+    private var nbCorrectAnswer = 0
+    var hasAnswer : Boolean = false
     var hasAnswerCorrectly : Boolean = false
-    var hasAnswerCorrectlyToday : Boolean = false
-    private lateinit var dateLastCorrectAnswer : Calendar
+    var hasFinishedQuizzToday : Boolean = false
+    private lateinit var dateLastQuizzEnded : Calendar
 
-    val BUNDLE_EXTRA_SCORE = "BUNDLE_EXTRA_SCORE"
-    val BUNDLE_STATE_SCORE = "currentScore"
-    val BUNDLE_STATE_QUESTION = "currentQuestion"
-
+    var chronoIsStarted = false
     private var mEnableTouchEvents: Boolean = false
+    private lateinit var countDownTimer : CountDownTimer
+    private var counter = 7
+    private lateinit var chrono : TextView
 
     companion object {
 
@@ -109,19 +93,10 @@ class QuizzFragment : androidx.fragment.app.Fragment(), View.OnClickListener {
 
     }
 
+    @SuppressLint("NewApi")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mPokemonQuestions = Manager.generateQuestions()
-
-
-
-        if (savedInstanceState != null) {
-            mScore = savedInstanceState.getInt(BUNDLE_STATE_SCORE)
-            mNumberOfQuestions = savedInstanceState.getInt(BUNDLE_STATE_QUESTION)
-        } else {
-            mScore = 0
-            mNumberOfQuestions = 4
-        }
 
         mEnableTouchEvents = true
 
@@ -145,13 +120,27 @@ class QuizzFragment : androidx.fragment.app.Fragment(), View.OnClickListener {
         mCurrentQuestion = mPokemonQuestions!!.question
         this.displayQuestion(mCurrentQuestion!!)
 
-    }
+        chrono = chronoTextView
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        outState.putInt(BUNDLE_STATE_SCORE, mScore)
-        outState.putInt(BUNDLE_STATE_QUESTION, mNumberOfQuestions)
+        object : CountDownTimer(7000, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                chrono.text = counter.toString()
+                counter--
+            }
 
-        super.onSaveInstanceState(outState)
+            override fun onFinish() {
+                counter = 7
+
+                if (hasAnswer) {
+                    hasAnswer = false
+                } else {
+                    nbQuestion++
+                }
+
+                setTimerCountDown()
+            }
+        }.start()
+
     }
 
     override fun onClick(v: View) {
@@ -159,32 +148,26 @@ class QuizzFragment : androidx.fragment.app.Fragment(), View.OnClickListener {
 
         if (responseIndex == mCurrentQuestion!!.answerIndex) {
             // Good answer
-            val snackbar = Snackbar.make(v, "Correct", Snackbar.LENGTH_LONG)
+            val snackbar = Snackbar.make(v, "Correct", Snackbar.LENGTH_SHORT)
             snackbar.show()
-            Manager.userSiam.coins += 50
             hasAnswerCorrectly = true
-            dateLastCorrectAnswer = Calendar.getInstance()
+            hasAnswer = true
+            nbCorrectAnswer += 1
         } else {
             // Wrong answer
-            val snackbar = Snackbar.make(v, "Faux", Snackbar.LENGTH_LONG)
+            val snackbar = Snackbar.make(v, "Faux", Snackbar.LENGTH_SHORT)
             snackbar.show()
+            hasAnswer = true
         }
 
+        nbQuestion += 1
         mEnableTouchEvents = false
 
         Handler().postDelayed({
             mEnableTouchEvents = true
             // If this is the last question, ends the game.
             // Else, display the next question.
-            if (hasAnswerCorrectly) {
-                hasAnswerCorrectlyToday = true
-                Manager.userSiam.dateLastCorrectAnswwer = dateLastCorrectAnswer
-                endGame()
-            } else {
-                mCurrentQuestion = mPokemonQuestions!!.question
-                displayQuestion(mCurrentQuestion!!)
-            }
-        }, 2000) // LENGTH_SHORT is usually 2 second long
+        }, 1000) // LENGTH_SHORT is usually 2 second long
     }
 
  /*  fun dispatchTouchEvent(ev: MotionEvent): Boolean {
@@ -201,6 +184,39 @@ class QuizzFragment : androidx.fragment.app.Fragment(), View.OnClickListener {
         mAnswerButton2!!.text = q.choiceList!![1]
         mAnswerButton3!!.text = q.choiceList!![2]
         mAnswerButton4!!.text = q.choiceList!![3]
+    }
+
+    private fun setTimerCountDown() {
+        if (nbQuestion < 3) {
+            mCurrentQuestion = mPokemonQuestions!!.question
+            this.displayQuestion(mCurrentQuestion!!)
+
+            object : CountDownTimer(7000, 1000) {
+                override fun onTick(millisUntilFinished: Long) {
+                    chrono.text = counter.toString()
+                    counter--
+                }
+
+                override fun onFinish() {
+                    counter = 7
+
+                    if (hasAnswer) {
+                        hasAnswer = false
+                    } else {
+                        nbQuestion++
+                    }
+                    setTimerCountDown()
+                }
+            }.start()
+        } else {
+            if (nbCorrectAnswer >= 2) {
+                Manager.userSiam.coins += 50
+            }
+            hasFinishedQuizzToday = true
+            dateLastQuizzEnded = Calendar.getInstance()
+            Manager.userSiam.dateLastQuizzEnded = dateLastQuizzEnded
+            endGame()
+        }
     }
 }
 

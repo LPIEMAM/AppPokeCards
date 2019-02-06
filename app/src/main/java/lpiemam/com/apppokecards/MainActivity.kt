@@ -115,8 +115,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             R.id.menuItemQuizz -> {
                 var dateOfDay = Calendar.getInstance()
-                if (Manager.userSiam.dateLastCorrectAnswwer == null || (dateOfDay.timeInMillis - Manager.userSiam.dateLastCorrectAnswwer!!.timeInMillis >= 86400000)) {
-                    quizzFragment.hasAnswerCorrectlyToday = false
+                if (Manager.userSiam.dateLastQuizzEnded == null || (dateOfDay.timeInMillis - Manager.userSiam.dateLastQuizzEnded!!.timeInMillis >= 86400000)) {
+                    quizzFragment.hasFinishedQuizzToday = false
                     quizzFragment.hasAnswerCorrectly = false
                     supportFragmentManager
                         .beginTransaction()
