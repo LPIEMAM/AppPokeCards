@@ -46,7 +46,6 @@ private const val ARG_PARAM2 = "param2"
  */
 class QuizzFragment : androidx.fragment.app.Fragment(), View.OnClickListener {
 
-    var quizzFragment: QuizzFragment? = null
     var replaceFragmentListener: ReplaceFragmentListener? = null
     private var mQuestionTextView: TextView? = null
     private var mAnswerButton1: Button? = null
@@ -59,6 +58,9 @@ class QuizzFragment : androidx.fragment.app.Fragment(), View.OnClickListener {
 
     private var mScore: Int = 0
     private var mNumberOfQuestions: Int = 0
+    var hasAnswerCorrectly : Boolean = false
+    var hasAnswerCorrectlyToday : Boolean = false
+    private lateinit var dateLastCorrectAnswer : Calendar
 
     val BUNDLE_EXTRA_SCORE = "BUNDLE_EXTRA_SCORE"
     val BUNDLE_STATE_SCORE = "currentScore"
@@ -111,6 +113,8 @@ class QuizzFragment : androidx.fragment.app.Fragment(), View.OnClickListener {
         super.onViewCreated(view, savedInstanceState)
         mPokemonQuestions = Manager.generateQuestions()
 
+
+
         if (savedInstanceState != null) {
             mScore = savedInstanceState.getInt(BUNDLE_STATE_SCORE)
             mNumberOfQuestions = savedInstanceState.getInt(BUNDLE_STATE_QUESTION)
@@ -121,11 +125,11 @@ class QuizzFragment : androidx.fragment.app.Fragment(), View.OnClickListener {
 
         mEnableTouchEvents = true
 
-        mQuestionTextView = view!!.findViewById(R.id.activity_game_question_text)
-        mAnswerButton1 = view!!.findViewById(R.id.activity_game_answer1_btn)
-        mAnswerButton2 = view!!.findViewById(R.id.activity_game_answer2_btn)
-        mAnswerButton3 = view!!.findViewById(R.id.activity_game_answer3_btn)
-        mAnswerButton4 = view!!.findViewById(R.id.activity_game_answer4_btn)
+        mQuestionTextView = activity_game_question_text
+        mAnswerButton1 = activity_game_answer1_btn
+        mAnswerButton2 = activity_game_answer2_btn
+        mAnswerButton3 = activity_game_answer3_btn
+        mAnswerButton4 = activity_game_answer4_btn
 
         // Use the tag property to 'name' the buttons
         mAnswerButton1!!.tag = 0
@@ -157,10 +161,13 @@ class QuizzFragment : androidx.fragment.app.Fragment(), View.OnClickListener {
             // Good answer
             val snackbar = Snackbar.make(v, "Correct", Snackbar.LENGTH_LONG)
             snackbar.show()
-            mScore++
+            Manager.userSiam.coins += 50
+            hasAnswerCorrectly = true
+            dateLastCorrectAnswer = Calendar.getInstance()
         } else {
             // Wrong answer
             val snackbar = Snackbar.make(v, "Faux", Snackbar.LENGTH_LONG)
+            snackbar.show()
         }
 
         mEnableTouchEvents = false
@@ -169,8 +176,9 @@ class QuizzFragment : androidx.fragment.app.Fragment(), View.OnClickListener {
             mEnableTouchEvents = true
             // If this is the last question, ends the game.
             // Else, display the next question.
-            if (--mNumberOfQuestions == 0) {
-                // End the game
+            if (hasAnswerCorrectly) {
+                hasAnswerCorrectlyToday = true
+                Manager.userSiam.dateLastCorrectAnswwer = dateLastCorrectAnswer
                 endGame()
             } else {
                 mCurrentQuestion = mPokemonQuestions!!.question
@@ -184,15 +192,15 @@ class QuizzFragment : androidx.fragment.app.Fragment(), View.OnClickListener {
     }*/
 
     private fun endGame() {
-
+        replaceFragmentListener!!.replaceWithQuizzEndedFragment()
     }
 
     private fun displayQuestion(q: Question) {
-        mQuestionTextView!!.setText(q.question)
-        mAnswerButton1!!.setText(q.choiceList!![0])
-        mAnswerButton2!!.setText(q.choiceList!![1])
-        mAnswerButton3!!.setText(q.choiceList!![2])
-        mAnswerButton4!!.setText(q.choiceList!![3])
+        mQuestionTextView!!.text = q.question
+        mAnswerButton1!!.text = q.choiceList!![0]
+        mAnswerButton2!!.text = q.choiceList!![1]
+        mAnswerButton3!!.text = q.choiceList!![2]
+        mAnswerButton4!!.text = q.choiceList!![3]
     }
 }
 

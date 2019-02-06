@@ -2,8 +2,6 @@ package lpiemam.com.apppokecards
 
 import android.os.Bundle
 import com.google.android.material.navigation.NavigationView
-import com.google.android.material.snackbar.Snackbar
-import androidx.fragment.app.Fragment
 import androidx.core.view.GravityCompat
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -12,11 +10,9 @@ import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import lpiemam.com.apppokecards.model.Card
-import lpiemam.com.apppokecards.model.Pokemon
-import lpiemam.com.apppokecards.model.User
-import androidx.drawerlayout.widget.DrawerLayout
 import lpiemam.com.apppokecards.fragment.*
 import lpiemam.com.apppokecards.model.Manager
+import java.util.*
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
@@ -31,6 +27,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     lateinit var addNewCardFragment : AddNewCardFragment
     lateinit var shopFragment : ShopFragment
     lateinit var quizzFragment: QuizzFragment
+    lateinit var quizzEndedFragment: QuizzEndedFragment
+    lateinit var quizzStartFragment: QuizzStartFragment
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,7 +40,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         allCardsFragment = AllCardsFragment.newInstance()
         addNewCardFragment = AddNewCardFragment.newInstance()
         shopFragment = ShopFragment.newInstance()
-        quizzFragment = QuizzFragment.newInstance()
+        quizzFragment = Manager.quizzFragment
+        quizzEndedFragment = QuizzEndedFragment.newInstance()
+        quizzStartFragment = QuizzStartFragment.newInstance()
 
 
         drawer = drawer_layout
@@ -114,10 +114,21 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     .commit()
             }
             R.id.menuItemQuizz -> {
-                supportFragmentManager
-                .beginTransaction()
-                .replace(R.id.mainActivityContainer, quizzFragment, "quizzFragment")
-                .commit()
+                var dateOfDay = Calendar.getInstance()
+                if (Manager.userSiam.dateLastCorrectAnswwer == null || (dateOfDay.timeInMillis - Manager.userSiam.dateLastCorrectAnswwer!!.timeInMillis >= 86400000)) {
+                    quizzFragment.hasAnswerCorrectlyToday = false
+                    quizzFragment.hasAnswerCorrectly = false
+                    supportFragmentManager
+                        .beginTransaction()
+                        .replace(R.id.mainActivityContainer, quizzStartFragment, "quizzStartFragment")
+                        .commit()
+                } else {
+                    supportFragmentManager
+                        .beginTransaction()
+                        .replace(R.id.mainActivityContainer, quizzEndedFragment, "quizzEndedFragment")
+                        .commit()
+                }
+
             }
             R.id.menuItemAchievements -> {
 //                supportFragmentManager
@@ -184,6 +195,29 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
+    override fun replaceWithQuizzFragment() {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.mainActivityContainer, QuizzFragment.newInstance(), "quizzFragment")
+            .addToBackStack("quizzFragment")
+            .commit()
+    }
+
+    override fun replaceWithQuizzStartFragment() {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.mainActivityContainer, QuizzStartFragment.newInstance(), "quizzStartFragment")
+            .addToBackStack("quizzStartFragment")
+            .commit()
+    }
+
+    override fun replaceWithQuizzEndedFragment() {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.mainActivityContainer, QuizzEndedFragment.newInstance(), "quizzEndedFragment")
+            .addToBackStack("quizzEndedFragment")
+            .commit()
+    }
 
     override fun replaceWithAddNewCardFragment() {
         supportFragmentManager

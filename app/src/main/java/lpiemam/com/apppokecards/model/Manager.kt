@@ -1,5 +1,6 @@
 package lpiemam.com.apppokecards.model
 
+import lpiemam.com.apppokecards.fragment.QuizzFragment
 import java.util.*
 
 object Manager {
@@ -9,6 +10,7 @@ object Manager {
     lateinit var userSiam : User
     lateinit var allCardsUserNeeds: ArrayList<Card>
     lateinit var cardsPacksList : ArrayList<CardsPack>
+    var quizzFragment = QuizzFragment.newInstance()
 
 
     fun initializeData() {

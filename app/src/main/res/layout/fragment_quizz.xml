@@ -6,6 +6,19 @@
         android:orientation="vertical"
         tools:context=".MainActivity">
 
+    <!-- chronometer with black background and red text color -->
+    <Chronometer
+            android:id="@+id/simpleChronometer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:background="#000"
+            android:gravity="center"
+            android:padding="10dp"
+            android:textColor="#f00"
+            android:textStyle="bold" />
+
     <TextView
             android:id="@+id/activity_game_question_text"
             android:layout_width="match_parent"

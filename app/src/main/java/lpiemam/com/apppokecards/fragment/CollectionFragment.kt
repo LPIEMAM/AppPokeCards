@@ -77,8 +77,6 @@ class CollectionFragment : androidx.fragment.app.Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
-
         setUpRecyclerView()
 
         floatingActionButtonAddPokemon.setOnClickListener {
