@@ -100,13 +100,13 @@ class AllCardsFragment : androidx.fragment.app.Fragment() {
 
                         val card = allCardAdapter!!.allCardList[position]
 
-                        replaceFragmentListener!!.replaceWithUserDetailFragment(card)
+                        replaceFragmentListener!!.replaceWithAllCardsDetailFragment(card)
                     }
 
                     override fun onLongClick(view: View?, position: Int) {
                         val card = allCardAdapter!!.allCardList[position]
 
-                        replaceFragmentListener!!.replaceWithUserDetailFragment(card)
+                        replaceFragmentListener!!.replaceWithAllCardsDetailFragment(card)
                     }
                 })
         )

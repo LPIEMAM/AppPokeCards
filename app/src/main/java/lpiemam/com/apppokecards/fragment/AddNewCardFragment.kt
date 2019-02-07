@@ -96,7 +96,7 @@ class AddNewCardFragment : androidx.fragment.app.Fragment() {
     }
 
     private fun setUpRecyclerView() {
-        addNewCardAdapter = AddNewCardAdapter(ArrayList(Manager.allCardsUserNeeds))
+        //addNewCardAdapter = AddNewCardAdapter(ArrayList(Manager.allCardsUserNeeds))
 
         addNewCardRecyclerView!!.layoutManager = androidx.recyclerview.widget.GridLayoutManager(context, 4)
         addNewCardRecyclerView!!.adapter = addNewCardAdapter
@@ -109,7 +109,7 @@ class AddNewCardFragment : androidx.fragment.app.Fragment() {
                             override fun onClick(view: View, position: Int) {
                                 val userCard = addNewCardAdapter!!.allCardsUserNeeds.get(position)
                                 Manager.userSiam.userCardList.add(userCard)
-                                Manager.allCardsUserNeeds.remove(userCard)
+                                //Manager.allCardsUserNeeds.remove(userCard)
                                 Manager.userSiam.userCardList = ArrayList(Manager.userSiam.userCardList.sortedWith(compareBy{it.pokemon.pokedexNumber}))
                                 replaceFragmentListener!!.notifyCollectionDataSetChanged()
                                 replaceFragmentListener!!.popBackStack()
@@ -119,7 +119,7 @@ class AddNewCardFragment : androidx.fragment.app.Fragment() {
                             override fun onLongClick(view: View?, position: Int) {
                                 val userCard = addNewCardAdapter!!.allCardsUserNeeds.get(position)
                                 Manager.userSiam.userCardList.add(userCard)
-                                Manager.allCardsUserNeeds.remove(userCard)
+                                //Manager.allCardsUserNeeds.remove(userCard)
                                 Manager.userSiam.userCardList = ArrayList(Manager.userSiam.userCardList.sortedWith(compareBy{it.pokemon.pokedexNumber}))
                                 replaceFragmentListener!!.notifyCollectionDataSetChanged()
                                 replaceFragmentListener!!.popBackStack()

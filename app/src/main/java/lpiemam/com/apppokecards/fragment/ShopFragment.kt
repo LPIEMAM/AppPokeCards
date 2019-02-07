@@ -122,7 +122,7 @@ class ShopFragment : androidx.fragment.app.Fragment() {
 
                         Manager.userSiam.buyAPack(selectedPack, view)
                         selectedPack.clearCardList()
-                        Manager.setAllCardsUserNeeds()
+                        //Manager.setAllCardsUserNeeds()
 
                     } catch (e: Exception) {
                         val snackbar = Snackbar.make(view, e.message!!, Snackbar.LENGTH_LONG)

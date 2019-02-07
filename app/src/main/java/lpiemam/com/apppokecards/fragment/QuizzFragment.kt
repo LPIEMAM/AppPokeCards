@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.Chronometer
 import android.widget.TextView
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_quizz.*
@@ -20,7 +19,6 @@ import lpiemam.com.apppokecards.model.PokemonQuestions
 import lpiemam.com.apppokecards.model.Question
 import java.util.*
 import android.os.CountDownTimer
-import kotlinx.android.synthetic.main.nav_header_main.*
 
 
 /**
@@ -49,7 +47,7 @@ class QuizzFragment : androidx.fragment.app.Fragment(), View.OnClickListener {
     var chronoIsStarted = false
     private var mEnableTouchEvents: Boolean = false
     private lateinit var countDownTimer : CountDownTimer
-    private var counter = 7
+    private var counter = 5
     private lateinit var chrono : TextView
 
     companion object {
@@ -198,7 +196,7 @@ class QuizzFragment : androidx.fragment.app.Fragment(), View.OnClickListener {
                 }
 
                 override fun onFinish() {
-                    counter = 7
+                    counter = 5
 
                     if (hasAnswer) {
                         hasAnswer = false

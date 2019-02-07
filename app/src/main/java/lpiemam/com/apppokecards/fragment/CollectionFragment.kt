@@ -79,9 +79,9 @@ class CollectionFragment : androidx.fragment.app.Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setUpRecyclerView()
 
-        floatingActionButtonAddPokemon.setOnClickListener {
+        /*floatingActionButtonAddPokemon.setOnClickListener {
             replaceFragmentListener!!.replaceWithAddNewCardFragment()
-        }
+        }*/
 
         collectionSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(s: String): Boolean {

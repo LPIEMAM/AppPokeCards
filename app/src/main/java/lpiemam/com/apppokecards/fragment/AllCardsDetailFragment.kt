@@ -24,15 +24,15 @@ private const val ARG_PARAM2 = "param2"
  * A simple [Fragment] subclass.
  *
  */
-class UserCardDetailFragment : androidx.fragment.app.Fragment() {
+class AllCardsDetailFragment : androidx.fragment.app.Fragment() {
 
     lateinit var card: Card
     var replaceFragmentListener: ReplaceFragmentListener? = null
 
     companion object {
 
-        fun newInstance(): UserCardDetailFragment {
-            return UserCardDetailFragment()
+        fun newInstance(): AllCardsDetailFragment {
+            return AllCardsDetailFragment()
         }
     }
 
@@ -59,7 +59,7 @@ class UserCardDetailFragment : androidx.fragment.app.Fragment() {
     ): View? {
         // Inflate the layout for this fragment
 
-        return inflater.inflate(R.layout.fragment_user_card_detail, container, false)
+        return inflater.inflate(R.layout.fragment_all_cards_detail, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -68,7 +68,7 @@ class UserCardDetailFragment : androidx.fragment.app.Fragment() {
         replaceFragmentListener!!.setDrawerEnabled(false)
         replaceFragmentListener!!.setUpBackButton(true)
 
-        userCardDetailDust.text = card.DustGivenByDecraft.toString()
+        userCardDetailDust.text = card.costDustToCraft.toString()
         userCardDetailCardVersion.text = card.version
         userCardDetailPokedexNumber.text = card.pokemon.pokedexNumber.toString()
         userCardDetailPokemonDescription.text = card.description
@@ -78,9 +78,9 @@ class UserCardDetailFragment : androidx.fragment.app.Fragment() {
 
 
         userCardDetailButtonDust.setOnClickListener {
-            Manager.userSiam.dusts += card.DustGivenByDecraft
-            Manager.userSiam.userCardList.remove(card)
-            replaceFragmentListener!!.replaceWithCollectionFragment()
+            Manager.userSiam.dusts -= card.costDustToCraft
+            Manager.userSiam.userCardList.add(card)
+            replaceFragmentListener!!.replaceWithAllCardsFragment()
         }
     }
 

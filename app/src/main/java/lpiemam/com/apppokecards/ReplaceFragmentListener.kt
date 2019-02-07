@@ -7,8 +7,11 @@ import lpiemam.com.apppokecards.model.Pokemon
 interface ReplaceFragmentListener {
 
     fun setDrawerEnabled(enabled: Boolean)
-    fun replaceWithUserDetailFragment(card: Card)
     fun setUpBackButton(enabled: Boolean)
+    fun replaceWithCollectionFragment()
+    fun replaceWithUserDetailFragment(card: Card)
+    fun replaceWithAllCardsFragment()
+    fun replaceWithAllCardsDetailFragment(card: Card)
     fun replaceWithAddNewCardFragment()
     fun replaceWithQuizzFragment()
     fun replaceWithQuizzStartFragment()

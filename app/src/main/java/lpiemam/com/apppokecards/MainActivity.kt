@@ -22,13 +22,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     lateinit var toggle: ActionBarDrawerToggle
     lateinit var drawer: androidx.drawerlayout.widget.DrawerLayout
 
-    lateinit var collectionFragment : CollectionFragment
     lateinit var allCardsFragment : AllCardsFragment
     lateinit var addNewCardFragment : AddNewCardFragment
     lateinit var shopFragment : ShopFragment
     lateinit var quizzFragment: QuizzFragment
     lateinit var quizzEndedFragment: QuizzEndedFragment
     lateinit var quizzStartFragment: QuizzStartFragment
+    lateinit var collectionFragment: CollectionFragment
+    lateinit var allCardsDetailFragment: AllCardsDetailFragment
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,14 +37,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        collectionFragment = CollectionFragment.newInstance()
         allCardsFragment = AllCardsFragment.newInstance()
         addNewCardFragment = AddNewCardFragment.newInstance()
         shopFragment = ShopFragment.newInstance()
         quizzFragment = Manager.quizzFragment
         quizzEndedFragment = QuizzEndedFragment.newInstance()
         quizzStartFragment = QuizzStartFragment.newInstance()
-
+        collectionFragment = Manager.collectionFragment
+        allCardsDetailFragment = AllCardsDetailFragment.newInstance()
 
         drawer = drawer_layout
         toggle = ActionBarDrawerToggle(
@@ -162,16 +163,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     }
 
-    override fun replaceWithUserDetailFragment(card: Card) {
-        val userCardDetailFragment = UserCardDetailFragment.newInstance()
-        userCardDetailFragment.card = card
-        supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.mainActivityContainer, userCardDetailFragment, "userCardDetailFragment")
-            .addToBackStack("userCardDetailFragment")
-            .commit()
-    }
-
     override fun setUpBackButton(enabled: Boolean) {
         supportActionBar!!.setDisplayHomeAsUpEnabled(enabled)
         if(enabled) {
@@ -193,6 +184,40 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             }
         }
+    }
+
+    override fun replaceWithCollectionFragment() {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.mainActivityContainer, collectionFragment, "collectionFragment")
+            .addToBackStack("collectionFragment")
+            .commit()
+    }
+
+    override fun replaceWithUserDetailFragment(card: Card) {
+        val userCardDetailFragment = UserCardDetailFragment.newInstance()
+        userCardDetailFragment.card = card
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.mainActivityContainer, userCardDetailFragment, "userCardDetailFragment")
+            .addToBackStack("userCardDetailFragment")
+            .commit()
+    }
+
+    override fun replaceWithAllCardsFragment() {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.mainActivityContainer, collectionFragment, "collectionFragment")
+            .addToBackStack("collectionFragment")
+            .commit()
+    }
+
+    override fun replaceWithAllCardsDetailFragment(card: Card) {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.mainActivityContainer, AllCardsDetailFragment.newInstance(), "allCardsDetailFragment")
+            .addToBackStack("allCardsDetailFragment")
+            .commit()
     }
 
     override fun replaceWithQuizzFragment() {

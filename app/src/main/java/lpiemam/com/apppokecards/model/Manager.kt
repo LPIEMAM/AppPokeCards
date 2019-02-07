@@ -1,5 +1,7 @@
 package lpiemam.com.apppokecards.model
 
+import lpiemam.com.apppokecards.fragment.AllCardsFragment
+import lpiemam.com.apppokecards.fragment.CollectionFragment
 import lpiemam.com.apppokecards.fragment.QuizzFragment
 import java.util.*
 
@@ -8,14 +10,16 @@ object Manager {
     lateinit var allCardsList: ArrayList<Card>
     lateinit var allPokemonList : ArrayList<Pokemon>
     lateinit var userSiam : User
-    lateinit var allCardsUserNeeds: ArrayList<Card>
     lateinit var cardsPacksList : ArrayList<CardsPack>
     var quizzFragment = QuizzFragment.newInstance()
+    var collectionFragment = CollectionFragment.newInstance()
+    var allCardsFragment = AllCardsFragment.newInstance()
 
 
     fun initializeData() {
-        userSiam = User("Annabelle", "Braye", "Siam", "annabelle.braye@gmail.com", "", 3000)
-
+        userSiam = User("Annabelle", "Braye", "Siam", "annabelle.braye@gmail.com", "")
+        userSiam.coins = 3000
+        userSiam.dusts = 900
         var pikachu = Pokemon("Pikachu", 25, "Electrik")
         var mew = Pokemon("Mew", 150, "Psy")
         var tortank = Pokemon("Tortank", 9, "Eau")
@@ -179,9 +183,9 @@ object Manager {
         userSiam.userCardList = ArrayList(userSiam.userCardList.sortedWith(compareBy{it.pokemon.pokedexNumber}))
 
         //Liste des cartes pokémons que l'utilisateur n'a pas
-        allCardsUserNeeds = ArrayList()
+       // allCardsUserNeeds = ArrayList()
 
-        setAllCardsUserNeeds()
+        //setAllCardsUserNeeds()
 
         cardsPacksList = ArrayList()
 
@@ -194,7 +198,7 @@ object Manager {
         cardsPacksList.add(grandPack)
     }
 
-    fun setAllCardsUserNeeds() {
+   /* fun setAllCardsUserNeeds() {
         allCardsUserNeeds.clear()
         for(card in allCardsList) {
             var firewall = true
@@ -206,12 +210,12 @@ object Manager {
                     firewall = false
                 }*/
             }
-            if(firewall)
+            if(firewa ll)
             {
                 allCardsUserNeeds.add(card)
             }
         }
-    }
+    }*/
 
     fun generateQuestions(): PokemonQuestions {
         val question1 = Question(
