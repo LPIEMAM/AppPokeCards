@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.fragment_user_card_detail.*
+import kotlinx.android.synthetic.main.fragment_all_cards_detail.*
 import lpiemam.com.apppokecards.R
 import lpiemam.com.apppokecards.ReplaceFragmentListener
 import lpiemam.com.apppokecards.model.Card
@@ -68,16 +68,17 @@ class AllCardsDetailFragment : androidx.fragment.app.Fragment() {
         replaceFragmentListener!!.setDrawerEnabled(false)
         replaceFragmentListener!!.setUpBackButton(true)
 
-        userCardDetailDust.text = card.costDustToCraft.toString()
-        userCardDetailCardVersion.text = card.version
-        userCardDetailPokedexNumber.text = card.pokemon.pokedexNumber.toString()
-        userCardDetailPokemonDescription.text = card.description
-        userCardDetailPokemonName.text = card.pokemon.name
-        userCardDetailPokemonType.text = card.pokemon.type
+        userDust.text = Manager.userSiam.dusts.toString()
+        allCardsDetailDust.text = card.costDustToCraft.toString()
+        allCardsDetailCardVersion.text = card.version
+        allCardsDetailPokedexNumber.text = card.pokemon.pokedexNumber.toString()
+        allCardsDetailPokemonDescription.text = card.description
+        allCardsDetailPokemonName.text = card.pokemon.name
+        allCardsDetailPokemonType.text = card.pokemon.type
         Picasso.get().load(card.url).placeholder(R.drawable.pokemon_card_back).into(allCardsDetailImageViewCard)
 
 
-        userCardDetailButtonDust.setOnClickListener {
+        allCardsDetailButtonDust.setOnClickListener {
             Manager.userSiam.dusts -= card.costDustToCraft
             Manager.userSiam.userCardList.add(card)
             replaceFragmentListener!!.replaceWithAllCardsFragment()

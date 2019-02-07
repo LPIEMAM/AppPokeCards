@@ -68,13 +68,14 @@ class UserCardDetailFragment : androidx.fragment.app.Fragment() {
         replaceFragmentListener!!.setDrawerEnabled(false)
         replaceFragmentListener!!.setUpBackButton(true)
 
+        userDust.text = Manager.userSiam.dusts.toString()
         userCardDetailDust.text = card.DustGivenByDecraft.toString()
         userCardDetailCardVersion.text = card.version
         userCardDetailPokedexNumber.text = card.pokemon.pokedexNumber.toString()
         userCardDetailPokemonDescription.text = card.description
         userCardDetailPokemonName.text = card.pokemon.name
         userCardDetailPokemonType.text = card.pokemon.type
-        Picasso.get().load(card.url).placeholder(R.drawable.pokemon_card_back).into(allCardsDetailImageViewCard)
+        Picasso.get().load(card.url).placeholder(R.drawable.pokemon_card_back).into(userCardDetailImageViewCard)
 
 
         userCardDetailButtonDust.setOnClickListener {

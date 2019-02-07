@@ -4,7 +4,7 @@
                                                    xmlns:tools="http://schemas.android.com/tools"
                                                    android:layout_width="match_parent"
                                                    android:layout_height="match_parent"
-                                                   tools:context=".fragment.UserCardDetailFragment"
+                                                   tools:context=".fragment.AllCardsDetailFragment"
                                                    android:id="@+id/constraintLayoutDetail"
                                                    android:background="@color/ic_launcher_background">
 
@@ -90,23 +90,23 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/allCardsDetailPokemonType"
-            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/userCardDetailPokemonName"
+            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/allCardsDetailPokemonName"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
             app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"/>
     <TextView
             android:text="Pokedex Number"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/allcardsDetailPokedexNumber"
-            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/userCardDetailPokemonType"
+            android:id="@+id/allCardsDetailPokedexNumber"
+            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/allCardsDetailPokemonType"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
             app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"/>
     <TextView
             android:text="Card Version"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/userCardDetailCardVersion"
-            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/userCardDetailPokedexNumber"
+            android:id="@+id/allCardsDetailCardVersion"
+            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/allCardsDetailPokedexNumber"
             app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"/>
     <TextView
@@ -114,7 +114,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/allCardsDetailPokemonDescription"
-            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/userCardDetailCardVersion"
+            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/allCardsDetailCardVersion"
             app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"/>
 
