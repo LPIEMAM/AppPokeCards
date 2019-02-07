@@ -55,15 +55,14 @@ class AllCardsFragment : androidx.fragment.app.Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val view = inflater.inflate(R.layout.fragment_all_cards, container, false)
-
         setHasOptionsMenu(true)
+
         // Inflate the layout for this fragment
-        return view
+        return inflater.inflate(R.layout.fragment_all_cards, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
+        setUpRecyclerView()
 
         allCardsSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(s: String): Boolean {
@@ -79,8 +78,6 @@ class AllCardsFragment : androidx.fragment.app.Fragment() {
                 return false
             }
         })
-
-        setUpRecyclerView()
 
         super.onViewCreated(view, savedInstanceState)
     }

@@ -98,9 +98,6 @@ class CollectionFragment : androidx.fragment.app.Fragment() {
             }
         })
 
-
-
-
         super.onViewCreated(view, savedInstanceState)
     }
 

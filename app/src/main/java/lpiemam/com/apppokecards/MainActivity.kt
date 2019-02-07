@@ -29,7 +29,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     lateinit var quizzEndedFragment: QuizzEndedFragment
     lateinit var quizzStartFragment: QuizzStartFragment
     lateinit var collectionFragment: CollectionFragment
-    lateinit var allCardsDetailFragment: AllCardsDetailFragment
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,7 +43,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         quizzEndedFragment = QuizzEndedFragment.newInstance()
         quizzStartFragment = QuizzStartFragment.newInstance()
         collectionFragment = Manager.collectionFragment
-        allCardsDetailFragment = AllCardsDetailFragment.newInstance()
 
         drawer = drawer_layout
         toggle = ActionBarDrawerToggle(
@@ -207,15 +205,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun replaceWithAllCardsFragment() {
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.mainActivityContainer, collectionFragment, "collectionFragment")
-            .addToBackStack("collectionFragment")
+            .replace(R.id.mainActivityContainer, allCardsFragment, "allCardsFragment")
+            .addToBackStack("allCardsFragment")
             .commit()
     }
 
     override fun replaceWithAllCardsDetailFragment(card: Card) {
+        val allCardsDetailFragment = AllCardsDetailFragment.newInstance()
+        allCardsDetailFragment.card = card
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.mainActivityContainer, AllCardsDetailFragment.newInstance(), "allCardsDetailFragment")
+            .replace(R.id.mainActivityContainer, allCardsDetailFragment, "allCardsDetailFragment")
             .addToBackStack("allCardsDetailFragment")
             .commit()
     }
