@@ -2,8 +2,6 @@ package lpiemam.com.apppokecards
 
 import android.os.Bundle
 import com.google.android.material.navigation.NavigationView
-import com.google.android.material.snackbar.Snackbar
-import androidx.fragment.app.Fragment
 import androidx.core.view.GravityCompat
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -11,15 +9,10 @@ import android.view.Menu
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
-import lpiemam.com.apppokecards.fragment.AddNewCardFragment
-import lpiemam.com.apppokecards.fragment.AllCardsFragment
-import lpiemam.com.apppokecards.fragment.CollectionFragment
 import lpiemam.com.apppokecards.model.Card
-import lpiemam.com.apppokecards.model.Pokemon
-import lpiemam.com.apppokecards.model.User
-import androidx.drawerlayout.widget.DrawerLayout
-import lpiemam.com.apppokecards.fragment.UserCardDetailFragment
+import lpiemam.com.apppokecards.fragment.*
 import lpiemam.com.apppokecards.model.Manager
+import java.util.*
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
@@ -29,9 +22,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     lateinit var toggle: ActionBarDrawerToggle
     lateinit var drawer: androidx.drawerlayout.widget.DrawerLayout
 
-    lateinit var collectionFragment : CollectionFragment
     lateinit var allCardsFragment : AllCardsFragment
     lateinit var addNewCardFragment : AddNewCardFragment
+    lateinit var shopFragment : ShopFragment
+    lateinit var quizzFragment: QuizzFragment
+    lateinit var quizzEndedFragment: QuizzEndedFragment
+    lateinit var quizzStartFragment: QuizzStartFragment
+    lateinit var collectionFragment: CollectionFragment
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,10 +36,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        collectionFragment = CollectionFragment.newInstance()
         allCardsFragment = AllCardsFragment.newInstance()
         addNewCardFragment = AddNewCardFragment.newInstance()
-
+        shopFragment = ShopFragment.newInstance()
+        quizzFragment = Manager.quizzFragment
+        quizzEndedFragment = QuizzEndedFragment.newInstance()
+        quizzStartFragment = QuizzStartFragment.newInstance()
+        collectionFragment = Manager.collectionFragment
 
         drawer = drawer_layout
         toggle = ActionBarDrawerToggle(
@@ -107,21 +107,32 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     .commit()
             }
             R.id.menuItemShop -> {
-//                supportFragmentManager
-//                .beginTransaction()
-//                .add(R.id.mainActivityContainer, ShopFragment.newInstance(), "collectionFragment")
-//                .commit()
+                supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.mainActivityContainer, shopFragment, "shopFragment")
+                    .commit()
             }
             R.id.menuItemQuizz -> {
-//                supportFragmentManager
-//                .beginTransaction()
-//                .add(R.id.mainActivityContainer, QuizzFragment.newInstance(), "collectionFragment")
-//                .commit()
+                var dateOfDay = Calendar.getInstance()
+                if (Manager.userSiam.dateLastQuizzEnded == null || (dateOfDay.timeInMillis - Manager.userSiam.dateLastQuizzEnded!!.timeInMillis >= 86400000)) {
+                    quizzFragment.hasFinishedQuizzToday = false
+                    quizzFragment.hasAnswerCorrectly = false
+                    supportFragmentManager
+                        .beginTransaction()
+                        .replace(R.id.mainActivityContainer, quizzStartFragment, "quizzStartFragment")
+                        .commit()
+                } else {
+                    supportFragmentManager
+                        .beginTransaction()
+                        .replace(R.id.mainActivityContainer, quizzEndedFragment, "quizzEndedFragment")
+                        .commit()
+                }
+
             }
             R.id.menuItemAchievements -> {
 //                supportFragmentManager
 //                    .beginTransaction()
-//                    .add(R.id.mainActivityContainer, UserCardDetailFragment.newInstance(), "collectionFragment")
+//                    .replace(R.id.mainActivityContainer, UserCardDetailFragment.newInstance(), "collectionFragment")
 //                    .commit()
             }
             R.id.menuItemAllCards -> {
@@ -150,16 +161,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     }
 
-    override fun replaceWithUserDetailFragment(card: Card) {
-        val userCardDetailFragment = UserCardDetailFragment.newInstance()
-        userCardDetailFragment.card = card
-        supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.mainActivityContainer, userCardDetailFragment, "userCardDetailFragment")
-            .addToBackStack("userCardDetailFragment")
-            .commit()
-    }
-
     override fun setUpBackButton(enabled: Boolean) {
         supportActionBar!!.setDisplayHomeAsUpEnabled(enabled)
         if(enabled) {
@@ -183,6 +184,74 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
+
+    override fun replaceWithFullScreenCard(card: Card, boolean: Boolean) {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.mainActivityContainer, FullScreenCardFragment.newInstance(card, boolean), "fullScreenCardFragment")
+            .addToBackStack("fullScreenCardFragment")
+            .commit()
+    }
+
+    override fun replaceWithCollectionFragment() {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.mainActivityContainer, collectionFragment, "collectionFragment")
+            .addToBackStack("collectionFragment")
+            .commit()
+    }
+
+    override fun replaceWithUserDetailFragment(card: Card) {
+        val userCardDetailFragment = UserCardDetailFragment.newInstance()
+        userCardDetailFragment.card = card
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.mainActivityContainer, userCardDetailFragment, "userCardDetailFragment")
+            .addToBackStack("userCardDetailFragment")
+            .commit()
+    }
+
+    override fun replaceWithAllCardsFragment() {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.mainActivityContainer, allCardsFragment, "allCardsFragment")
+            .addToBackStack("allCardsFragment")
+            .commit()
+    }
+
+    override fun replaceWithAllCardsDetailFragment(card: Card) {
+        val allCardsDetailFragment = AllCardsDetailFragment.newInstance()
+        allCardsDetailFragment.card = card
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.mainActivityContainer, allCardsDetailFragment, "allCardsDetailFragment")
+            .addToBackStack("allCardsDetailFragment")
+            .commit()
+    }
+
+    override fun replaceWithQuizzFragment() {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.mainActivityContainer, QuizzFragment.newInstance(), "quizzFragment")
+            .addToBackStack("quizzFragment")
+            .commit()
+    }
+
+    override fun replaceWithQuizzStartFragment() {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.mainActivityContainer, QuizzStartFragment.newInstance(), "quizzStartFragment")
+            .addToBackStack("quizzStartFragment")
+            .commit()
+    }
+
+    override fun replaceWithQuizzEndedFragment() {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.mainActivityContainer, QuizzEndedFragment.newInstance(), "quizzEndedFragment")
+            .addToBackStack("quizzEndedFragment")
+            .commit()
+    }
 
     override fun replaceWithAddNewCardFragment() {
         supportFragmentManager

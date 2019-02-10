@@ -21,7 +21,7 @@ class CarouselConfigInfo {
     /**
      * Set diameter distortion, 1.0 = perfect circle
      */
-    static final float DIAMETER_SCALE = 0f;
+    static final float DIAMETER_SCALE = 1f;
     
     /**
      * Rate to shrink objects as they appear further back in the depth field. Typical values 1.0,

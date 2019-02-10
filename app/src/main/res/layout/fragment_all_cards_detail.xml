@@ -4,7 +4,7 @@
                                                    xmlns:tools="http://schemas.android.com/tools"
                                                    android:layout_width="match_parent"
                                                    android:layout_height="match_parent"
-                                                   tools:context=".fragment.UserCardDetailFragment"
+                                                   tools:context=".fragment.AllCardsDetailFragment"
                                                    android:id="@+id/constraintLayoutDetail"
                                                    android:background="@color/ic_launcher_background">
 
@@ -27,9 +27,11 @@
             app:layout_constraintTop_toTopOf="@+id/imageView4"
             app:layout_constraintBottom_toBottomOf="@+id/imageView4" android:gravity="center"
             app:layout_constraintVertical_bias="1.0"/>
+
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/constraintLayoutCard"
+            android:layout_height="wrap_content"
+            android:id="@+id/constraintLayoutCard"
             app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent"
             android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginTop="16dp"
             android:layout_marginStart="8dp">
@@ -37,46 +39,48 @@
         <ImageView
                 android:src="@drawable/pokemon_card_back"
                 android:layout_width="100dp"
-                android:layout_height="135dp" android:id="@+id/userCardDetailImageViewCard"
+                android:layout_height="135dp" android:id="@+id/allCardsDetailImageViewCard"
                 app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginTop="8dp" app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginStart="16dp" android:layout_marginEnd="16dp"/>
+
         <ImageView
                 android:src="@drawable/dust_image"
                 android:layout_width="26dp"
                 android:layout_height="26dp"
                 android:id="@+id/imageView3"
-                app:layout_constraintBottom_toBottomOf="@+id/userCardDetailDust"
-                app:layout_constraintTop_toTopOf="@+id/userCardDetailDust"
-                app:layout_constraintStart_toStartOf="@+id/userCardDetailImageViewCard"
+                app:layout_constraintBottom_toBottomOf="@+id/allCardsDetailDust"
+                app:layout_constraintTop_toTopOf="@+id/allCardsDetailDust"
+                app:layout_constraintStart_toStartOf="@+id/allCardsDetailImageViewCard"
                 android:layout_marginStart="8dp"/>
+
         <TextView
                 android:text="Dust"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/userCardDetailDust"
-                app:layout_constraintTop_toBottomOf="@+id/userCardDetailImageViewCard"
+                android:id="@+id/allCardsDetailDust"
+                app:layout_constraintTop_toBottomOf="@+id/allCardsDetailImageViewCard"
                 app:layout_constraintStart_toEndOf="@+id/imageView3"
                 android:layout_marginStart="8dp" android:gravity="center"
                 android:layout_marginEnd="8dp"
-                app:layout_constraintEnd_toEndOf="@+id/userCardDetailImageViewCard"/>
+                app:layout_constraintEnd_toEndOf="@+id/allCardsDetailImageViewCard"/>
         <Button
-                android:text="@string/destroy"
+                android:text="@string/create"
                 android:layout_width="wrap_content"
-                android:layout_height="36dp" android:id="@+id/userCardDetailButtonDust"
-                app:layout_constraintTop_toBottomOf="@+id/userCardDetailDust"
+                android:layout_height="36dp" android:id="@+id/allCardsDetailButtonDust"
+                app:layout_constraintTop_toBottomOf="@+id/allCardsDetailDust"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginBottom="8dp"
                 app:layout_constraintVertical_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/userCardDetailImageViewCard"
-                app:layout_constraintEnd_toEndOf="@+id/userCardDetailImageViewCard"
+                app:layout_constraintStart_toStartOf="@+id/allCardsDetailImageViewCard"
+                app:layout_constraintEnd_toEndOf="@+id/allCardsDetailImageViewCard"
                 android:backgroundTintMode="screen"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
     <TextView
             android:text="Pokemon Name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/userCardDetailPokemonName"
+            android:id="@+id/allCardsDetailPokemonName"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
             app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
             app:layout_constraintHorizontal_bias="0.0" android:layout_marginTop="32dp"
@@ -85,32 +89,32 @@
             android:text="Pokemon Type"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/userCardDetailPokemonType"
-            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/userCardDetailPokemonName"
+            android:id="@+id/allCardsDetailPokemonType"
+            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/allCardsDetailPokemonName"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
             app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"/>
     <TextView
             android:text="Pokedex Number"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/userCardDetailPokedexNumber"
-            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/userCardDetailPokemonType"
+            android:id="@+id/allCardsDetailPokedexNumber"
+            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/allCardsDetailPokemonType"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
             app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"/>
     <TextView
             android:text="Card Version"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/userCardDetailCardVersion"
-            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/userCardDetailPokedexNumber"
+            android:id="@+id/allCardsDetailCardVersion"
+            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/allCardsDetailPokedexNumber"
             app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"/>
     <TextView
             android:text="Pokemon Description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/userCardDetailPokemonDescription"
-            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/userCardDetailCardVersion"
+            android:id="@+id/allCardsDetailPokemonDescription"
+            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/allCardsDetailCardVersion"
             app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"/>
 
