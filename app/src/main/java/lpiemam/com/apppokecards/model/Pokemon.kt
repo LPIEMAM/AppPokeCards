@@ -1,11 +1,14 @@
 package lpiemam.com.apppokecards.model
 
+import android.os.Parcelable
 import androidx.recyclerview.widget.SortedList
+import kotlinx.android.parcel.Parcelize
 
 /**
  * Created by lpiem on 21/01/2019.
  */
-class Pokemon (val name : String, val pokedexNumber : Int, val type : String)  {
+@Parcelize
+class Pokemon (val name : String, val pokedexNumber : Int, val type : String) : Parcelable {
 
     val generation : String = when(pokedexNumber) {
         in 1..151 -> "Première génération"

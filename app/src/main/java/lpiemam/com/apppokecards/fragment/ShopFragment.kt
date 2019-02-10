@@ -2,25 +2,16 @@ package lpiemam.com.apppokecards.fragment
 
 
 import android.content.Context
-import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.appcompat.widget.SearchView
-import androidx.fragment.app.DialogFragment
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.fragment_collection.*
 import kotlinx.android.synthetic.main.fragment_shop.*
-import kotlinx.android.synthetic.main.fragment_shop.view.*
-import kotlinx.android.synthetic.main.pack_opening_dialog_layout.*
 import lpiemam.com.apppokecards.*
 
 import lpiemam.com.apppokecards.adapter.ShopAdapter
-import lpiemam.com.apppokecards.adapter.UserCardsAdapter
 import lpiemam.com.apppokecards.model.CardsPack
 import lpiemam.com.apppokecards.model.Manager
 

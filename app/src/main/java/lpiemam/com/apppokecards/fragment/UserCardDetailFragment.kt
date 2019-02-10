@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_user_card_detail.*
+import lpiemam.com.apppokecards.MainActivity
 import lpiemam.com.apppokecards.R
 import lpiemam.com.apppokecards.ReplaceFragmentListener
 import lpiemam.com.apppokecards.model.Card
@@ -64,22 +65,25 @@ class UserCardDetailFragment : androidx.fragment.app.Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        (context as MainActivity).supportActionBar!!.show()
         replaceFragmentListener!!.setDrawerEnabled(false)
         replaceFragmentListener!!.setUpBackButton(true)
 
         userDust.text = Manager.userSiam.dusts.toString()
-        userCardDetailDust.text = card.DustGivenByDecraft.toString()
+        userCardDetailDust.text = card.dustGivenByDecraft.toString()
         userCardDetailCardVersion.text = card.version
         userCardDetailPokedexNumber.text = card.pokemon.pokedexNumber.toString()
         userCardDetailPokemonDescription.text = card.description
         userCardDetailPokemonName.text = card.pokemon.name
         userCardDetailPokemonType.text = card.pokemon.type
         Picasso.get().load(card.url).placeholder(R.drawable.pokemon_card_back).into(userCardDetailImageViewCard)
+        userCardDetailImageViewCard.setOnClickListener{
+            replaceFragmentListener!!.replaceWithFullScreenCard(card, true)
+        }
 
 
         userCardDetailButtonDust.setOnClickListener {
-            Manager.userSiam.dusts += card.DustGivenByDecraft
+            Manager.userSiam.dusts += card.dustGivenByDecraft
             Manager.userSiam.userCardList.remove(card)
             replaceFragmentListener!!.replaceWithCollectionFragment()
         }

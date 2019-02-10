@@ -64,6 +64,7 @@ class AllCardsFragment : androidx.fragment.app.Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setUpRecyclerView()
 
+        (context as MainActivity).supportActionBar!!.show()
         allCardsSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(s: String): Boolean {
                 Log.d("", "onQueryTextChange: $s")

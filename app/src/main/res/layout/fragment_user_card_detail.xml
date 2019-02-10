@@ -11,9 +11,9 @@
     <!-- TODO: Update blank fragment layout -->
 
     <ImageView
-            android:src="@mipmap/dust_image_foreground"
+            android:src="@drawable/dust_image"
             android:layout_width="26dp"
-            android:layout_height="28dp"
+            android:layout_height="26dp"
             android:id="@+id/imageView4"
             app:layout_constraintTop_toTopOf="@+id/constraintLayoutCard"
             android:layout_marginStart="8dp" app:layout_constraintStart_toStartOf="parent"/>
@@ -32,7 +32,7 @@
             android:layout_height="wrap_content" android:id="@+id/constraintLayoutCard"
             app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent"
             android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginTop="16dp"
-            android:layout_marginStart="8dp" android:background="@drawable/pack_layout_border">
+            android:layout_marginStart="8dp">
 
         <ImageView
                 android:src="@drawable/pokemon_card_back"
@@ -42,9 +42,9 @@
                 android:layout_marginTop="8dp" app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginStart="16dp" android:layout_marginEnd="16dp"/>
         <ImageView
-                android:src="@mipmap/dust_image_foreground"
+                android:src="@drawable/dust_image"
                 android:layout_width="26dp"
-                android:layout_height="28dp"
+                android:layout_height="26dp"
                 android:id="@+id/imageView3"
                 app:layout_constraintBottom_toBottomOf="@+id/userCardDetailDust"
                 app:layout_constraintTop_toTopOf="@+id/userCardDetailDust"

@@ -7,8 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_all_cards_detail.*
+import lpiemam.com.apppokecards.MainActivity
 import lpiemam.com.apppokecards.R
 import lpiemam.com.apppokecards.ReplaceFragmentListener
 import lpiemam.com.apppokecards.model.Card
@@ -79,9 +81,14 @@ class AllCardsDetailFragment : androidx.fragment.app.Fragment() {
 
 
         allCardsDetailButtonDust.setOnClickListener {
-            Manager.userSiam.dusts -= card.costDustToCraft
-            Manager.userSiam.userCardList.add(card)
-            replaceFragmentListener!!.replaceWithAllCardsFragment()
+            if(Manager.userSiam.dusts >= card.costDustToCraft) {
+                Manager.userSiam.dusts -= card.costDustToCraft
+                Manager.addCardForUser(card)
+                replaceFragmentListener!!.replaceWithFullScreenCard(card, false)
+            } else {
+                val snackbar = Snackbar.make(view, "Vous n'avez pas assez de poussières.", Snackbar.LENGTH_SHORT)
+                snackbar.show()
+            }
         }
     }
 

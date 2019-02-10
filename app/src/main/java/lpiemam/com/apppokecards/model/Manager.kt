@@ -287,5 +287,10 @@ object Manager {
         )
     }
 
+    fun addCardForUser(card : Card) {
+        userSiam.userCardList.add(card)
+        userSiam.userCardList = ArrayList(userSiam.userCardList.sortedWith(compareBy{it.pokemon.pokedexNumber}))
+    }
+
 
 }

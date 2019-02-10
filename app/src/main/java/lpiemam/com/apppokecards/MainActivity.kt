@@ -184,6 +184,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
+
+    override fun replaceWithFullScreenCard(card: Card, boolean: Boolean) {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.mainActivityContainer, FullScreenCardFragment.newInstance(card, boolean), "fullScreenCardFragment")
+            .addToBackStack("fullScreenCardFragment")
+            .commit()
+    }
+
     override fun replaceWithCollectionFragment() {
         supportFragmentManager
             .beginTransaction()

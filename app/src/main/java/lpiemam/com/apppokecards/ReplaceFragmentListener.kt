@@ -8,6 +8,7 @@ interface ReplaceFragmentListener {
 
     fun setDrawerEnabled(enabled: Boolean)
     fun setUpBackButton(enabled: Boolean)
+    fun replaceWithFullScreenCard(card : Card, boolean: Boolean)
     fun replaceWithCollectionFragment()
     fun replaceWithUserDetailFragment(card: Card)
     fun replaceWithAllCardsFragment()
