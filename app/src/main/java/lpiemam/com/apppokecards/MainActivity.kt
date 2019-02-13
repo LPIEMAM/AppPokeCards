@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.app_bar_main.*
 import lpiemam.com.apppokecards.model.Card
 import lpiemam.com.apppokecards.fragment.*
 import lpiemam.com.apppokecards.model.Manager
+import lpiemam.com.apppokecards.model.UserCard
 import java.util.*
 
 
@@ -201,9 +202,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             .commit()
     }
 
-    override fun replaceWithUserDetailFragment(card: Card) {
+    override fun replaceWithUserDetailFragment(userCard: UserCard) {
         val userCardDetailFragment = UserCardDetailFragment.newInstance()
-        userCardDetailFragment.card = card
+        userCardDetailFragment.userCard = userCard
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.mainActivityContainer, userCardDetailFragment, "userCardDetailFragment")

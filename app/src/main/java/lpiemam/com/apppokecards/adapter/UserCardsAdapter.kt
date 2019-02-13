@@ -9,10 +9,11 @@ import lpiemam.com.apppokecards.viewholder.UserCardsViewHolder
 import android.widget.Filterable
 import lpiemam.com.apppokecards.model.Card
 import lpiemam.com.apppokecards.model.Pokemon
+import lpiemam.com.apppokecards.model.UserCard
 
-class UserCardsAdapter(val cardList: ArrayList<Card>) : androidx.recyclerview.widget.RecyclerView.Adapter<UserCardsViewHolder>(), Filterable {
+class UserCardsAdapter(val userCardList: ArrayList<UserCard>) : androidx.recyclerview.widget.RecyclerView.Adapter<UserCardsViewHolder>(), Filterable {
 
-    private var userCardsListFiltered: ArrayList<Card>? = ArrayList(cardList)
+    private var userCardsListFiltered: ArrayList<UserCard>? = ArrayList(userCardList)
 
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): UserCardsViewHolder {
@@ -35,15 +36,15 @@ class UserCardsAdapter(val cardList: ArrayList<Card>) : androidx.recyclerview.wi
                 val charString = charSequence.toString()
                 if (charString.isEmpty()) {
                     userCardsListFiltered?.clear()
-                    userCardsListFiltered?.addAll(cardList)
+                    userCardsListFiltered?.addAll(userCardList)
                 } else {
-                    val filteredList = java.util.ArrayList<Card>()
-                    for (card in cardList) {
+                    val filteredList = java.util.ArrayList<UserCard>()
+                    for (userCard in userCardList) {
 
                         // name match condition. this might differ depending on your requirement
                         // here we are looking for name or phone number match
-                        if (card.pokemon.name.toLowerCase().contains(charString.toLowerCase())) {
-                            filteredList.add(card)
+                        if (userCard.card.pokemon.name.toLowerCase().contains(charString.toLowerCase())) {
+                            filteredList.add(userCard)
                         }
                     }
 
@@ -56,7 +57,7 @@ class UserCardsAdapter(val cardList: ArrayList<Card>) : androidx.recyclerview.wi
             }
 
             override fun publishResults(charSequence: CharSequence, filterResults: Filter.FilterResults) {
-                userCardsListFiltered = filterResults.values as java.util.ArrayList<Card>
+                userCardsListFiltered = filterResults.values as java.util.ArrayList<UserCard>
 
                 // refresh the replaceFragmentListener with filtered data
                 notifyDataSetChanged()
