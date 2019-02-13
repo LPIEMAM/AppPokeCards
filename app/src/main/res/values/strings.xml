@@ -8,12 +8,9 @@
     <string name="action_settings">Settings</string>
     <string name="destroy">Détruire</string>
     <string name="create">Crafter</string>
-    <string name="quizzWon">"Vous avez déjà répondu au quizz aujourd'hui, revenez demain pour essayer de gagner de
-        nouvelles pièces !"
+    <string name="quizzWon">"Vous avez déjà répondu au quizz aujourd'hui, revenez demain pour essayer de gagner de nouvelles pièces !"
     </string>
-    <string name="quizzStart">"Après avoir cliqué sur le bouton "Commencer", trois questions vous seront posées.
-        Répondez correctement à au moins deux d'entre elles dans le temps qui vous est imparti pour obtenir 50
-        poképièces !"
+    <string name="quizzStart">"Après avoir cliqué sur le bouton "Commencer", trois questions vous seront posées. Répondez correctement à au moins deux d'entre elles dans le temps qui vous est imparti pour obtenir 50 poképièces !"
     </string>
 
     <!-- TODO: Remove or change this placeholder text -->
