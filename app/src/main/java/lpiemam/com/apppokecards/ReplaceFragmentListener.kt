@@ -20,5 +20,6 @@ interface ReplaceFragmentListener {
     fun replaceWithFragment(fragment: androidx.fragment.app.Fragment, tag : String?)
     fun popBackStack()
     fun notifyCollectionDataSetChanged()
+    fun goBackFromFullScreenToAllCardsFragment()
 
 }

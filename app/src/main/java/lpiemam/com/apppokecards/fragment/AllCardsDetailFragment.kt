@@ -64,8 +64,11 @@ class AllCardsDetailFragment : androidx.fragment.app.Fragment() {
         return inflater.inflate(R.layout.fragment_all_cards_detail, container, false)
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        (context as MainActivity).supportActionBar!!.show()
 
         replaceFragmentListener!!.setDrawerEnabled(false)
         replaceFragmentListener!!.setUpBackButton(true)

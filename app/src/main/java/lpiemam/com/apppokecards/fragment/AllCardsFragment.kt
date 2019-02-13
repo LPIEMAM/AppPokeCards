@@ -63,6 +63,8 @@ class AllCardsFragment : androidx.fragment.app.Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setUpRecyclerView()
+        replaceFragmentListener!!.setUpBackButton(false)
+        replaceFragmentListener!!.setDrawerEnabled(true)
 
         (context as MainActivity).supportActionBar!!.show()
         allCardsSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {

@@ -18,8 +18,8 @@ object Manager {
 
     fun initializeData() {
         userSiam = User("Annabelle", "Braye", "Siam", "annabelle.braye@gmail.com", "")
-        userSiam.coins = 3000
-        userSiam.dusts = 900
+        userSiam.coins = 100000
+        userSiam.dusts = 100000
         var pikachu = Pokemon("Pikachu", 25, "Electrik")
         var mew = Pokemon("Mew", 150, "Psy")
         var tortank = Pokemon("Tortank", 9, "Eau")

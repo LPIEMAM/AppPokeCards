@@ -229,6 +229,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             .commit()
     }
 
+    override fun goBackFromFullScreenToAllCardsFragment() {
+        supportFragmentManager.popBackStack()
+        supportFragmentManager.popBackStack()
+    }
+
     override fun replaceWithQuizzFragment() {
         supportFragmentManager
             .beginTransaction()
