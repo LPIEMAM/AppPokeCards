@@ -115,15 +115,15 @@ class CollectionFragment : androidx.fragment.app.Fragment() {
                 object : RecyclerTouchListener.ClickListener {
                     override fun onClick(view: View, position: Int) {
 
-                        val card = userCardAdapter!!.cardList[position]
+                        val userCard = userCardAdapter!!.userCardList[position]
 
-                        replaceFragmentListener!!.replaceWithUserDetailFragment(card)
+                        replaceFragmentListener!!.replaceWithUserDetailFragment(userCard)
                     }
 
                     override fun onLongClick(view: View?, position: Int) {
-                        val card = userCardAdapter!!.cardList[position]
+                        val userCard = userCardAdapter!!.userCardList[position]
 
-                        replaceFragmentListener!!.replaceWithUserDetailFragment(card)
+                        replaceFragmentListener!!.replaceWithUserDetailFragment(userCard)
                     }
                 })
         )

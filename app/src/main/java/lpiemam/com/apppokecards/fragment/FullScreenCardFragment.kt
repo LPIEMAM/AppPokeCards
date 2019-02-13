@@ -57,10 +57,11 @@ class FullScreenCardFragment : Fragment() {
             if(wasPreviousScreenUserDetail!!) {
                 listener!!.popBackStack()
             } else {
-                listener!!.replaceWithAllCardsFragment()
+                listener!!.goBackFromFullScreenToAllCardsFragment()
             }
         }
     }
+
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -72,6 +73,9 @@ class FullScreenCardFragment : Fragment() {
     }
 
     override fun onDetach() {
+
+        listener!!.setUpBackButton(false)
+        listener!!.setDrawerEnabled(true)
         super.onDetach()
         listener = null
     }

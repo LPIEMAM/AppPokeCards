@@ -18,8 +18,8 @@ object Manager {
 
     fun initializeData() {
         userSiam = User("Annabelle", "Braye", "Siam", "annabelle.braye@gmail.com", "")
-        userSiam.coins = 3000
-        userSiam.dusts = 900
+        userSiam.coins = 100000
+        userSiam.dusts = 100000
         var pikachu = Pokemon("Pikachu", 25, "Electrik")
         var mew = Pokemon("Mew", 150, "Psy")
         var tortank = Pokemon("Tortank", 9, "Eau")
@@ -179,8 +179,8 @@ object Manager {
         allCardsList = ArrayList(allCardsList.sortedWith(compareBy{it.pokemon.pokedexNumber}))
 
         //Liste des pokémons dont l'utilisateur possède une carte
-        userSiam.userCardList = arrayListOf(pikachuCard, mewCard, hericendreCard, goeliseCard, corbossCard, tortankCard, dracaufeuCard, mentaliCard, noctaliCard)
-        userSiam.userCardList = ArrayList(userSiam.userCardList.sortedWith(compareBy{it.pokemon.pokedexNumber}))
+        userSiam.userCardList = arrayListOf(UserCard(pikachuCard), UserCard(mewCard), UserCard(hericendreCard), UserCard(goeliseCard), UserCard(corbossCard), UserCard(tortankCard), UserCard(dracaufeuCard), UserCard(mentaliCard), UserCard(noctaliCard))
+        userSiam.userCardList = ArrayList(userSiam.userCardList.sortedWith(compareBy{it.card.pokemon.pokedexNumber}))
 
         //Liste des cartes pokémons que l'utilisateur n'a pas
        // allCardsUserNeeds = ArrayList()
@@ -288,8 +288,22 @@ object Manager {
     }
 
     fun addCardForUser(card : Card) {
-        userSiam.userCardList.add(card)
-        userSiam.userCardList = ArrayList(userSiam.userCardList.sortedWith(compareBy{it.pokemon.pokedexNumber}))
+        if(card.isCardInArray(userSiam.userCardList)) {
+            var userCard = card.getInstanceOfUserCard(userSiam.userCardList)
+            userCard.numberOfCard++
+        } else {
+            userSiam.userCardList.add(UserCard(card))
+        }
+        userSiam.userCardList = ArrayList(userSiam.userCardList.sortedWith(compareBy{it.card.pokemon.pokedexNumber}))
+    }
+
+    fun removeCardForUser(userCard: UserCard) {
+        if(userCard.numberOfCard > 1) {
+            userCard.numberOfCard--
+        } else {
+            Manager.userSiam.userCardList.remove(userCard)
+        }
+        userSiam.userCardList = ArrayList(userSiam.userCardList.sortedWith(compareBy{it.card.pokemon.pokedexNumber}))
     }
 
 

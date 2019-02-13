@@ -14,6 +14,7 @@ import lpiemam.com.apppokecards.R
 import lpiemam.com.apppokecards.ReplaceFragmentListener
 import lpiemam.com.apppokecards.model.Card
 import lpiemam.com.apppokecards.model.Manager
+import lpiemam.com.apppokecards.model.UserCard
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -27,7 +28,7 @@ private const val ARG_PARAM2 = "param2"
  */
 class UserCardDetailFragment : androidx.fragment.app.Fragment() {
 
-    lateinit var card: Card
+    lateinit var userCard: UserCard
     var replaceFragmentListener: ReplaceFragmentListener? = null
 
     companion object {
@@ -70,21 +71,21 @@ class UserCardDetailFragment : androidx.fragment.app.Fragment() {
         replaceFragmentListener!!.setUpBackButton(true)
 
         userDust.text = Manager.userSiam.dusts.toString()
-        userCardDetailDust.text = card.dustGivenByDecraft.toString()
-        userCardDetailCardVersion.text = card.version
-        userCardDetailPokedexNumber.text = card.pokemon.pokedexNumber.toString()
-        userCardDetailPokemonDescription.text = card.description
-        userCardDetailPokemonName.text = card.pokemon.name
-        userCardDetailPokemonType.text = card.pokemon.type
-        Picasso.get().load(card.url).placeholder(R.drawable.pokemon_card_back).into(userCardDetailImageViewCard)
+        userCardDetailDust.text = userCard.card.dustGivenByDecraft.toString()
+        userCardDetailCardVersion.text = userCard.card.version
+        userCardDetailPokedexNumber.text = userCard.card.pokemon.pokedexNumber.toString()
+        userCardDetailPokemonDescription.text = userCard.card.description
+        userCardDetailPokemonName.text = userCard.card.pokemon.name
+        userCardDetailPokemonType.text = userCard.card.pokemon.type
+        Picasso.get().load(userCard.card.url).placeholder(R.drawable.pokemon_card_back).into(userCardDetailImageViewCard)
         userCardDetailImageViewCard.setOnClickListener{
-            replaceFragmentListener!!.replaceWithFullScreenCard(card, true)
+            replaceFragmentListener!!.replaceWithFullScreenCard(userCard.card, true)
         }
 
 
         userCardDetailButtonDust.setOnClickListener {
-            Manager.userSiam.dusts += card.dustGivenByDecraft
-            Manager.userSiam.userCardList.remove(card)
+            Manager.userSiam.dusts += userCard.card.dustGivenByDecraft
+            Manager.removeCardForUser(userCard)
             replaceFragmentListener!!.replaceWithCollectionFragment()
         }
     }
