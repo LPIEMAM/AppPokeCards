@@ -87,5 +87,10 @@
             app:layout_constraintTop_toBottomOf="@+id/activity_game_answer3_btn"
             app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
             android:background="@drawable/unselected_quizz_answer"/>
+    <Button
+            android:text="Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" tools:layout_editor_absoluteY="575dp"
+            tools:layout_editor_absoluteX="161dp" android:id="@+id/buttonBitch"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

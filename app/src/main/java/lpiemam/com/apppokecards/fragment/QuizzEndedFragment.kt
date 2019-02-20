@@ -19,7 +19,6 @@ import lpiemam.com.apppokecards.model.Manager
 class QuizzEndedFragment : Fragment() {
 
     var replaceFragmentListener: ReplaceFragmentListener? = null
-    var quizzFragment = Manager.quizzFragment
 
     companion object {
 
@@ -61,7 +60,6 @@ class QuizzEndedFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        System.out.println(quizzFragment.hasFinishedQuizzToday)
     }
 
 }

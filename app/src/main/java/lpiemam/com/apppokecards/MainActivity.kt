@@ -1,12 +1,15 @@
 package lpiemam.com.apppokecards
 
 import android.os.Bundle
+import android.os.Handler
 import com.google.android.material.navigation.NavigationView
 import androidx.core.view.GravityCompat
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
+import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import lpiemam.com.apppokecards.model.Card
@@ -23,13 +26,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     lateinit var toggle: ActionBarDrawerToggle
     lateinit var drawer: androidx.drawerlayout.widget.DrawerLayout
 
-    lateinit var allCardsFragment : AllCardsFragment
-    lateinit var addNewCardFragment : AddNewCardFragment
-    lateinit var shopFragment : ShopFragment
-    lateinit var quizzFragment: QuizzFragment
+    lateinit var allCardsFragment: AllCardsFragment
+    lateinit var addNewCardFragment: AddNewCardFragment
+    lateinit var shopFragment: ShopFragment
     lateinit var quizzEndedFragment: QuizzEndedFragment
     lateinit var quizzStartFragment: QuizzStartFragment
     lateinit var collectionFragment: CollectionFragment
+
+    var hasClickedBack = false
+
+    var toast : Toast? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,10 +46,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         allCardsFragment = AllCardsFragment.newInstance()
         addNewCardFragment = AddNewCardFragment.newInstance()
         shopFragment = ShopFragment.newInstance()
-        quizzFragment = Manager.quizzFragment
         quizzEndedFragment = QuizzEndedFragment.newInstance()
         quizzStartFragment = QuizzStartFragment.newInstance()
-        collectionFragment = Manager.collectionFragment
+        collectionFragment = CollectionFragment()
 
         drawer = drawer_layout
         toggle = ActionBarDrawerToggle(
@@ -65,19 +70,58 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         nav_view.setNavigationItemSelectedListener(this)
     }
 
-
+    private fun getVisibleFragment(): Fragment? {
+        val fragmentManager = this@MainActivity.supportFragmentManager
+        val fragments = fragmentManager.fragments
+        if (fragments != null) {
+            for (fragment in fragments) {
+                if (fragment != null && fragment.isVisible)
+                    return fragment
+            }
+        }
+        return null
+    }
 
     override fun onBackPressed() {
         if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
             drawer_layout.closeDrawer(GravityCompat.START)
-        } else if (supportFragmentManager.backStackEntryCount > 0)
-            supportFragmentManager.popBackStack()
-        else {
-            super.onBackPressed()
+        } else if (hasClickedBack) {
+            toast!!.cancel()
+            Manager.userSiam.dateLastQuizzEnded = Calendar.getInstance()
+            supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.mainActivityContainer, collectionFragment, "collectionFragment")
+                .commit()
+            toast = Toast.makeText(this, "Echec du quizz.", Toast.LENGTH_SHORT)
+            toast!!.show()
+        } else {
+            var currentFragment = getVisibleFragment()
+            when (currentFragment) {
+                is AllCardsDetailFragment -> supportFragmentManager.popBackStack()
+                is CollectionFragment -> super.onBackPressed()
+                is QuizzFragment -> {
+                    toast =
+                        Toast.makeText(this, "Si vous recliquez, votre quizz quotidien sera considéré comme un echec.", Toast.LENGTH_SHORT)
+                    toast!!.show()
+                    hasClickedBack = true
+                    Handler().postDelayed({
+                        hasClickedBack = false
+                        // If this is the last question, ends the game.
+                        // Else, display the next question.
+                    }, 3000) // LENGTH_SHORT is usually 2 second long
+                }
+                else -> {
+                    for (i in 0 until supportFragmentManager.getBackStackEntryCount()) {
+                        supportFragmentManager.popBackStack()
+                    }
+                    supportFragmentManager
+                        .beginTransaction()
+                        .replace(R.id.mainActivityContainer, collectionFragment, "collectionFragment")
+                        .commit()
+                }
+            }
         }
     }
-
-
 
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -116,16 +160,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.menuItemQuizz -> {
                 var dateOfDay = Calendar.getInstance()
                 if (Manager.userSiam.dateLastQuizzEnded == null || (dateOfDay.timeInMillis - Manager.userSiam.dateLastQuizzEnded!!.timeInMillis >= 86400000)) {
-                    quizzFragment.hasFinishedQuizzToday = false
-                    quizzFragment.hasAnswerCorrectly = false
                     supportFragmentManager
                         .beginTransaction()
-                        .replace(R.id.mainActivityContainer, quizzStartFragment, "quizzStartFragment")
+                        .replace(R.id.mainActivityContainer, QuizzStartFragment.newInstance(), "quizzStartFragment")
                         .commit()
                 } else {
                     supportFragmentManager
                         .beginTransaction()
-                        .replace(R.id.mainActivityContainer, quizzEndedFragment, "quizzEndedFragment")
+                        .replace(R.id.mainActivityContainer, QuizzEndedFragment.newInstance(), "quizzEndedFragment")
                         .commit()
                 }
 
@@ -149,8 +191,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
 
-
-
     override fun setDrawerEnabled(enabled: Boolean) {
         val lockMode = if (enabled) {
             androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
@@ -164,17 +204,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun setUpBackButton(enabled: Boolean) {
         supportActionBar!!.setDisplayHomeAsUpEnabled(enabled)
-        if(enabled) {
-            toolbar.setNavigationOnClickListener{
+        if (enabled) {
+            toolbar.setNavigationOnClickListener {
                 if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
                     drawer_layout.closeDrawer(GravityCompat.START)
-                } else if (supportFragmentManager.backStackEntryCount > 0) {
+                } else {
                     supportFragmentManager.popBackStack()
                 }
             }
 
         } else {
-            toolbar.setNavigationOnClickListener{
+            toolbar.setNavigationOnClickListener {
                 if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
                     drawer_layout.closeDrawer(GravityCompat.START)
                 } else {
@@ -189,8 +229,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun replaceWithFullScreenCard(card: Card, boolean: Boolean) {
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.mainActivityContainer, FullScreenCardFragment.newInstance(card, boolean), "fullScreenCardFragment")
-            .addToBackStack("fullScreenCardFragment")
+            .replace(
+                R.id.mainActivityContainer,
+                FullScreenCardFragment.newInstance(card, boolean),
+                "fullScreenCardFragment"
+            )
             .commit()
     }
 
@@ -198,7 +241,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.mainActivityContainer, collectionFragment, "collectionFragment")
-            .addToBackStack("collectionFragment")
             .commit()
     }
 
@@ -208,7 +250,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.mainActivityContainer, userCardDetailFragment, "userCardDetailFragment")
-            .addToBackStack("userCardDetailFragment")
+            .addToBackStack(null)
             .commit()
     }
 
@@ -216,7 +258,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.mainActivityContainer, allCardsFragment, "allCardsFragment")
-            .addToBackStack("allCardsFragment")
             .commit()
     }
 
@@ -226,7 +267,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.mainActivityContainer, allCardsDetailFragment, "allCardsDetailFragment")
-            .addToBackStack("allCardsDetailFragment")
+            .addToBackStack(null)
             .commit()
     }
 
@@ -239,7 +280,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.mainActivityContainer, QuizzFragment.newInstance(), "quizzFragment")
-            .addToBackStack("quizzFragment")
             .commit()
     }
 
@@ -247,7 +287,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.mainActivityContainer, QuizzStartFragment.newInstance(), "quizzStartFragment")
-            .addToBackStack("quizzStartFragment")
             .commit()
     }
 
@@ -255,7 +294,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.mainActivityContainer, QuizzEndedFragment.newInstance(), "quizzEndedFragment")
-            .addToBackStack("quizzEndedFragment")
             .commit()
     }
 
@@ -263,15 +301,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.mainActivityContainer, AddNewCardFragment.newInstance(), "userCardDetailFragment")
-            .addToBackStack("userCardDetailFragment")
             .commit()
     }
 
-    override fun replaceWithFragment(fragment: androidx.fragment.app.Fragment, tag : String?) {
+    override fun replaceWithFragment(fragment: androidx.fragment.app.Fragment, tag: String?) {
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.mainActivityContainer, fragment, tag)
-            .addToBackStack(tag)
             .commit()
     }
 

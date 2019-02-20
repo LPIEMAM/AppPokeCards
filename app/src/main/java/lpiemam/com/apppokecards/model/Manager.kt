@@ -11,9 +11,6 @@ object Manager {
     lateinit var allPokemonList : ArrayList<Pokemon>
     lateinit var userSiam : User
     lateinit var cardsPacksList : ArrayList<CardsPack>
-    var quizzFragment = QuizzFragment.newInstance()
-    var collectionFragment = CollectionFragment.newInstance()
-    var allCardsFragment = AllCardsFragment.newInstance()
 
 
     fun initializeData() {

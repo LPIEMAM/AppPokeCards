@@ -46,12 +46,13 @@ class QuizzFragment : androidx.fragment.app.Fragment(), View.OnClickListener {
     private lateinit var dateLastQuizzEnded : Calendar
 
     lateinit var countDownTimer: CountDownTimer
-    var chronoIsStarted = false
     private var mEnableTouchEvents: Boolean = false
     private var counter = 5
     private lateinit var chrono : TextView
 
     private var buttonList = ArrayList<Button?>()
+
+    private var remainingTime : Long = 0
 
     companion object {
 
@@ -70,16 +71,31 @@ class QuizzFragment : androidx.fragment.app.Fragment(), View.OnClickListener {
 
     override fun onDetach() {
 
+        replaceFragmentListener!!.setDrawerEnabled(true)
         replaceFragmentListener = null
         super.onDetach()
     }
 
     override fun onResume() {
 
-        replaceFragmentListener!!.setUpBackButton(false)
-        replaceFragmentListener!!.setDrawerEnabled(true)
+
+
+        if(remainingTime != 0L) {
+            chrono.text = "0"
+            setUpCountDownTimer(0)
+        }
 
         super.onResume()
+    }
+
+    override fun onDestroy() {
+        countDownTimer.cancel()
+        super.onDestroy()
+    }
+
+    override fun onStop() {
+        countDownTimer.cancel()
+        super.onStop()
     }
 
     override fun onCreateView(
@@ -94,9 +110,11 @@ class QuizzFragment : androidx.fragment.app.Fragment(), View.OnClickListener {
 
     }
 
-    @SuppressLint("NewApi")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        replaceFragmentListener!!.setDrawerEnabled(false)
+
         mPokemonQuestions = Manager.generateQuestions()
 
         mEnableTouchEvents = true
@@ -127,7 +145,7 @@ class QuizzFragment : androidx.fragment.app.Fragment(), View.OnClickListener {
 
         chrono = chronoTextView
 
-        setUpCountDownTimer()
+        setUpCountDownTimer(6)
 
 
 
@@ -212,7 +230,7 @@ class QuizzFragment : androidx.fragment.app.Fragment(), View.OnClickListener {
         if (nbQuestion < 3) {
             mCurrentQuestion = mPokemonQuestions!!.question
             this.displayQuestion(mCurrentQuestion!!)
-            setUpCountDownTimer()
+            setUpCountDownTimer(6)
 
         } else {
             if (nbCorrectAnswer >= 2) {
@@ -225,9 +243,18 @@ class QuizzFragment : androidx.fragment.app.Fragment(), View.OnClickListener {
         }
     }
 
-    private fun setUpCountDownTimer() {
-        countDownTimer = object : CountDownTimer(6000, 1000) {
+
+
+    private fun setUpCountDownTimer(remainingTime : Long) {
+        var countDownTimerRemaining : Long
+        if(remainingTime == 0L) {
+            countDownTimerRemaining = 6L
+        } else {
+            countDownTimerRemaining = remainingTime * 1000
+        }
+        countDownTimer = object : CountDownTimer(countDownTimerRemaining, 1000) {
             override fun onTick(millisUntilFinished: Long) {
+                this@QuizzFragment.remainingTime = millisUntilFinished/1000
                 chrono.text = counter.toString()
                 counter--
             }
@@ -257,6 +284,11 @@ class QuizzFragment : androidx.fragment.app.Fragment(), View.OnClickListener {
             }
         }
         countDownTimer.start()
+    }
+
+    override fun onPause() {
+        countDownTimer.cancel()
+        super.onPause()
     }
 }
 
