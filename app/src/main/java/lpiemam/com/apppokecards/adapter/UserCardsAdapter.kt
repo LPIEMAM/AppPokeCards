@@ -1,33 +1,30 @@
 package lpiemam.com.apppokecards.adapter
 
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Filter
 import lpiemam.com.apppokecards.R
-import lpiemam.com.apppokecards.viewholder.UserCardsViewHolder
+import lpiemam.com.apppokecards.viewholder.UserCardViewHolder
 import android.widget.Filterable
-import lpiemam.com.apppokecards.model.Card
-import lpiemam.com.apppokecards.model.Pokemon
 import lpiemam.com.apppokecards.model.UserCard
 
-class UserCardsAdapter(val userCardList: ArrayList<UserCard>) : androidx.recyclerview.widget.RecyclerView.Adapter<UserCardsViewHolder>(), Filterable {
+class UserCardsAdapter(val userCardList: ArrayList<UserCard>) : androidx.recyclerview.widget.RecyclerView.Adapter<UserCardViewHolder>(), Filterable {
 
     private var userCardsListFiltered: ArrayList<UserCard>? = ArrayList(userCardList)
 
 
-    override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): UserCardsViewHolder {
+    override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): UserCardViewHolder {
         val view = LayoutInflater.from(viewGroup.context).inflate(R.layout.rv_row_collection, viewGroup, false)
-        return UserCardsViewHolder(view)
+        return UserCardViewHolder(view)
     }
 
     override fun getItemCount(): Int {
         return userCardsListFiltered!!.size
     }
 
-    override fun onBindViewHolder(userCardsViewHolder: UserCardsViewHolder, i: Int) {
+    override fun onBindViewHolder(userCardViewHolder: UserCardViewHolder, i: Int) {
         val card = userCardsListFiltered!![i]
-        userCardsViewHolder.bind(card)
+        userCardViewHolder.bind(card)
     }
 
     override fun getFilter(): Filter? {
@@ -43,7 +40,7 @@ class UserCardsAdapter(val userCardList: ArrayList<UserCard>) : androidx.recycle
 
                         // name match condition. this might differ depending on your requirement
                         // here we are looking for name or phone number match
-                        if (userCard.card.pokemon.name.toLowerCase().contains(charString.toLowerCase())) {
+                        if (userCard.pokemonCard.name.toLowerCase().contains(charString.toLowerCase())) {
                             filteredList.add(userCard)
                         }
                     }

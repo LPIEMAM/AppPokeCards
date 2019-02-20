@@ -1,11 +1,8 @@
 package lpiemam.com.apppokecards.viewholder
 
 import android.view.View
-import android.widget.ImageView
-import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.rv_row_cardspack.view.*
 import lpiemam.com.apppokecards.R
-import lpiemam.com.apppokecards.model.Card
 import lpiemam.com.apppokecards.model.CardsPack
 
 /**

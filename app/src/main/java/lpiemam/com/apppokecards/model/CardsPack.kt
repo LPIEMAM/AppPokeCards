@@ -1,11 +1,9 @@
 package lpiemam.com.apppokecards.model
 
-import lpiemam.com.apppokecards.viewmodel.ViewModelPokemon
-
 /**
  * Created by lpiem on 02/02/2019.
  */
-class CardsPack(val name : String, var listCards : ArrayList<Card> = ArrayList(), var isSelected : Boolean = false) {
+class CardsPack(val name : String, var listPokemonCards : ArrayList<PokemonCard> = ArrayList(), var isSelected : Boolean = false) {
     val nbCards = when (name) {
         "Petit" -> 3
         "Moyen" -> 6
@@ -20,26 +18,26 @@ class CardsPack(val name : String, var listCards : ArrayList<Card> = ArrayList()
         else -> 0
     }
 
-    fun generateRandomCards(allCards : ArrayList<Card>) {
-        listCards.clear()
-        if(nbCards <= allCards.size) {
+    fun generateRandomCards(allPokemonCards : ArrayList<PokemonCard>) {
+        listPokemonCards.clear()
+        if(nbCards <= allPokemonCards.size) {
             val usedPositions = ArrayList<Int>()
             for(i in 1..nbCards) {
-                var randomPosition = (0..(allCards.size-1)).random()
+                var randomPosition = (0..(allPokemonCards.size-1)).random()
 
-                listCards.add(allCards[randomPosition])
+                listPokemonCards.add(allPokemonCards[randomPosition])
                 usedPositions.add(randomPosition)
             }
         }
 
-        /*if(nbCards <= ViewModelPokemon.allCardsUserNeeds.size) {
+        /*if(nbCards <= PokemonCardsViewModel.allCardsUserNeeds.size) {
             val usedPositions = ArrayList<Int>()
             for(i in 1..nbCards) {
-                var randomPosition = (0..(ViewModelPokemon.allCardsUserNeeds.size-1)).random()
+                var randomPosition = (0..(PokemonCardsViewModel.allCardsUserNeeds.size-1)).random()
                 while(usedPositions.contains(randomPosition)) {
-                    randomPosition = (0..(ViewModelPokemon.allCardsUserNeeds.size-1)).random()
+                    randomPosition = (0..(PokemonCardsViewModel.allCardsUserNeeds.size-1)).random()
                 }
-                listCards.add(ViewModelPokemon.allCardsUserNeeds[randomPosition])
+                listPokemonCards.add(PokemonCardsViewModel.allCardsUserNeeds[randomPosition])
                 usedPositions.add(randomPosition)
             }
         } else {
@@ -48,7 +46,7 @@ class CardsPack(val name : String, var listCards : ArrayList<Card> = ArrayList()
     }
 
     fun clearCardList() {
-        listCards.clear()
+        listPokemonCards.clear()
     }
 
 }

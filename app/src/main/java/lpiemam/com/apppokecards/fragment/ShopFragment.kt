@@ -15,7 +15,7 @@ import lpiemam.com.apppokecards.*
 import lpiemam.com.apppokecards.adapter.ShopAdapter
 import lpiemam.com.apppokecards.model.CardsPack
 import lpiemam.com.apppokecards.model.User
-import lpiemam.com.apppokecards.viewmodel.ViewModelPokemon
+import lpiemam.com.apppokecards.viewmodel.PokemonCardsViewModel
 
 
 
@@ -24,7 +24,7 @@ import lpiemam.com.apppokecards.viewmodel.ViewModelPokemon
  */
 class ShopFragment : Fragment() {
 
-    lateinit var viewModelPokemon: ViewModelPokemon
+    lateinit var pokemonCardsViewModel: PokemonCardsViewModel
 
     var shopAdapter: ShopAdapter? = null
     var replaceFragmentListener: ReplaceFragmentListener? = null
@@ -79,7 +79,7 @@ class ShopFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        viewModelPokemon = ViewModelProviders.of(activity!!).get(ViewModelPokemon::class.java)
+        pokemonCardsViewModel = ViewModelProviders.of(activity!!).get(PokemonCardsViewModel::class.java)
 
 
         shopConstraintLayout.setOnClickListener {
@@ -107,16 +107,16 @@ class ShopFragment : Fragment() {
             if (onePackSelected) {
                 if (User.canBuyAPack(selectedPack)) {
                     try {
-                        selectedPack.generateRandomCards(viewModelPokemon.allCardsList)
+                        selectedPack.generateRandomCards(pokemonCardsViewModel.allCardsList)
 
 
                         var packOpeningDialogFragment = PackOpeningDialogFragment()
-                        packOpeningDialogFragment.listCardsPack = ArrayList(selectedPack.listCards)
+                        packOpeningDialogFragment.listCardsPack = ArrayList(selectedPack.listPokemonCards)
                         packOpeningDialogFragment.show(childFragmentManager, "Contenu du Pack")
 
-                        viewModelPokemon.buyAPack(selectedPack)
+                        pokemonCardsViewModel.buyAPack(selectedPack)
                         selectedPack.clearCardList()
-                        //ViewModelPokemon.setAllCardsUserNeeds()
+                        //PokemonCardsViewModel.setAllCardsUserNeeds()
 
                     } catch (e: Exception) {
                         val snackbar = Snackbar.make(view, e.message!!, Snackbar.LENGTH_LONG)
@@ -140,7 +140,7 @@ class ShopFragment : Fragment() {
 
 
     private fun setUpRecyclerView() {
-        shopAdapter = ShopAdapter(ArrayList(viewModelPokemon.cardsPacksList))
+        shopAdapter = ShopAdapter(ArrayList(pokemonCardsViewModel.cardsPacksList))
 
         shopRecyclerView!!.layoutManager = androidx.recyclerview.widget.GridLayoutManager(context, 3)
         shopRecyclerView!!.adapter = shopAdapter
@@ -158,9 +158,9 @@ class ShopFragment : Fragment() {
                         }
                         shopAdapter!!.cardsPackList[position].isSelected = !temp
                         shopAdapter!!.notifyDataSetChanged()
-                        //val card = shopAdapter!!.cardList[position]
+                        //val pokemonCard = shopAdapter!!.cardList[position]
 
-                        //replaceFragmentListener!!.replaceWithUserDetailFragment(card)
+                        //replaceFragmentListener!!.replaceWithUserDetailFragment(pokemonCard)
                     }
 
                     override fun onLongClick(view: View?, position: Int) {
@@ -170,9 +170,9 @@ class ShopFragment : Fragment() {
                         }
                         shopAdapter!!.cardsPackList[position].isSelected = !temp
                         shopAdapter!!.notifyDataSetChanged()
-                        //val card = userCardAdapter!!.cardList[position]
+                        //val pokemonCard = userCardAdapter!!.cardList[position]
 
-                        //replaceFragmentListener!!.replaceWithUserDetailFragment(card)
+                        //replaceFragmentListener!!.replaceWithUserDetailFragment(pokemonCard)
                     }
                 })
         )

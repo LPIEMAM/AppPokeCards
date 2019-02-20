@@ -15,7 +15,7 @@ import lpiemam.com.apppokecards.R
 import lpiemam.com.apppokecards.RecyclerTouchListener
 import lpiemam.com.apppokecards.ReplaceFragmentListener
 import lpiemam.com.apppokecards.adapter.UserCardsAdapter
-import lpiemam.com.apppokecards.viewmodel.ViewModelPokemon
+import lpiemam.com.apppokecards.viewmodel.PokemonCardsViewModel
 
 
 
@@ -23,17 +23,17 @@ import lpiemam.com.apppokecards.viewmodel.ViewModelPokemon
  * A simple [Fragment] subclass.
  *
  */
-class CollectionFragment : androidx.fragment.app.Fragment() {
+class UserCardsFragment : androidx.fragment.app.Fragment() {
 
-    lateinit var viewModelPokemon: ViewModelPokemon
+    lateinit var pokemonCardsViewModel: PokemonCardsViewModel
 
     var userCardAdapter: UserCardsAdapter? = null
     var replaceFragmentListener: ReplaceFragmentListener? = null
 
 
     companion object {
-        fun newInstance(): CollectionFragment {
-            return CollectionFragment()
+        fun newInstance(): UserCardsFragment {
+            return UserCardsFragment()
         }
     }
 
@@ -74,7 +74,7 @@ class CollectionFragment : androidx.fragment.app.Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        viewModelPokemon = ViewModelProviders.of(activity!!).get(ViewModelPokemon::class.java)
+        pokemonCardsViewModel = ViewModelProviders.of(activity!!).get(PokemonCardsViewModel::class.java)
 
         setUpRecyclerView()
 
@@ -102,7 +102,7 @@ class CollectionFragment : androidx.fragment.app.Fragment() {
 
 
     private fun setUpRecyclerView() {
-        userCardAdapter = UserCardsAdapter(ArrayList(viewModelPokemon.userCardList))
+        userCardAdapter = UserCardsAdapter(ArrayList(pokemonCardsViewModel.userCardList))
 
         collectionRecyclerView!!.layoutManager = androidx.recyclerview.widget.GridLayoutManager(context, 4)
         collectionRecyclerView!!.adapter = userCardAdapter

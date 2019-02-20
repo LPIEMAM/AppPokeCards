@@ -14,26 +14,26 @@ import kotlinx.android.synthetic.main.fragment_all_cards_detail.*
 import lpiemam.com.apppokecards.MainActivity
 import lpiemam.com.apppokecards.R
 import lpiemam.com.apppokecards.ReplaceFragmentListener
-import lpiemam.com.apppokecards.model.Card
+import lpiemam.com.apppokecards.model.PokemonCard
 import lpiemam.com.apppokecards.model.User
-import lpiemam.com.apppokecards.viewmodel.ViewModelPokemon
+import lpiemam.com.apppokecards.viewmodel.PokemonCardsViewModel
 
 
 /**
  * A simple [Fragment] subclass.
  *
  */
-class AllCardsDetailFragment : Fragment() {
+class PokemonCardDetailFragment : Fragment() {
 
-    lateinit var viewModelPokemon: ViewModelPokemon
+    lateinit var pokemonCardsViewModel: PokemonCardsViewModel
 
-    lateinit var card: Card
+    lateinit var pokemonCard: PokemonCard
     var replaceFragmentListener: ReplaceFragmentListener? = null
 
     companion object {
 
-        fun newInstance(): AllCardsDetailFragment {
-            return AllCardsDetailFragment()
+        fun newInstance(): PokemonCardDetailFragment {
+            return PokemonCardDetailFragment()
         }
     }
 
@@ -67,7 +67,7 @@ class AllCardsDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
 
-        viewModelPokemon = ViewModelProviders.of(activity!!).get(ViewModelPokemon::class.java)
+        pokemonCardsViewModel = ViewModelProviders.of(activity!!).get(PokemonCardsViewModel::class.java)
 
 
         super.onViewCreated(view, savedInstanceState)
@@ -78,20 +78,21 @@ class AllCardsDetailFragment : Fragment() {
         replaceFragmentListener!!.setUpBackButton(true)
 
         userDust.text = User.dusts.toString()
-        allCardsDetailDust.text = card.costDustToCraft.toString()
-        allCardsDetailCardVersion.text = card.version
-        allCardsDetailPokedexNumber.text = card.pokemon.pokedexNumber.toString()
-        allCardsDetailPokemonDescription.text = card.description
-        allCardsDetailPokemonName.text = card.pokemon.name
-        allCardsDetailPokemonType.text = card.pokemon.type
-        Picasso.get().load(card.url).placeholder(R.drawable.pokemon_card_back).into(allCardsDetailImageViewCard)
+//        pokemonCard.costDustToCraft = 350
+        allCardsDetailDust.text = pokemonCard.getCostToCraft().toString()
+//        allCardsDetailCardVersion.text = pokemonCard.version
+//        allCardsDetailPokedexNumber.text = pokemonCard.pokemon.pokedexNumber.toString()
+//        allCardsDetailPokemonDescription.text = pokemonCard.description
+//        allCardsDetailPokemonName.text = pokemonCard.pokemon.name
+//        allCardsDetailPokemonType.text = pokemonCard.pokemon.type
+        Picasso.get().load(pokemonCard.imageUrlHiRes).placeholder(R.drawable.pokemon_card_back).into(allCardsDetailImageViewCard)
 
 
         allCardsDetailButtonDust.setOnClickListener {
-            if(User.dusts >= card.costDustToCraft) {
-                User.dusts -= card.costDustToCraft
-                viewModelPokemon.addUserCard(card)
-                replaceFragmentListener!!.replaceWithFullScreenCard(card, false)
+            if(User.dusts >= pokemonCard.getCostToCraft()) {
+                User.dusts -= pokemonCard.getCostToCraft()
+                pokemonCardsViewModel.addUserCard(pokemonCard)
+                replaceFragmentListener!!.replaceWithFullScreenCard(pokemonCard, false)
             } else {
                 val snackbar = Snackbar.make(view, "Vous n'avez pas assez de poussières.", Snackbar.LENGTH_SHORT)
                 snackbar.show()

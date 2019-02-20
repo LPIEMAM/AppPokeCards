@@ -9,11 +9,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.fragment_all_cards.*
 import lpiemam.com.apppokecards.*
-import lpiemam.com.apppokecards.adapter.AllCardAdapter
-import lpiemam.com.apppokecards.viewmodel.ViewModelPokemon
+import lpiemam.com.apppokecards.adapter.PokemonCardsAdapter
+import lpiemam.com.apppokecards.viewmodel.PokemonCardsViewModel
 
 
 
@@ -21,17 +22,17 @@ import lpiemam.com.apppokecards.viewmodel.ViewModelPokemon
  * A simple [Fragment] subclass.
  *
  */
-class AllCardsFragment : Fragment() {
+class PokemonCardsFragment : Fragment() {
 
-    lateinit var viewModelPokemon: ViewModelPokemon
+    lateinit var pokemonCardsViewModel: PokemonCardsViewModel
 
-    var allCardAdapter: AllCardAdapter? = null
+    var pokemonCardsAdapter: PokemonCardsAdapter? = null
     var replaceFragmentListener: ReplaceFragmentListener? = null
 
     companion object {
 
-        fun newInstance(): AllCardsFragment {
-            return AllCardsFragment()
+        fun newInstance(): PokemonCardsFragment {
+            return PokemonCardsFragment()
         }
     }
     override fun onAttach(context: Context) {
@@ -42,9 +43,21 @@ class AllCardsFragment : Fragment() {
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+    }
+
     override fun onDetach() {
         replaceFragmentListener = null
         super.onDetach()
+    }
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        pokemonCardsViewModel = ViewModelProviders.of(activity!!).get(PokemonCardsViewModel::class.java)
+        pokemonCardsViewModel.fetchPokemonCards("")
     }
 
     override fun onCreateView(
@@ -54,6 +67,8 @@ class AllCardsFragment : Fragment() {
 
         setHasOptionsMenu(true)
 
+
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_all_cards, container, false)
     }
@@ -61,7 +76,8 @@ class AllCardsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
 
-        viewModelPokemon = ViewModelProviders.of(activity!!).get(ViewModelPokemon::class.java)
+
+
 
         setUpRecyclerView()
         replaceFragmentListener!!.setUpBackButton(false)
@@ -71,14 +87,14 @@ class AllCardsFragment : Fragment() {
         allCardsSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(s: String): Boolean {
                 Log.d("", "onQueryTextChange: $s")
-                allCardAdapter!!.filter!!.filter(s)
+                pokemonCardsViewModel.fetchPokemonCards(s)
                 return false
             }
 
             override fun onQueryTextChange(s: String): Boolean {
                 //CharSequence charSequence = searchView.getQuery();
                 Log.d("", "onQueryTextChange: $s")
-                allCardAdapter!!.filter!!.filter(s)
+                pokemonCardsViewModel.fetchPokemonCards(s)
                 return false
             }
         })
@@ -87,10 +103,13 @@ class AllCardsFragment : Fragment() {
     }
 
     private fun setUpRecyclerView() {
-        allCardAdapter = AllCardAdapter(ArrayList(viewModelPokemon.allCardsList))
+        val pokemonCardsAdapter = PokemonCardsAdapter()
+        pokemonCardsViewModel.pokemonCardsLiveData.observe(this, Observer {
+            pokemonCardsAdapter.setData(it)
+        })
 
         allCardsRecyclerView!!.layoutManager = androidx.recyclerview.widget.GridLayoutManager(context, 4)
-        allCardsRecyclerView!!.adapter = allCardAdapter
+        allCardsRecyclerView!!.adapter = pokemonCardsAdapter
 
         allCardsRecyclerView!!.addOnItemTouchListener(
             RecyclerTouchListener(
@@ -99,18 +118,19 @@ class AllCardsFragment : Fragment() {
                 object : RecyclerTouchListener.ClickListener {
                     override fun onClick(view: View, position: Int) {
 
-                        val card = allCardAdapter!!.allCardList[position]
+                        val card = pokemonCardsAdapter!!.allPokemonCardsList[position]
 
                         replaceFragmentListener!!.replaceWithAllCardsDetailFragment(card)
                     }
 
                     override fun onLongClick(view: View?, position: Int) {
-                        val card = allCardAdapter!!.allCardList[position]
+                        val card = pokemonCardsAdapter!!.allPokemonCardsList[position]
 
                         replaceFragmentListener!!.replaceWithAllCardsDetailFragment(card)
                     }
                 })
         )
+
     }
 
 }

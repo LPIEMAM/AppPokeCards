@@ -5,7 +5,7 @@ import lpiemam.com.apppokecards.model.PokemonQuestions
 import lpiemam.com.apppokecards.model.Question
 import java.util.*
 
-class ViewModelQuizz: ViewModel() {
+class QuizzViewModel: ViewModel() {
 
 
     fun generateQuestions(): PokemonQuestions {

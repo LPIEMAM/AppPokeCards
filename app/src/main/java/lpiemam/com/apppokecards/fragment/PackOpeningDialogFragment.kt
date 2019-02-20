@@ -8,10 +8,10 @@ import androidx.fragment.app.DialogFragment
 import kotlinx.android.synthetic.main.pack_opening_dialog_layout.view.*
 import lpiemam.com.apppokecards.ImagePanel
 import lpiemam.com.apppokecards.R
-import lpiemam.com.apppokecards.model.Card
+import lpiemam.com.apppokecards.model.PokemonCard
 
 class PackOpeningDialogFragment : DialogFragment() {
-    lateinit var listCardsPack : ArrayList<Card>
+    lateinit var listCardsPack : ArrayList<PokemonCard>
     private val carouselViews = ArrayList<View>()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -43,7 +43,7 @@ class PackOpeningDialogFragment : DialogFragment() {
         var imagePanel : ImagePanel
         for (card in listCardsPack) {
             imagePanel = ImagePanel(context!!)
-            imagePanel.setImageUrl(card.url)
+            imagePanel.setImageUrl(card.imageUrlHiRes)
 //            imagePanel.setImageResId(R.drawable.pokemon_card_back)
             carouselViews.add(imagePanel)
         }

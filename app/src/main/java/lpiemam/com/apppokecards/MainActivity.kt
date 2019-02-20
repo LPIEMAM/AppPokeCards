@@ -19,10 +19,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
-import lpiemam.com.apppokecards.model.Card
+import lpiemam.com.apppokecards.model.PokemonCard
 import lpiemam.com.apppokecards.fragment.*
 import lpiemam.com.apppokecards.model.User
-import lpiemam.com.apppokecards.viewmodel.ViewModelPokemon
+import lpiemam.com.apppokecards.viewmodel.PokemonCardsViewModel
 import lpiemam.com.apppokecards.model.UserCard
 import java.util.*
 
@@ -34,14 +34,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     lateinit var toggle: ActionBarDrawerToggle
     lateinit var drawer: androidx.drawerlayout.widget.DrawerLayout
 
-    lateinit var allCardsFragment: AllCardsFragment
+    lateinit var pokemonCardsFragment: PokemonCardsFragment
     lateinit var addNewCardFragment: AddNewCardFragment
     lateinit var shopFragment: ShopFragment
     lateinit var quizzEndedFragment: QuizzEndedFragment
     lateinit var quizzStartFragment: QuizzStartFragment
-    lateinit var collectionFragment: CollectionFragment
+    lateinit var userCardsFragment: UserCardsFragment
 
-    var viewModelPokemon : ViewModelPokemon? = null
+    var pokemonCardsViewModel : PokemonCardsViewModel? = null
 
     var hasClickedBack = false
 
@@ -53,12 +53,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        allCardsFragment = AllCardsFragment.newInstance()
+        pokemonCardsFragment = PokemonCardsFragment.newInstance()
         addNewCardFragment = AddNewCardFragment.newInstance()
         shopFragment = ShopFragment.newInstance()
         quizzEndedFragment = QuizzEndedFragment.newInstance()
         quizzStartFragment = QuizzStartFragment.newInstance()
-        collectionFragment = CollectionFragment()
+        userCardsFragment = UserCardsFragment()
 
         drawer = drawer_layout
         toggle = ActionBarDrawerToggle(
@@ -71,12 +71,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (savedInstanceState == null) {
             supportFragmentManager
                 .beginTransaction()
-                .add(R.id.mainActivityContainer, collectionFragment, "collectionFragment")
+                .add(R.id.mainActivityContainer, userCardsFragment, "userCardsFragment")
                 .commit()
         }
 
-        viewModelPokemon = ViewModelProviders.of(this).get(ViewModelPokemon::class.java)
-        viewModelPokemon!!.initializeData()
+        pokemonCardsViewModel = ViewModelProviders.of(this).get(PokemonCardsViewModel::class.java)
+        pokemonCardsViewModel!!.initializeData()
 
         nav_view.setNavigationItemSelectedListener(this)
     }
@@ -101,15 +101,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             User.dateLastQuizzEnded = Calendar.getInstance()
             supportFragmentManager
                 .beginTransaction()
-                .replace(R.id.mainActivityContainer, collectionFragment, "collectionFragment")
+                .replace(R.id.mainActivityContainer, userCardsFragment, "userCardsFragment")
                 .commit()
             toast = Toast.makeText(this, "Echec du quizz.", Toast.LENGTH_SHORT)
             toast!!.show()
         } else {
             var currentFragment = getVisibleFragment()
             when (currentFragment) {
-                is AllCardsDetailFragment -> supportFragmentManager.popBackStack()
-                is CollectionFragment -> super.onBackPressed()
+                is PokemonCardDetailFragment -> supportFragmentManager.popBackStack()
+                is UserCardsFragment -> super.onBackPressed()
                 is QuizzFragment -> {
                     toast =
                         Toast.makeText(this, "Si vous recliquez, votre quizz quotidien sera considéré comme un echec.", Toast.LENGTH_SHORT)
@@ -127,7 +127,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     }
                     supportFragmentManager
                         .beginTransaction()
-                        .replace(R.id.mainActivityContainer, collectionFragment, "collectionFragment")
+                        .replace(R.id.mainActivityContainer, userCardsFragment, "userCardsFragment")
                         .commit()
                 }
             }
@@ -159,7 +159,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.menuItemCollection -> {
                 supportFragmentManager
                     .beginTransaction()
-                    .replace(R.id.mainActivityContainer, collectionFragment, "collectionFragment")
+                    .replace(R.id.mainActivityContainer, userCardsFragment, "userCardsFragment")
                     .commit()
             }
             R.id.menuItemShop -> {
@@ -186,13 +186,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.menuItemAchievements -> {
 //                supportFragmentManager
 //                    .beginTransaction()
-//                    .replace(R.id.mainActivityContainer, UserCardDetailFragment.newInstance(), "collectionFragment")
+//                    .replace(R.id.mainActivityContainer, UserCardDetailFragment.newInstance(), "userCardsFragment")
 //                    .commit()
             }
             R.id.menuItemAllCards -> {
                 supportFragmentManager
                     .beginTransaction()
-                    .replace(R.id.mainActivityContainer, allCardsFragment, "allCardsFragment")
+                    .replace(R.id.mainActivityContainer, pokemonCardsFragment, "pokemonCardsFragment")
                     .commit()
             }
         }
@@ -237,22 +237,22 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
 
-    override fun replaceWithFullScreenCard(card: Card, boolean: Boolean) {
+    override fun replaceWithFullScreenCard(pokemonCard: PokemonCard, boolean: Boolean) {
         supportFragmentManager
             .beginTransaction()
             .replace(
                 R.id.mainActivityContainer,
-                FullScreenCardFragment.newInstance(card, boolean),
+                FullScreenCardFragment.newInstance(pokemonCard, boolean),
                 "fullScreenCardFragment"
             )
             .commit()
     }
 
     override fun replaceWithCollectionFragment() {
-        val tempCollectionFragment = supportFragmentManager.findFragmentByTag("collectionFragment")
+        val tempCollectionFragment = supportFragmentManager.findFragmentByTag("userCardsFragment")
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.mainActivityContainer, tempCollectionFragment!!, "collectionFragment")
+            .replace(R.id.mainActivityContainer, tempCollectionFragment!!, "userCardsFragment")
             .commit()
     }
 
@@ -269,13 +269,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun replaceWithAllCardsFragment() {
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.mainActivityContainer, allCardsFragment, "allCardsFragment")
+            .replace(R.id.mainActivityContainer, pokemonCardsFragment, "pokemonCardsFragment")
             .commit()
     }
 
-    override fun replaceWithAllCardsDetailFragment(card: Card) {
-        val allCardsDetailFragment = AllCardsDetailFragment.newInstance()
-        allCardsDetailFragment.card = card
+    override fun replaceWithAllCardsDetailFragment(pokemonCard: PokemonCard) {
+        val allCardsDetailFragment = PokemonCardDetailFragment.newInstance()
+        allCardsDetailFragment.pokemonCard = pokemonCard
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.mainActivityContainer, allCardsDetailFragment, "allCardsDetailFragment")
@@ -328,7 +328,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun notifyCollectionDataSetChanged() {
-        collectionFragment.userCardAdapter!!.notifyDataSetChanged()
+        userCardsFragment.userCardAdapter!!.notifyDataSetChanged()
     }
 
     override fun dispatchTouchEvent(event: MotionEvent): Boolean {

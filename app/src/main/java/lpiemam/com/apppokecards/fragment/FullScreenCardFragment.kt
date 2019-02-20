@@ -11,20 +11,30 @@ import kotlinx.android.synthetic.main.fragment_full_screen_card.view.*
 import lpiemam.com.apppokecards.MainActivity
 import lpiemam.com.apppokecards.R
 import lpiemam.com.apppokecards.ReplaceFragmentListener
-import lpiemam.com.apppokecards.model.Card
+import lpiemam.com.apppokecards.model.PokemonCard
 
 
 
 
 class FullScreenCardFragment : Fragment() {
-    private var card : Card? = null
+    private var pokemonCard : PokemonCard? = null
     private var wasPreviousScreenUserDetail : Boolean? = null
     private var listener: ReplaceFragmentListener? = null
+
+    companion object {
+        fun newInstance(pokemonCard: PokemonCard, boolean: Boolean) =
+            FullScreenCardFragment().apply {
+                arguments = Bundle().apply {
+                    putParcelable("pokemonCard", pokemonCard)
+                    putBoolean("wasPreviousScreenUserDetail", boolean)
+                }
+            }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            card = arguments?.getParcelable("card")
+            pokemonCard = arguments?.getParcelable("pokemonCard") as PokemonCard
             wasPreviousScreenUserDetail = arguments?.getBoolean("wasPreviousScreenUserDetail")
         }
     }
@@ -37,10 +47,11 @@ class FullScreenCardFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_full_screen_card, container, false)
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (context as MainActivity).supportActionBar!!.hide()
-        Picasso.get().load(card?.url).placeholder(R.drawable.pokemon_card_back).into(view.cardImageView)
+        Picasso.get().load(pokemonCard?.imageUrlHiRes).placeholder(R.drawable.pokemon_card_back).into(view.cardImageView)
         view.cardImageView.setOnClickListener{
             if(wasPreviousScreenUserDetail!!) {
                 listener!!.popBackStack()
@@ -49,7 +60,6 @@ class FullScreenCardFragment : Fragment() {
             }
         }
     }
-
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -60,22 +70,12 @@ class FullScreenCardFragment : Fragment() {
         }
     }
 
+
     override fun onDetach() {
 
         listener!!.setUpBackButton(false)
         listener!!.setDrawerEnabled(true)
         super.onDetach()
         listener = null
-    }
-
-
-    companion object {
-        fun newInstance(card: Card, boolean: Boolean) =
-            FullScreenCardFragment().apply {
-                arguments = Bundle().apply {
-                    putParcelable("card", card)
-                    putBoolean("wasPreviousScreenUserDetail", boolean)
-                }
-            }
     }
 }

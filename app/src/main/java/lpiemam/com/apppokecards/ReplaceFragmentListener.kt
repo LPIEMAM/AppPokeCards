@@ -1,19 +1,17 @@
 package lpiemam.com.apppokecards
 
-import androidx.fragment.app.Fragment
-import lpiemam.com.apppokecards.model.Card
-import lpiemam.com.apppokecards.model.Pokemon
+import lpiemam.com.apppokecards.model.PokemonCard
 import lpiemam.com.apppokecards.model.UserCard
 
 interface ReplaceFragmentListener {
 
     fun setDrawerEnabled(enabled: Boolean)
     fun setUpBackButton(enabled: Boolean)
-    fun replaceWithFullScreenCard(card : Card, boolean: Boolean)
+    fun replaceWithFullScreenCard(pokemonCard : PokemonCard, boolean: Boolean)
     fun replaceWithCollectionFragment()
     fun replaceWithUserDetailFragment(userCard: UserCard)
     fun replaceWithAllCardsFragment()
-    fun replaceWithAllCardsDetailFragment(card: Card)
+    fun replaceWithAllCardsDetailFragment(pokemonCard: PokemonCard)
     fun replaceWithAddNewCardFragment()
     fun replaceWithQuizzFragment()
     fun replaceWithQuizzStartFragment()

@@ -12,14 +12,13 @@ import android.widget.TextView
 import kotlinx.android.synthetic.main.fragment_quizz.*
 import lpiemam.com.apppokecards.*
 
-import lpiemam.com.apppokecards.viewmodel.ViewModelPokemon
 import lpiemam.com.apppokecards.model.PokemonQuestions
 import lpiemam.com.apppokecards.model.Question
 import java.util.*
 import android.os.CountDownTimer
 import androidx.lifecycle.ViewModelProviders
 import lpiemam.com.apppokecards.model.User
-import lpiemam.com.apppokecards.viewmodel.ViewModelQuizz
+import lpiemam.com.apppokecards.viewmodel.QuizzViewModel
 import kotlin.collections.ArrayList
 
 
@@ -28,7 +27,7 @@ import kotlin.collections.ArrayList
  */
 class QuizzFragment : Fragment(){
 
-    lateinit var viewModelQuizz: ViewModelQuizz
+    lateinit var quizzViewModel: QuizzViewModel
 
     var replaceFragmentListener: ReplaceFragmentListener? = null
     private var mQuestionTextView: TextView? = null
@@ -116,11 +115,11 @@ class QuizzFragment : Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModelQuizz = ViewModelProviders.of(activity!!).get(ViewModelQuizz::class.java)
+        quizzViewModel = ViewModelProviders.of(activity!!).get(QuizzViewModel::class.java)
 
         replaceFragmentListener!!.setDrawerEnabled(false)
 
-        mPokemonQuestions = viewModelQuizz.generateQuestions()
+        mPokemonQuestions = quizzViewModel.generateQuestions()
 
         mEnableTouchEvents = true
 

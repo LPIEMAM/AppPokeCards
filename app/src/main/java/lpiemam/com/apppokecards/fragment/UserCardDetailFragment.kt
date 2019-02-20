@@ -14,7 +14,7 @@ import lpiemam.com.apppokecards.MainActivity
 import lpiemam.com.apppokecards.R
 import lpiemam.com.apppokecards.ReplaceFragmentListener
 import lpiemam.com.apppokecards.model.User
-import lpiemam.com.apppokecards.viewmodel.ViewModelPokemon
+import lpiemam.com.apppokecards.viewmodel.PokemonCardsViewModel
 import lpiemam.com.apppokecards.model.UserCard
 
 
@@ -24,7 +24,7 @@ import lpiemam.com.apppokecards.model.UserCard
  */
 class UserCardDetailFragment : Fragment() {
 
-    lateinit var viewModelPokemon: ViewModelPokemon
+    lateinit var pokemonCardsViewModel: PokemonCardsViewModel
 
     lateinit var userCard: UserCard
     var replaceFragmentListener: ReplaceFragmentListener? = null
@@ -65,7 +65,7 @@ class UserCardDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
 
-        viewModelPokemon = ViewModelProviders.of(activity!!).get(ViewModelPokemon::class.java)
+        pokemonCardsViewModel = ViewModelProviders.of(activity!!).get(PokemonCardsViewModel::class.java)
 
         super.onViewCreated(view, savedInstanceState)
         (context as MainActivity).supportActionBar!!.show()
@@ -73,21 +73,21 @@ class UserCardDetailFragment : Fragment() {
         replaceFragmentListener!!.setUpBackButton(true)
 
         userDust.text = User.dusts.toString()
-        userCardDetailDust.text = userCard.card.dustGivenByDecraft.toString()
-        userCardDetailCardVersion.text = userCard.card.version
-        userCardDetailPokedexNumber.text = userCard.card.pokemon.pokedexNumber.toString()
-        userCardDetailPokemonDescription.text = userCard.card.description
-        userCardDetailPokemonName.text = userCard.card.pokemon.name
-        userCardDetailPokemonType.text = userCard.card.pokemon.type
-        Picasso.get().load(userCard.card.url).placeholder(R.drawable.pokemon_card_back).into(userCardDetailImageViewCard)
+        userCardDetailDust.text = userCard.pokemonCard.getCostForDecraft().toString()
+//        userCardDetailCardVersion.text = userCard.pokemonCard.version
+//        userCardDetailPokedexNumber.text = userCard.pokemonCard.pokemon.pokedexNumber.toString()
+//        userCardDetailPokemonDescription.text = userCard.pokemonCard.description
+//        userCardDetailPokemonName.text = userCard.pokemonCard.pokemon.name
+//        userCardDetailPokemonType.text = userCard.pokemonCard.pokemon.type
+        Picasso.get().load(userCard.pokemonCard.imageUrlHiRes).placeholder(R.drawable.pokemon_card_back).into(userCardDetailImageViewCard)
         userCardDetailImageViewCard.setOnClickListener{
-            replaceFragmentListener!!.replaceWithFullScreenCard(userCard.card, true)
+            replaceFragmentListener!!.replaceWithFullScreenCard(userCard.pokemonCard, true)
         }
 
 
         userCardDetailButtonDust.setOnClickListener {
-            User.dusts += userCard.card.dustGivenByDecraft
-            viewModelPokemon.removeUserCard(userCard)
+            User.dusts += userCard.pokemonCard.getCostForDecraft()
+            pokemonCardsViewModel.removeUserCard(userCard)
             replaceFragmentListener!!.replaceWithCollectionFragment()
         }
     }
