@@ -7,24 +7,24 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_shop.*
 import lpiemam.com.apppokecards.*
 
 import lpiemam.com.apppokecards.adapter.ShopAdapter
 import lpiemam.com.apppokecards.model.CardsPack
-import lpiemam.com.apppokecards.model.Manager
+import lpiemam.com.apppokecards.model.User
+import lpiemam.com.apppokecards.viewmodel.ViewModelPokemon
 
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
  */
-class ShopFragment : androidx.fragment.app.Fragment() {
+class ShopFragment : Fragment() {
+
+    lateinit var viewModelPokemon: ViewModelPokemon
 
     var shopAdapter: ShopAdapter? = null
     var replaceFragmentListener: ReplaceFragmentListener? = null
@@ -79,6 +79,9 @@ class ShopFragment : androidx.fragment.app.Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
+        viewModelPokemon = ViewModelProviders.of(activity!!).get(ViewModelPokemon::class.java)
+
+
         shopConstraintLayout.setOnClickListener {
             for (cardPack in shopAdapter!!.cardsPackList) {
                 cardPack.isSelected = false
@@ -88,7 +91,7 @@ class ShopFragment : androidx.fragment.app.Fragment() {
 
 
 
-        userCoinsTextView.text = Manager.userSiam.coins.toString()
+        userCoinsTextView.text = User.coins.toString()
 
         setUpRecyclerView()
 
@@ -102,18 +105,18 @@ class ShopFragment : androidx.fragment.app.Fragment() {
                 }
             }
             if (onePackSelected) {
-                if (Manager.userSiam.canBuyAPack(selectedPack)) {
+                if (User.canBuyAPack(selectedPack)) {
                     try {
-                        selectedPack.generateRandomCards()
+                        selectedPack.generateRandomCards(viewModelPokemon.allCardsList)
 
 
                         var packOpeningDialogFragment = PackOpeningDialogFragment()
                         packOpeningDialogFragment.listCardsPack = ArrayList(selectedPack.listCards)
                         packOpeningDialogFragment.show(childFragmentManager, "Contenu du Pack")
 
-                        Manager.userSiam.buyAPack(selectedPack, view)
+                        viewModelPokemon.buyAPack(selectedPack)
                         selectedPack.clearCardList()
-                        //Manager.setAllCardsUserNeeds()
+                        //ViewModelPokemon.setAllCardsUserNeeds()
 
                     } catch (e: Exception) {
                         val snackbar = Snackbar.make(view, e.message!!, Snackbar.LENGTH_LONG)
@@ -125,7 +128,7 @@ class ShopFragment : androidx.fragment.app.Fragment() {
                     snackbar.show()
                 }
             }
-            userCoinsTextView.text = Manager.userSiam.coins.toString()
+            userCoinsTextView.text = User.coins.toString()
         }
 
 
@@ -137,7 +140,7 @@ class ShopFragment : androidx.fragment.app.Fragment() {
 
 
     private fun setUpRecyclerView() {
-        shopAdapter = ShopAdapter(ArrayList(Manager.cardsPacksList))
+        shopAdapter = ShopAdapter(ArrayList(viewModelPokemon.cardsPacksList))
 
         shopRecyclerView!!.layoutManager = androidx.recyclerview.widget.GridLayoutManager(context, 3)
         shopRecyclerView!!.adapter = shopAdapter

@@ -1,7 +1,6 @@
 package lpiemam.com.apppokecards.fragment
 
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.os.*
 import androidx.fragment.app.Fragment
@@ -10,22 +9,26 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_quizz.*
 import lpiemam.com.apppokecards.*
 
-import lpiemam.com.apppokecards.model.Manager
+import lpiemam.com.apppokecards.viewmodel.ViewModelPokemon
 import lpiemam.com.apppokecards.model.PokemonQuestions
 import lpiemam.com.apppokecards.model.Question
 import java.util.*
 import android.os.CountDownTimer
+import androidx.lifecycle.ViewModelProviders
+import lpiemam.com.apppokecards.model.User
+import lpiemam.com.apppokecards.viewmodel.ViewModelQuizz
 import kotlin.collections.ArrayList
 
 
 /**
  * A simple [Fragment] subclass.
  */
-class QuizzFragment : androidx.fragment.app.Fragment(), View.OnClickListener {
+class QuizzFragment : Fragment(){
+
+    lateinit var viewModelQuizz: ViewModelQuizz
 
     var replaceFragmentListener: ReplaceFragmentListener? = null
     private var mQuestionTextView: TextView? = null
@@ -113,9 +116,11 @@ class QuizzFragment : androidx.fragment.app.Fragment(), View.OnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModelQuizz = ViewModelProviders.of(activity!!).get(ViewModelQuizz::class.java)
+
         replaceFragmentListener!!.setDrawerEnabled(false)
 
-        mPokemonQuestions = Manager.generateQuestions()
+        mPokemonQuestions = viewModelQuizz.generateQuestions()
 
         mEnableTouchEvents = true
 
@@ -135,10 +140,18 @@ class QuizzFragment : androidx.fragment.app.Fragment(), View.OnClickListener {
         mAnswerButton3!!.tag = 2
         mAnswerButton4!!.tag = 3
 
-        mAnswerButton1!!.setOnClickListener(this)
-        mAnswerButton2!!.setOnClickListener(this)
-        mAnswerButton3!!.setOnClickListener(this)
-        mAnswerButton4!!.setOnClickListener(this)
+        mAnswerButton1!!.setOnClickListener {
+            onClick(it)
+        }
+        mAnswerButton2!!.setOnClickListener{
+            onClick(it)
+        }
+        mAnswerButton3!!.setOnClickListener{
+            onClick(it)
+        }
+        mAnswerButton4!!.setOnClickListener{
+            onClick(it)
+        }
 
         mCurrentQuestion = mPokemonQuestions!!.question
         this.displayQuestion(mCurrentQuestion!!)
@@ -146,14 +159,14 @@ class QuizzFragment : androidx.fragment.app.Fragment(), View.OnClickListener {
         chrono = chronoTextView
 
         setUpCountDownTimer(6)
-
-
-
-
     }
 
-    override fun onClick(v: View) {
+    fun onClick(v: View) {
         countDownTimer.cancel()
+        mAnswerButton1!!.isEnabled = false
+        mAnswerButton2!!.isEnabled = false
+        mAnswerButton3!!.isEnabled = false
+        mAnswerButton4!!.isEnabled = false
         if(counter > 0) {
 
 
@@ -206,6 +219,10 @@ class QuizzFragment : androidx.fragment.app.Fragment(), View.OnClickListener {
 
     private fun displayQuestion(q: Question) {
         mQuestionTextView!!.text = q.question
+        mAnswerButton1!!.isEnabled = true
+        mAnswerButton2!!.isEnabled = true
+        mAnswerButton3!!.isEnabled = true
+        mAnswerButton4!!.isEnabled = true
         mAnswerButton1!!.text = q.choiceList!![0]
         mAnswerButton2!!.text = q.choiceList!![1]
         mAnswerButton3!!.text = q.choiceList!![2]
@@ -234,11 +251,11 @@ class QuizzFragment : androidx.fragment.app.Fragment(), View.OnClickListener {
 
         } else {
             if (nbCorrectAnswer >= 2) {
-                Manager.userSiam.coins += 50
+                User.coins += 50
             }
             hasFinishedQuizzToday = true
             dateLastQuizzEnded = Calendar.getInstance()
-            Manager.userSiam.dateLastQuizzEnded = dateLastQuizzEnded
+            User.dateLastQuizzEnded = dateLastQuizzEnded
             endGame()
         }
     }

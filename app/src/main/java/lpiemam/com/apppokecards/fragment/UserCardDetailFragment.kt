@@ -7,26 +7,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_user_card_detail.*
 import lpiemam.com.apppokecards.MainActivity
 import lpiemam.com.apppokecards.R
 import lpiemam.com.apppokecards.ReplaceFragmentListener
-import lpiemam.com.apppokecards.model.Card
-import lpiemam.com.apppokecards.model.Manager
+import lpiemam.com.apppokecards.model.User
+import lpiemam.com.apppokecards.viewmodel.ViewModelPokemon
 import lpiemam.com.apppokecards.model.UserCard
 
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
  *
  */
-class UserCardDetailFragment : androidx.fragment.app.Fragment() {
+class UserCardDetailFragment : Fragment() {
+
+    lateinit var viewModelPokemon: ViewModelPokemon
 
     lateinit var userCard: UserCard
     var replaceFragmentListener: ReplaceFragmentListener? = null
@@ -65,12 +63,16 @@ class UserCardDetailFragment : androidx.fragment.app.Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+
+        viewModelPokemon = ViewModelProviders.of(activity!!).get(ViewModelPokemon::class.java)
+
         super.onViewCreated(view, savedInstanceState)
         (context as MainActivity).supportActionBar!!.show()
         replaceFragmentListener!!.setDrawerEnabled(false)
         replaceFragmentListener!!.setUpBackButton(true)
 
-        userDust.text = Manager.userSiam.dusts.toString()
+        userDust.text = User.dusts.toString()
         userCardDetailDust.text = userCard.card.dustGivenByDecraft.toString()
         userCardDetailCardVersion.text = userCard.card.version
         userCardDetailPokedexNumber.text = userCard.card.pokemon.pokedexNumber.toString()
@@ -84,8 +86,8 @@ class UserCardDetailFragment : androidx.fragment.app.Fragment() {
 
 
         userCardDetailButtonDust.setOnClickListener {
-            Manager.userSiam.dusts += userCard.card.dustGivenByDecraft
-            Manager.removeCardForUser(userCard)
+            User.dusts += userCard.card.dustGivenByDecraft
+            viewModelPokemon.removeUserCard(userCard)
             replaceFragmentListener!!.replaceWithCollectionFragment()
         }
     }

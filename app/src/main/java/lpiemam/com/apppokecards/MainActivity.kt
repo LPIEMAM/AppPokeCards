@@ -1,5 +1,7 @@
 package lpiemam.com.apppokecards
 
+import android.content.Context
+import android.graphics.Rect
 import android.os.Bundle
 import android.os.Handler
 import com.google.android.material.navigation.NavigationView
@@ -8,13 +10,19 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.view.MotionEvent
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import lpiemam.com.apppokecards.model.Card
 import lpiemam.com.apppokecards.fragment.*
-import lpiemam.com.apppokecards.model.Manager
+import lpiemam.com.apppokecards.model.User
+import lpiemam.com.apppokecards.viewmodel.ViewModelPokemon
 import lpiemam.com.apppokecards.model.UserCard
 import java.util.*
 
@@ -32,6 +40,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     lateinit var quizzEndedFragment: QuizzEndedFragment
     lateinit var quizzStartFragment: QuizzStartFragment
     lateinit var collectionFragment: CollectionFragment
+
+    var viewModelPokemon : ViewModelPokemon? = null
 
     var hasClickedBack = false
 
@@ -65,7 +75,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 .commit()
         }
 
-        Manager.initializeData()
+        viewModelPokemon = ViewModelProviders.of(this).get(ViewModelPokemon::class.java)
+        viewModelPokemon!!.initializeData()
 
         nav_view.setNavigationItemSelectedListener(this)
     }
@@ -87,7 +98,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             drawer_layout.closeDrawer(GravityCompat.START)
         } else if (hasClickedBack) {
             toast!!.cancel()
-            Manager.userSiam.dateLastQuizzEnded = Calendar.getInstance()
+            User.dateLastQuizzEnded = Calendar.getInstance()
             supportFragmentManager
                 .beginTransaction()
                 .replace(R.id.mainActivityContainer, collectionFragment, "collectionFragment")
@@ -159,7 +170,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             R.id.menuItemQuizz -> {
                 var dateOfDay = Calendar.getInstance()
-                if (Manager.userSiam.dateLastQuizzEnded == null || (dateOfDay.timeInMillis - Manager.userSiam.dateLastQuizzEnded!!.timeInMillis >= 86400000)) {
+                if (User.dateLastQuizzEnded == null || (dateOfDay.timeInMillis - User.dateLastQuizzEnded!!.timeInMillis >= 86400000)) {
                     supportFragmentManager
                         .beginTransaction()
                         .replace(R.id.mainActivityContainer, QuizzStartFragment.newInstance(), "quizzStartFragment")
@@ -238,9 +249,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun replaceWithCollectionFragment() {
+        val tempCollectionFragment = supportFragmentManager.findFragmentByTag("collectionFragment")
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.mainActivityContainer, collectionFragment, "collectionFragment")
+            .replace(R.id.mainActivityContainer, tempCollectionFragment!!, "collectionFragment")
             .commit()
     }
 
@@ -317,5 +329,21 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun notifyCollectionDataSetChanged() {
         collectionFragment.userCardAdapter!!.notifyDataSetChanged()
+    }
+
+    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+        if (event.action == MotionEvent.ACTION_DOWN) {
+            val v = currentFocus
+            if (v is EditText || v is SearchView) {
+                val outRect = Rect()
+                v.getGlobalVisibleRect(outRect)
+                if (!outRect.contains(event.rawX.toInt(), event.rawY.toInt())) {
+                    v.clearFocus()
+                    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(v.windowToken, 0)
+                }
+            }
+        }
+        return super.dispatchTouchEvent(event)
     }
 }

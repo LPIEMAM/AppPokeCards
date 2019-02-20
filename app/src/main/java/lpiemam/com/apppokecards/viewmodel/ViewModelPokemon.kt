@@ -1,22 +1,22 @@
-package lpiemam.com.apppokecards.model
+package lpiemam.com.apppokecards.viewmodel
 
-import lpiemam.com.apppokecards.fragment.AllCardsFragment
-import lpiemam.com.apppokecards.fragment.CollectionFragment
-import lpiemam.com.apppokecards.fragment.QuizzFragment
+import android.view.View
+import androidx.lifecycle.ViewModel
+import lpiemam.com.apppokecards.model.*
 import java.util.*
+import kotlin.collections.ArrayList
 
-object Manager {
+class ViewModelPokemon : ViewModel() {
 
     lateinit var allCardsList: ArrayList<Card>
-    lateinit var allPokemonList : ArrayList<Pokemon>
-    lateinit var userSiam : User
-    lateinit var cardsPacksList : ArrayList<CardsPack>
+    lateinit var allPokemonList: ArrayList<Pokemon>
+    lateinit var cardsPacksList: ArrayList<CardsPack>
+    lateinit var userCardList: ArrayList<UserCard>
 
 
     fun initializeData() {
-        userSiam = User("Annabelle", "Braye", "Siam", "annabelle.braye@gmail.com", "")
-        userSiam.coins = 100000
-        userSiam.dusts = 100000
+        User.setUpUser("Annabelle", "Braye", "Siam", "annabelle.braye@gmail.com", 100000, 100000)
+
         var pikachu = Pokemon("Pikachu", 25, "Electrik")
         var mew = Pokemon("Mew", 150, "Psy")
         var tortank = Pokemon("Tortank", 9, "Eau")
@@ -168,19 +168,72 @@ object Manager {
 
 
         //Liste de TOUS les pokémons
-        allPokemonList = arrayListOf(arcko, rozbouton, tenefix, tiplouf, tortipouss, tortank, ouisticram, pikachu, poussifeu, mentali, mew, kaiminus, hericendre, germignon, gobou, goelise, florizarre, dracaufeu, corboss, noctali)
-        allPokemonList = ArrayList(allPokemonList.sortedWith(compareBy{it.pokedexNumber}))
+        allPokemonList = arrayListOf(
+            arcko,
+            rozbouton,
+            tenefix,
+            tiplouf,
+            tortipouss,
+            tortank,
+            ouisticram,
+            pikachu,
+            poussifeu,
+            mentali,
+            mew,
+            kaiminus,
+            hericendre,
+            germignon,
+            gobou,
+            goelise,
+            florizarre,
+            dracaufeu,
+            corboss,
+            noctali
+        )
+        allPokemonList = ArrayList(allPokemonList.sortedWith(compareBy { it.pokedexNumber }))
 
         //Liste de TOUTES les cartes de TOUS les pokémons
-        allCardsList = arrayListOf(arckoCard, rozboutonCard, tenefixCard, tiploufCard, tortipoussCard, tortankCard, ouisticramCard, pikachuCard, pikachuCard2, poussifeuCard, mentaliCard, mewCard, kaiminusCard, hericendreCard, germignonCard, gobouCard, goeliseCard, florizarreCard, dracaufeuCard, corbossCard, noctaliCard)
-        allCardsList = ArrayList(allCardsList.sortedWith(compareBy{it.pokemon.pokedexNumber}))
+        allCardsList = arrayListOf(
+            arckoCard,
+            rozboutonCard,
+            tenefixCard,
+            tiploufCard,
+            tortipoussCard,
+            tortankCard,
+            ouisticramCard,
+            pikachuCard,
+            pikachuCard2,
+            poussifeuCard,
+            mentaliCard,
+            mewCard,
+            kaiminusCard,
+            hericendreCard,
+            germignonCard,
+            gobouCard,
+            goeliseCard,
+            florizarreCard,
+            dracaufeuCard,
+            corbossCard,
+            noctaliCard
+        )
+        allCardsList = ArrayList(allCardsList.sortedWith(compareBy { it.pokemon.pokedexNumber }))
 
         //Liste des pokémons dont l'utilisateur possède une carte
-        userSiam.userCardList = arrayListOf(UserCard(pikachuCard), UserCard(mewCard), UserCard(hericendreCard), UserCard(goeliseCard), UserCard(corbossCard), UserCard(tortankCard), UserCard(dracaufeuCard), UserCard(mentaliCard), UserCard(noctaliCard))
-        userSiam.userCardList = ArrayList(userSiam.userCardList.sortedWith(compareBy{it.card.pokemon.pokedexNumber}))
+        userCardList = arrayListOf(
+            UserCard(pikachuCard),
+            UserCard(mewCard),
+            UserCard(hericendreCard),
+            UserCard(goeliseCard),
+            UserCard(corbossCard),
+            UserCard(tortankCard),
+            UserCard(dracaufeuCard),
+            UserCard(mentaliCard),
+            UserCard(noctaliCard)
+        )
+        userCardList = ArrayList(userCardList.sortedWith(compareBy { it.card.pokemon.pokedexNumber }))
 
         //Liste des cartes pokémons que l'utilisateur n'a pas
-       // allCardsUserNeeds = ArrayList()
+        // allCardsUserNeeds = ArrayList()
 
         //setAllCardsUserNeeds()
 
@@ -195,112 +248,61 @@ object Manager {
         cardsPacksList.add(grandPack)
     }
 
-   /* fun setAllCardsUserNeeds() {
-        allCardsUserNeeds.clear()
-        for(card in allCardsList) {
-            var firewall = true
-            for(userCard in userSiam.userCardList) {
-                if(card.toString().equals(userCard.toString())) {
-                    firewall = false
-                }
-                /*while (card.toString() == userCard.toString()) {
-                    firewall = false
-                }*/
-            }
-            if(firewa ll)
-            {
-                allCardsUserNeeds.add(card)
+    /* fun setAllCardsUserNeeds() {
+         allCardsUserNeeds.clear()
+         for(card in allCardsList) {
+             var firewall = true
+             for(userCard in userSiam.userCardList) {
+                 if(card.toString().equals(userCard.toString())) {
+                     firewall = false
+                 }
+                 /*while (card.toString() == userCard.toString()) {
+                     firewall = false
+                 }*/
+             }
+             if(firewa ll)
+             {
+                 allCardsUserNeeds.add(card)
+             }
+         }
+     }*/
+
+    fun buyAPack(pack: CardsPack) {
+        for(card in pack.listCards) {
+
+            if(card.isCardInArray(userCardList)) {
+                var userCard = card.getInstanceOfUserCard(userCardList)
+                userCard.numberOfCard++
+            } else {
+                userCardList.add(UserCard(card))
             }
         }
-    }*/
-
-    fun generateQuestions(): PokemonQuestions {
-        val question1 = Question(
-            "De quelle couleur est pikachu ?",
-            Arrays.asList("Bleue", "Orange", "Jaune", "Marron"),
-            2
-        )
-
-        val question2 = Question(
-            "Comment s'appelle le pokémon faisant parti du trio de la team Rocket ?",
-            Arrays.asList("Rattata", "Smogo", "Abo", "Miaouss"),
-            3
-        )
-
-        val question3 = Question(
-            "De quelle couleur est le shiny de psykokwak ?",
-            Arrays.asList("Orange", "Bleue", "Jaune", "Rose"),
-            1
-        )
-
-        val question4 = Question(
-            "Comment s'appelle l'évolution de rhinoféros ?",
-            Arrays.asList("Rhinocorne", "Rhinite", "Rhinastoc", "Rhinopharyngite"),
-            2
-        )
-
-        val question5 = Question(
-            "De quelle génération est issu Tiplouf ?",
-            Arrays.asList("Il n'existe pas", "2ème génération", "4ème génération", "3ème génération"),
-            2
-        )
-
-        val question6 = Question(
-            "De quel autre type est Grodrive ? Vol - ?",
-            Arrays.asList("Ténèbres", "Normal", "Spectre", "Fée"),
-            2
-        )
-
-        val question7 = Question(
-            "Quel pokémon ressemble à un coeur ?",
-            Arrays.asList("Lovdisc", "Baudrive", "Roserade", "Milobellus"),
-            0
-        )
-
-        val question8 = Question(
-            "Quelle pierre faut-il pour faire évoluer cornèbre ?",
-            Arrays.asList("Pierre Sinnoh", "Pierre Soleil", "Améliorator", "Aucune des trois"),
-            0
-        )
-
-        val question9 = Question(
-            "De quelle couleur est Lainergie, l'évolution de wattouat ?",
-            Arrays.asList("Blanche", "Rose", "Rouge", "Jaune"),
-            1
-        )
-
-        return PokemonQuestions(
-            Arrays.asList(
-                question1,
-                question2,
-                question3,
-                question4,
-                question5,
-                question6,
-                question7,
-                question8,
-                question9
-            )
-        )
+        userCardList = ArrayList(userCardList.sortedWith(compareBy{it.card.pokemon.pokedexNumber}))
+        User.coins -= pack.costPack
     }
 
-    fun addCardForUser(card : Card) {
-        if(card.isCardInArray(userSiam.userCardList)) {
-            var userCard = card.getInstanceOfUserCard(userSiam.userCardList)
+
+    fun addUserCard(card: Card) {
+        if (card.isCardInArray(userCardList)) {
+            var userCard = card.getInstanceOfUserCard(userCardList)
             userCard.numberOfCard++
         } else {
-            userSiam.userCardList.add(UserCard(card))
+            userCardList.add(
+                UserCard(
+                    card
+                )
+            )
         }
-        userSiam.userCardList = ArrayList(userSiam.userCardList.sortedWith(compareBy{it.card.pokemon.pokedexNumber}))
+        userCardList = ArrayList(userCardList.sortedWith(compareBy { it.card.pokemon.pokedexNumber }))
     }
 
-    fun removeCardForUser(userCard: UserCard) {
-        if(userCard.numberOfCard > 1) {
+    fun removeUserCard(userCard: UserCard) {
+        if (userCard.numberOfCard > 1) {
             userCard.numberOfCard--
         } else {
-            Manager.userSiam.userCardList.remove(userCard)
+            userCardList.remove(userCard)
         }
-        userSiam.userCardList = ArrayList(userSiam.userCardList.sortedWith(compareBy{it.card.pokemon.pokedexNumber}))
+        userCardList = ArrayList(userCardList.sortedWith(compareBy { it.card.pokemon.pokedexNumber }))
     }
 
 

@@ -1,6 +1,5 @@
 package lpiemam.com.apppokecards.adapter
 
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Filter

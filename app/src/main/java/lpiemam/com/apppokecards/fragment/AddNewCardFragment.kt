@@ -11,16 +11,11 @@ import lpiemam.com.apppokecards.R
 import lpiemam.com.apppokecards.ReplaceFragmentListener
 
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
 /**
  * A simple [Fragment] subclass.
  *
  */
-class AddNewCardFragment : androidx.fragment.app.Fragment() {
+class AddNewCardFragment : Fragment() {
 
     var replaceFragmentListener: ReplaceFragmentListener? = null
 

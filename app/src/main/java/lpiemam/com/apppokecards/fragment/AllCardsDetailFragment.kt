@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_all_cards_detail.*
@@ -14,19 +15,17 @@ import lpiemam.com.apppokecards.MainActivity
 import lpiemam.com.apppokecards.R
 import lpiemam.com.apppokecards.ReplaceFragmentListener
 import lpiemam.com.apppokecards.model.Card
-import lpiemam.com.apppokecards.model.Manager
+import lpiemam.com.apppokecards.model.User
+import lpiemam.com.apppokecards.viewmodel.ViewModelPokemon
 
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
  *
  */
-class AllCardsDetailFragment : androidx.fragment.app.Fragment() {
+class AllCardsDetailFragment : Fragment() {
+
+    lateinit var viewModelPokemon: ViewModelPokemon
 
     lateinit var card: Card
     var replaceFragmentListener: ReplaceFragmentListener? = null
@@ -66,6 +65,11 @@ class AllCardsDetailFragment : androidx.fragment.app.Fragment() {
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+
+        viewModelPokemon = ViewModelProviders.of(activity!!).get(ViewModelPokemon::class.java)
+
+
         super.onViewCreated(view, savedInstanceState)
 
         (context as MainActivity).supportActionBar!!.show()
@@ -73,7 +77,7 @@ class AllCardsDetailFragment : androidx.fragment.app.Fragment() {
         replaceFragmentListener!!.setDrawerEnabled(false)
         replaceFragmentListener!!.setUpBackButton(true)
 
-        userDust.text = Manager.userSiam.dusts.toString()
+        userDust.text = User.dusts.toString()
         allCardsDetailDust.text = card.costDustToCraft.toString()
         allCardsDetailCardVersion.text = card.version
         allCardsDetailPokedexNumber.text = card.pokemon.pokedexNumber.toString()
@@ -84,9 +88,9 @@ class AllCardsDetailFragment : androidx.fragment.app.Fragment() {
 
 
         allCardsDetailButtonDust.setOnClickListener {
-            if(Manager.userSiam.dusts >= card.costDustToCraft) {
-                Manager.userSiam.dusts -= card.costDustToCraft
-                Manager.addCardForUser(card)
+            if(User.dusts >= card.costDustToCraft) {
+                User.dusts -= card.costDustToCraft
+                viewModelPokemon.addUserCard(card)
                 replaceFragmentListener!!.replaceWithFullScreenCard(card, false)
             } else {
                 val snackbar = Snackbar.make(view, "Vous n'avez pas assez de poussières.", Snackbar.LENGTH_SHORT)

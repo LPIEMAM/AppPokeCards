@@ -10,7 +10,6 @@ import android.view.ViewGroup
 
 import lpiemam.com.apppokecards.R
 import lpiemam.com.apppokecards.ReplaceFragmentListener
-import lpiemam.com.apppokecards.model.Manager
 
 /**
  * A simple [Fragment] subclass.

@@ -4,32 +4,28 @@ package lpiemam.com.apppokecards.fragment
 import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import androidx.appcompat.widget.SearchView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.fragment_collection.*
-import lpiemam.com.apppokecards.MainActivity
 import lpiemam.com.apppokecards.R
 import lpiemam.com.apppokecards.RecyclerTouchListener
 import lpiemam.com.apppokecards.ReplaceFragmentListener
 import lpiemam.com.apppokecards.adapter.UserCardsAdapter
-import lpiemam.com.apppokecards.model.Manager
+import lpiemam.com.apppokecards.viewmodel.ViewModelPokemon
 
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
  *
  */
 class CollectionFragment : androidx.fragment.app.Fragment() {
+
+    lateinit var viewModelPokemon: ViewModelPokemon
 
     var userCardAdapter: UserCardsAdapter? = null
     var replaceFragmentListener: ReplaceFragmentListener? = null
@@ -77,6 +73,9 @@ class CollectionFragment : androidx.fragment.app.Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        viewModelPokemon = ViewModelProviders.of(activity!!).get(ViewModelPokemon::class.java)
+
         setUpRecyclerView()
 
         /*floatingActionButtonAddPokemon.setOnClickListener {
@@ -103,7 +102,7 @@ class CollectionFragment : androidx.fragment.app.Fragment() {
 
 
     private fun setUpRecyclerView() {
-        userCardAdapter = UserCardsAdapter(ArrayList(Manager.userSiam.userCardList))
+        userCardAdapter = UserCardsAdapter(ArrayList(viewModelPokemon.userCardList))
 
         collectionRecyclerView!!.layoutManager = androidx.recyclerview.widget.GridLayoutManager(context, 4)
         collectionRecyclerView!!.adapter = userCardAdapter

@@ -1,6 +1,6 @@
 package lpiemam.com.apppokecards.model
 
-import java.lang.Exception
+import lpiemam.com.apppokecards.viewmodel.ViewModelPokemon
 
 /**
  * Created by lpiem on 02/02/2019.
@@ -20,26 +20,26 @@ class CardsPack(val name : String, var listCards : ArrayList<Card> = ArrayList()
         else -> 0
     }
 
-    fun generateRandomCards() {
+    fun generateRandomCards(allCards : ArrayList<Card>) {
         listCards.clear()
-        if(nbCards <= Manager.allCardsList.size) {
+        if(nbCards <= allCards.size) {
             val usedPositions = ArrayList<Int>()
             for(i in 1..nbCards) {
-                var randomPosition = (0..(Manager.allCardsList.size-1)).random()
+                var randomPosition = (0..(allCards.size-1)).random()
 
-                listCards.add(Manager.allCardsList[randomPosition])
+                listCards.add(allCards[randomPosition])
                 usedPositions.add(randomPosition)
             }
         }
 
-        /*if(nbCards <= Manager.allCardsUserNeeds.size) {
+        /*if(nbCards <= ViewModelPokemon.allCardsUserNeeds.size) {
             val usedPositions = ArrayList<Int>()
             for(i in 1..nbCards) {
-                var randomPosition = (0..(Manager.allCardsUserNeeds.size-1)).random()
+                var randomPosition = (0..(ViewModelPokemon.allCardsUserNeeds.size-1)).random()
                 while(usedPositions.contains(randomPosition)) {
-                    randomPosition = (0..(Manager.allCardsUserNeeds.size-1)).random()
+                    randomPosition = (0..(ViewModelPokemon.allCardsUserNeeds.size-1)).random()
                 }
-                listCards.add(Manager.allCardsUserNeeds[randomPosition])
+                listCards.add(ViewModelPokemon.allCardsUserNeeds[randomPosition])
                 usedPositions.add(randomPosition)
             }
         } else {
