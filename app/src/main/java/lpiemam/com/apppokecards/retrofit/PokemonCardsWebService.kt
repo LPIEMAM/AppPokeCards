@@ -9,4 +9,8 @@ interface PokemonCardsWebService {
     @GET("cards?page=1")
     fun getPokemonCardsForName(@Query("name") name: String) : Call<PokemonCardsResponse>
 
+
+    @GET("cards?pageSize=500")
+    fun getPokemonCardsForPage(@Query("page") page: Int) : Call<PokemonCardsResponse>
+
 }

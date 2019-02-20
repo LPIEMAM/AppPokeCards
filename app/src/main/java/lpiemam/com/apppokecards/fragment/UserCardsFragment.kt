@@ -10,7 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProviders
-import kotlinx.android.synthetic.main.fragment_collection.*
+import kotlinx.android.synthetic.main.fragment_user_cards.*
 import lpiemam.com.apppokecards.R
 import lpiemam.com.apppokecards.RecyclerTouchListener
 import lpiemam.com.apppokecards.ReplaceFragmentListener
@@ -68,7 +68,7 @@ class UserCardsFragment : androidx.fragment.app.Fragment() {
 
 
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_collection, container, false)
+        return inflater.inflate(R.layout.fragment_user_cards, container, false)
 
     }
 

@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.fragment_all_cards_detail.*
+import kotlinx.android.synthetic.main.fragment_pokemon_card_detail.*
 import lpiemam.com.apppokecards.MainActivity
 import lpiemam.com.apppokecards.R
 import lpiemam.com.apppokecards.ReplaceFragmentListener
@@ -60,7 +60,7 @@ class PokemonCardDetailFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
 
-        return inflater.inflate(R.layout.fragment_all_cards_detail, container, false)
+        return inflater.inflate(R.layout.fragment_pokemon_card_detail, container, false)
     }
 
 

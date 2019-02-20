@@ -11,7 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import kotlinx.android.synthetic.main.fragment_all_cards.*
+import kotlinx.android.synthetic.main.fragment_pokemon_cards.*
 import lpiemam.com.apppokecards.*
 import lpiemam.com.apppokecards.adapter.PokemonCardsAdapter
 import lpiemam.com.apppokecards.viewmodel.PokemonCardsViewModel
@@ -57,7 +57,7 @@ class PokemonCardsFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         pokemonCardsViewModel = ViewModelProviders.of(activity!!).get(PokemonCardsViewModel::class.java)
-        pokemonCardsViewModel.fetchPokemonCards("")
+        pokemonCardsViewModel.fetchPokemonCardsForName("")
     }
 
     override fun onCreateView(
@@ -70,7 +70,7 @@ class PokemonCardsFragment : Fragment() {
 
 
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_all_cards, container, false)
+        return inflater.inflate(R.layout.fragment_pokemon_cards, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -87,14 +87,14 @@ class PokemonCardsFragment : Fragment() {
         allCardsSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(s: String): Boolean {
                 Log.d("", "onQueryTextChange: $s")
-                pokemonCardsViewModel.fetchPokemonCards(s)
+                pokemonCardsViewModel.fetchPokemonCardsForName(s)
                 return false
             }
 
             override fun onQueryTextChange(s: String): Boolean {
                 //CharSequence charSequence = searchView.getQuery();
                 Log.d("", "onQueryTextChange: $s")
-                pokemonCardsViewModel.fetchPokemonCards(s)
+                pokemonCardsViewModel.fetchPokemonCardsForName(s)
                 return false
             }
         })
@@ -104,7 +104,7 @@ class PokemonCardsFragment : Fragment() {
 
     private fun setUpRecyclerView() {
         val pokemonCardsAdapter = PokemonCardsAdapter()
-        pokemonCardsViewModel.pokemonCardsLiveData.observe(this, Observer {
+        pokemonCardsViewModel.pokemonCardsForNameLiveData.observe(this, Observer {
             pokemonCardsAdapter.setData(it)
         })
 

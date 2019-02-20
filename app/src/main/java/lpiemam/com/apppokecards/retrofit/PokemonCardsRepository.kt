@@ -10,7 +10,9 @@ import timber.log.Timber
 
 object PokemonCardsRepository {
 
-    private var pokemonCardsLiveData = MutableLiveData<ArrayList<PokemonCard>>()
+    private var pokemonCardsLiveDataForName = MutableLiveData<ArrayList<PokemonCard>>()
+    private var pokemonCardsLiveDataForNationalPokedexNumber = MutableLiveData<ArrayList<PokemonCard>>()
+
     private var pokemonCardApi = ApiFactory.POKEMON_CARDS_WEB_SERVICE
     var error = MutableLiveData<Boolean>()
 
@@ -22,23 +24,49 @@ object PokemonCardsRepository {
         call.enqueue(object : Callback<PokemonCardsResponse> {
             override fun onFailure(call: Call<PokemonCardsResponse>, t: Throwable) {
                 Timber.e(t)
-                pokemonCardsLiveData.postValue(ArrayList())
+                pokemonCardsLiveDataForName.postValue(ArrayList())
                 error.postValue(true)
             }
 
             override fun onResponse(call: Call<PokemonCardsResponse>, response: Response<PokemonCardsResponse>) {
                 if (response.isSuccessful) {
                     error.postValue(false)
-                    pokemonCardsLiveData.postValue(response.body()?.cards)
+                    pokemonCardsLiveDataForName.postValue(response.body()?.cards)
                 } else {
                     error.postValue(true)
-                    pokemonCardsLiveData.postValue(ArrayList())
+                    pokemonCardsLiveDataForName.postValue(ArrayList())
                     Timber.e(response.message())
                 }
             }
         })
 
-        return pokemonCardsLiveData
+        return pokemonCardsLiveDataForName
+    }
+
+    fun fetchPokemonCardsForPage(page: Int) : LiveData<ArrayList<PokemonCard>> {
+        val call = pokemonCardApi.getPokemonCardsForPage(page)
+
+
+        call.enqueue(object : Callback<PokemonCardsResponse> {
+            override fun onFailure(call: Call<PokemonCardsResponse>, t: Throwable) {
+                Timber.e(t)
+                pokemonCardsLiveDataForNationalPokedexNumber.postValue(ArrayList())
+                error.postValue(true)
+            }
+
+            override fun onResponse(call: Call<PokemonCardsResponse>, response: Response<PokemonCardsResponse>) {
+                if (response.isSuccessful) {
+                    error.postValue(false)
+                    pokemonCardsLiveDataForNationalPokedexNumber.postValue(response.body()?.cards)
+                } else {
+                    error.postValue(true)
+                    pokemonCardsLiveDataForNationalPokedexNumber.postValue(ArrayList())
+                    Timber.e(response.message())
+                }
+            }
+        })
+
+        return pokemonCardsLiveDataForNationalPokedexNumber
     }
 
 }

@@ -3,10 +3,13 @@ package lpiemam.com.apppokecards.fragment
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_shop.*
@@ -14,6 +17,7 @@ import lpiemam.com.apppokecards.*
 
 import lpiemam.com.apppokecards.adapter.ShopAdapter
 import lpiemam.com.apppokecards.model.CardsPack
+import lpiemam.com.apppokecards.model.PokemonCard
 import lpiemam.com.apppokecards.model.User
 import lpiemam.com.apppokecards.viewmodel.PokemonCardsViewModel
 
@@ -107,16 +111,18 @@ class ShopFragment : Fragment() {
             if (onePackSelected) {
                 if (User.canBuyAPack(selectedPack)) {
                     try {
-                        selectedPack.generateRandomCards(pokemonCardsViewModel.allCardsList)
+                        pokemonCardsViewModel.generateRandomCards(selectedPack)
 
+                        pokemonCardsViewModel.pokemonCardsForPackLiveData.observe(this, Observer {
 
-                        var packOpeningDialogFragment = PackOpeningDialogFragment()
-                        packOpeningDialogFragment.listCardsPack = ArrayList(selectedPack.listPokemonCards)
-                        packOpeningDialogFragment.show(childFragmentManager, "Contenu du Pack")
+                            var packOpeningDialogFragment = PackOpeningDialogFragment()
+                            packOpeningDialogFragment.listCardsPack = ArrayList(selectedPack.listPokemonCards)
+                            packOpeningDialogFragment.show(childFragmentManager, "Contenu du Pack")
 
-                        pokemonCardsViewModel.buyAPack(selectedPack)
-                        selectedPack.clearCardList()
-                        //PokemonCardsViewModel.setAllCardsUserNeeds()
+                            pokemonCardsViewModel.buyAPack(selectedPack)
+                            selectedPack.clearCardList()
+                        })
+
 
                     } catch (e: Exception) {
                         val snackbar = Snackbar.make(view, e.message!!, Snackbar.LENGTH_LONG)
@@ -140,7 +146,7 @@ class ShopFragment : Fragment() {
 
 
     private fun setUpRecyclerView() {
-        shopAdapter = ShopAdapter(ArrayList(pokemonCardsViewModel.cardsPacksList))
+        shopAdapter = ShopAdapter(ArrayList(pokemonCardsViewModel.getCardsPackList()))
 
         shopRecyclerView!!.layoutManager = androidx.recyclerview.widget.GridLayoutManager(context, 3)
         shopRecyclerView!!.adapter = shopAdapter
