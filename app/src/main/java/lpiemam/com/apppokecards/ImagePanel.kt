@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
+import com.squareup.picasso.Picasso
 
 /**
  * Created by CarouselView on 7/7/16.
@@ -25,6 +26,9 @@ class ImagePanel @JvmOverloads constructor(context: Context, attrs: AttributeSet
         mImageViewHolder!!.setImageResource(resId)
     }
 
+    fun setImageUrl(url : String) {
+        Picasso.get().load(url).placeholder(R.drawable.pokemon_card_back).into(mImageViewHolder)
+    }
 
     private fun initPanelContainer() {
         val inflater = LayoutInflater.from(context)

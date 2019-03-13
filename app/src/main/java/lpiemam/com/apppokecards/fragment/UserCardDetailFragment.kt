@@ -7,47 +7,60 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_user_card_detail.*
+import lpiemam.com.apppokecards.MainActivity
 import lpiemam.com.apppokecards.R
-import lpiemam.com.apppokecards.ReplaceFragmentListener
-import lpiemam.com.apppokecards.model.Card
+import lpiemam.com.apppokecards.MainActivityListener
+import lpiemam.com.apppokecards.model.PokemonCard
+import lpiemam.com.apppokecards.model.User
+import lpiemam.com.apppokecards.viewmodel.PokemonCardsViewModel
+import lpiemam.com.apppokecards.model.UserCard
 
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
  *
  */
-class UserCardDetailFragment : androidx.fragment.app.Fragment() {
+class UserCardDetailFragment : Fragment() {
 
-    lateinit var card: Card
-    var replaceFragmentListener: ReplaceFragmentListener? = null
+    lateinit var pokemonCardsViewModel: PokemonCardsViewModel
+
+    lateinit var userCard: UserCard
+    var mainActivityListener: MainActivityListener? = null
 
     companion object {
 
-        fun newInstance(): UserCardDetailFragment {
-            return UserCardDetailFragment()
+        fun newInstance(userCard: UserCard): UserCardDetailFragment {
+            val userCardDetailFragment = UserCardDetailFragment()
+            val args = Bundle()
+            args.putParcelable("userCard", userCard)
+            userCardDetailFragment.arguments = args
+            return userCardDetailFragment
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            userCard = it.getParcelable("userCard")!!
         }
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        replaceFragmentListener = context as? ReplaceFragmentListener
-        if (replaceFragmentListener == null) {
+        mainActivityListener = context as? MainActivityListener
+        if (mainActivityListener == null) {
             throw ClassCastException("$context must implement OnCardSelectedListener")
         }
     }
 
     override fun onDetach() {
 
-        replaceFragmentListener!!.setUpBackButton(false)
-        replaceFragmentListener!!.setDrawerEnabled(true)
-        replaceFragmentListener = null
+        mainActivityListener!!.setUpBackButton(false)
+        mainActivityListener!!.setDrawerEnabled(true)
+        mainActivityListener = null
         super.onDetach()
     }
 
@@ -58,23 +71,37 @@ class UserCardDetailFragment : androidx.fragment.app.Fragment() {
     ): View? {
         // Inflate the layout for this fragment
 
+        mainActivityListener!!.setFragmentTitle(userCard.pokemonCard.name)
         return inflater.inflate(R.layout.fragment_user_card_detail, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+
+        pokemonCardsViewModel = ViewModelProviders.of(activity!!).get(PokemonCardsViewModel::class.java)
+
         super.onViewCreated(view, savedInstanceState)
+        mainActivityListener!!.setDrawerEnabled(false)
+        mainActivityListener!!.setUpBackButton(true)
 
-        replaceFragmentListener!!.setDrawerEnabled(false)
-        replaceFragmentListener!!.setUpBackButton(true)
+        userDust.text = User.dusts.toString()
+        userCardDetailDust.text = userCard.pokemonCard.getCostForDecraft().toString()
+//        userCardDetailCardVersion.text = userCard.pokemonCard.version
+//        userCardDetailPokedexNumber.text = userCard.pokemonCard.pokemon.pokedexNumber.toString()
+//        userCardDetailPokemonDescription.text = userCard.pokemonCard.description
+//        userCardDetailPokemonName.text = userCard.pokemonCard.pokemon.name
+//        userCardDetailPokemonType.text = userCard.pokemonCard.pokemon.type
+        Picasso.get().load(userCard.pokemonCard.imageUrlHiRes).placeholder(R.drawable.pokemon_card_back).into(userCardDetailImageViewCard)
+        userCardDetailImageViewCard.setOnClickListener{
+            mainActivityListener!!.replaceWithFullScreenCard(userCard.pokemonCard, true)
+        }
 
-        userCardDetailCardVersion.text = card.version
-        userCardDetailPokedexNumber.text = card.pokemon.pokedexNumber.toString()
-        userCardDetailPokemonDescription.text = card.description
-        userCardDetailPokemonName.text = card.pokemon.name
-        userCardDetailPokemonType.text = card.pokemon.type
-        Picasso.get().load(card.url).placeholder(R.drawable.pokemon_card_back).into(userCardDetailImageViewCard)
 
-
+        userCardDetailButtonDust.setOnClickListener {
+            User.dusts += userCard.pokemonCard.getCostForDecraft()
+            pokemonCardsViewModel.removeUserCard(userCard)
+            mainActivityListener!!.replaceWithCollectionFragment()
+        }
     }
 
 }
