@@ -16,6 +16,7 @@ import lpiemam.com.apppokecards.*
 import lpiemam.com.apppokecards.adapter.ShopAdapter
 import lpiemam.com.apppokecards.model.CardsPack
 import lpiemam.com.apppokecards.model.User
+import lpiemam.com.apppokecards.model.UserManager
 import lpiemam.com.apppokecards.viewmodel.PokemonCardsViewModel
 
 
@@ -26,6 +27,8 @@ import lpiemam.com.apppokecards.viewmodel.PokemonCardsViewModel
 class ShopFragment : BaseFragment() {
 
     lateinit var pokemonCardsViewModel: PokemonCardsViewModel
+
+    var user = UserManager.user
 
     var shopAdapter: ShopAdapter? = null
 
@@ -78,7 +81,7 @@ class ShopFragment : BaseFragment() {
             shopAdapter?.notifyDataSetChanged()
         }
 
-        userCoinsTextView.text = User.coins.toString()
+        userCoinsTextView.text = user?.coins.toString()
 
         setUpRecyclerView()
 
@@ -92,7 +95,7 @@ class ShopFragment : BaseFragment() {
                 }
             }
             if (onePackSelected) {
-                if (User.canBuyAPack(selectedPack)) {
+                if (user!!.canBuyAPack(selectedPack)) {
                     try {
 
                         pokemonCardsViewModel.pokemonCardsForPackLiveData = MutableLiveData()
@@ -105,7 +108,7 @@ class ShopFragment : BaseFragment() {
 
                             pokemonCardsViewModel.buyAPack(selectedPack)
                             selectedPack.clearCardList()
-                            userCoinsTextView.text = User.coins.toString()
+                            userCoinsTextView.text = user?.coins.toString()
                         })
 
                         pokemonCardsViewModel.generateRandomCards(selectedPack)

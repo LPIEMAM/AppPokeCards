@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.fragment_quizz_start.*
 import lpiemam.com.apppokecards.R
 import lpiemam.com.apppokecards.MainActivityListener
 import lpiemam.com.apppokecards.model.User
+import lpiemam.com.apppokecards.model.UserManager
 import java.util.*
 
 
@@ -21,8 +22,9 @@ import java.util.*
  */
 class QuizzStartFragment : BaseFragment() {
 
-    companion object {
+    var user = UserManager.user
 
+    companion object {
         fun newInstance(): QuizzStartFragment {
             return QuizzStartFragment()
         }
@@ -50,7 +52,7 @@ class QuizzStartFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         var dateOfDay = Calendar.getInstance()
-        if (User.dateLastQuizzEnded == null || (dateOfDay.timeInMillis - User.dateLastQuizzEnded!!.timeInMillis >= 86400000)) {
+        if (user?.dateLastQuizzEnded == null || (dateOfDay.timeInMillis - user?.dateLastQuizzEnded!!.timeInMillis >= 86400000)) {
             quizzEndedGroup.visibility = View.GONE
             quizzStartGroup.visibility = View.VISIBLE
         } else {

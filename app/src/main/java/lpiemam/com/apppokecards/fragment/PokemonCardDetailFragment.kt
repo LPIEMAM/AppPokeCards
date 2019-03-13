@@ -13,6 +13,7 @@ import kotlinx.android.synthetic.main.fragment_pokemon_card_detail.*
 import lpiemam.com.apppokecards.R
 import lpiemam.com.apppokecards.model.PokemonCard
 import lpiemam.com.apppokecards.model.User
+import lpiemam.com.apppokecards.model.UserManager
 import lpiemam.com.apppokecards.viewmodel.PokemonCardsViewModel
 
 
@@ -25,6 +26,7 @@ class PokemonCardDetailFragment : BaseFragment() {
     lateinit var pokemonCardsViewModel: PokemonCardsViewModel
 
     lateinit var pokemonCard: PokemonCard
+    var user = UserManager.user
 
     companion object {
 
@@ -60,15 +62,15 @@ class PokemonCardDetailFragment : BaseFragment() {
         setDrawerEnabled(false)
         setUpBackButton(true)
 
-        userDust.text = User.dusts.toString()
+        userDust.text = user?.dusts.toString()
         allCardsDetailDust.text = pokemonCard.getCostToCraft().toString()
 
         Picasso.get().load(pokemonCard.imageUrlHiRes).placeholder(R.drawable.pokemon_card_back).into(allCardsDetailImageViewCard)
 
 
         allCardsDetailButtonDust.setOnClickListener {
-            if(User.dusts >= pokemonCard.getCostToCraft()) {
-                User.dusts -= pokemonCard.getCostToCraft()
+            if(user?.dusts!! >= pokemonCard.getCostToCraft()) {
+                user!!.dusts -= pokemonCard.getCostToCraft()
                 pokemonCardsViewModel.addUserCard(pokemonCard)
                 mainActivityListener?.replaceWithFullScreenCard(pokemonCard, false)
             } else {

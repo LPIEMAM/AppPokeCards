@@ -29,12 +29,14 @@ import lpiemam.com.apppokecards.fragment.*
 import lpiemam.com.apppokecards.model.User
 import lpiemam.com.apppokecards.viewmodel.PokemonCardsViewModel
 import lpiemam.com.apppokecards.model.UserCard
+import lpiemam.com.apppokecards.model.UserManager
 import java.util.*
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
     MainActivityListener {
 
+    var user = UserManager.user
 
     lateinit var toggle: ActionBarDrawerToggle
     lateinit var drawer: androidx.drawerlayout.widget.DrawerLayout
@@ -80,7 +82,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         pokemonCardsViewModel = ViewModelProviders.of(this).get(PokemonCardsViewModel::class.java)
         pokemonCardsViewModel!!.initializeData()
 
-        drawer.nav_view.getHeaderView(0).userNickNameTextField.text = User.nickName
+        drawer.nav_view.getHeaderView(0).userNickNameTextField.text = user?.nickName
         nav_view.setNavigationItemSelectedListener(this)
     }
 
@@ -102,7 +104,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             drawer_layout.closeDrawer(GravityCompat.START)
         } else if (hasClickedBack) {
             toast!!.cancel()
-            User.dateLastQuizzEnded = Calendar.getInstance()
+            user?.dateLastQuizzEnded = Calendar.getInstance()
             supportFragmentManager
                 .beginTransaction()
                 .replace(R.id.mainActivityContainer, userCardsFragment, "userCardsFragment")

@@ -2,11 +2,13 @@ package lpiemam.com.apppokecards.model
 
 import android.os.Parcelable
 import android.view.inputmethod.InputMethodSubtype
+import androidx.room.Entity
 import com.google.gson.annotations.Expose
 import kotlinx.android.parcel.Parcelize
 import java.io.Serializable
 
 @Parcelize
+@Entity
 data class PokemonCard(val id: String,
                   val name: String,
                   val nationalPokedexNumber: Int,

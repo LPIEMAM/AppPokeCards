@@ -65,4 +65,8 @@ dependencies {
 
     // Timber
     implementation "com.jakewharton.timber:timber:$timber"
+
+    //Room
+    implementation 'android.arch.persistence.room:runtime:1.1.1'
+    annotationProcessor 'android.arch.persistence.room:compiler:1.1.1'
 }

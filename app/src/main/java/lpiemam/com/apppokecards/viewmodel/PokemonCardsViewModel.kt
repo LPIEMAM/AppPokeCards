@@ -9,14 +9,17 @@ import lpiemam.com.apppokecards.retrofit.PokemonCardsRepository
 
 class PokemonCardsViewModel : ViewModel() {
 
+    var user = UserManager.user
 
     var pokemonCardsForNameLiveData = MutableLiveData<ArrayList<PokemonCard>>()
     var pokemonCardsForPackLiveData = MutableLiveData<ArrayList<PokemonCard>>()
 
     var userCardList = ArrayList<UserCard>()
 
+
+
     fun initializeData() {
-        User.setUpUser("Annabelle", "Braye", "Siam", "annabelle.braye@gmail.com", 100000, 100000)
+        user?.setUpUser("Annabelle", "Braye", "Siam", "annabelle.braye@gmail.com", 100000, 100000)
     }
 
     fun fetchPokemonCardsForName(name: String) {
@@ -87,7 +90,7 @@ class PokemonCardsViewModel : ViewModel() {
             }
         }
         userCardList = ArrayList(userCardList.sortedWith(compareBy { it.pokemonCard.nationalPokedexNumber }))
-        User.coins -= pack.costPack
+        user!!.coins -= pack.costPack
     }
 
 

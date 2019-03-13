@@ -17,6 +17,7 @@ import lpiemam.com.apppokecards.model.PokemonCard
 import lpiemam.com.apppokecards.model.User
 import lpiemam.com.apppokecards.viewmodel.PokemonCardsViewModel
 import lpiemam.com.apppokecards.model.UserCard
+import lpiemam.com.apppokecards.model.UserManager
 
 
 /**
@@ -24,6 +25,8 @@ import lpiemam.com.apppokecards.model.UserCard
  *
  */
 class UserCardDetailFragment : BaseFragment() {
+
+    var user = UserManager.user
 
     lateinit var pokemonCardsViewModel: PokemonCardsViewModel
 
@@ -67,7 +70,7 @@ class UserCardDetailFragment : BaseFragment() {
         setDrawerEnabled(false)
         setUpBackButton(true)
 
-        userDust.text = User.dusts.toString()
+        userDust.text = user?.dusts.toString()
         userCardDetailDust.text = userCard.pokemonCard.getCostForDecraft().toString()
         Picasso.get().load(userCard.pokemonCard.imageUrlHiRes).placeholder(R.drawable.pokemon_card_back).into(userCardDetailImageViewCard)
         userCardDetailImageViewCard.setOnClickListener{
@@ -75,7 +78,7 @@ class UserCardDetailFragment : BaseFragment() {
         }
 
         userCardDetailButtonDust.setOnClickListener {
-            User.dusts += userCard.pokemonCard.getCostForDecraft()
+            user!!.dusts += userCard.pokemonCard.getCostForDecraft()
             pokemonCardsViewModel.removeUserCard(userCard)
             mainActivityListener?.replaceWithCollectionFragment()
         }

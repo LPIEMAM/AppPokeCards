@@ -16,6 +16,7 @@ import lpiemam.com.apppokecards.R
 import lpiemam.com.apppokecards.model.PokemonQuestions
 import lpiemam.com.apppokecards.model.Question
 import lpiemam.com.apppokecards.model.User
+import lpiemam.com.apppokecards.model.UserManager
 import lpiemam.com.apppokecards.viewmodel.QuizzViewModel
 import java.util.*
 import kotlin.collections.ArrayList
@@ -25,6 +26,8 @@ import kotlin.collections.ArrayList
  * A simple [Fragment] subclass.
  */
 class QuizzFragment : BaseFragment(){
+
+    var user = UserManager.user
 
     lateinit var quizzViewModel: QuizzViewModel
 
@@ -197,10 +200,10 @@ class QuizzFragment : BaseFragment(){
 
         } else {
             if (nbCorrectAnswer >= 2) {
-                User.coins += 50
+                user!!.coins += 50
                 userWonQuiz = true
             }
-            User.dateLastQuizzEnded = Calendar.getInstance()
+            user?.dateLastQuizzEnded = Calendar.getInstance()
             endGame()
         }
     }
