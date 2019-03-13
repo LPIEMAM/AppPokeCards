@@ -161,13 +161,13 @@ class QuizzFragment : Fragment(){
     }
 
     fun onClick(v: View) {
-        countDownTimer.cancel()
         mAnswerButton1!!.isEnabled = false
         mAnswerButton2!!.isEnabled = false
         mAnswerButton3!!.isEnabled = false
         mAnswerButton4!!.isEnabled = false
-        if(counter > 0) {
+        if(counter > -1) {
 
+            countDownTimer.cancel()
 
             val responseIndex = v.tag as Int
 
