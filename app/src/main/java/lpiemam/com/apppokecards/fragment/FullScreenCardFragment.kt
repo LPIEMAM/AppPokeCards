@@ -1,41 +1,35 @@
 package lpiemam.com.apppokecards.fragment
 
-import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_full_screen_card.view.*
-import lpiemam.com.apppokecards.MainActivity
 import lpiemam.com.apppokecards.R
-import lpiemam.com.apppokecards.MainActivityListener
 import lpiemam.com.apppokecards.model.PokemonCard
 
 
-
-
-class FullScreenCardFragment : Fragment() {
+class FullScreenCardFragment : BaseFragment() {
     private var pokemonCard : PokemonCard? = null
     private var wasPreviousScreenUserDetail : Boolean? = null
-    private var listener: MainActivityListener? = null
 
     companion object {
-        fun newInstance(pokemonCard: PokemonCard, boolean: Boolean) =
-            FullScreenCardFragment().apply {
-                arguments = Bundle().apply {
-                    putParcelable("pokemonCard", pokemonCard)
-                    putBoolean("wasPreviousScreenUserDetail", boolean)
-                }
-            }
+        fun newInstance(pokemonCard: PokemonCard, boolean: Boolean) : FullScreenCardFragment {
+            val fullScreenCardFragment = FullScreenCardFragment()
+            val args = Bundle()
+            args.putParcelable("pokemonCard", pokemonCard)
+            args.putBoolean("wasPreviousScreenUserDetail", boolean)
+            fullScreenCardFragment.arguments = args
+            return fullScreenCardFragment
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            pokemonCard = arguments?.getParcelable("pokemonCard") as PokemonCard
-            wasPreviousScreenUserDetail = arguments?.getBoolean("wasPreviousScreenUserDetail")
+            pokemonCard = it.getParcelable("pokemonCard") as PokemonCard
+            wasPreviousScreenUserDetail = it.getBoolean("wasPreviousScreenUserDetail")
         }
     }
 
@@ -47,36 +41,20 @@ class FullScreenCardFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_full_screen_card, container, false)
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        listener!!.showActionBar(false)
+
+        showActionBar(false)
+
         Picasso.get().load(pokemonCard?.imageUrlHiRes).placeholder(R.drawable.pokemon_card_back).into(view.cardImageView)
+
         view.cardImageView.setOnClickListener{
-            listener!!.showActionBar(true)
+            mainActivityListener?.showActionBar(true)
             if(wasPreviousScreenUserDetail!!) {
-                listener!!.popBackStack()
+                mainActivityListener?.popBackStack()
             } else {
-                listener!!.goBackFromFullScreenToAllCardsFragment()
+                mainActivityListener?.goBackFromFullScreenToAllCardsFragment()
             }
         }
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is MainActivityListener) {
-            listener = context
-        } else {
-            throw RuntimeException(context.toString() + " must implement MainActivityListener")
-        }
-    }
-
-
-    override fun onDetach() {
-
-        listener!!.setUpBackButton(false)
-        listener!!.setDrawerEnabled(true)
-        super.onDetach()
-        listener = null
     }
 }

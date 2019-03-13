@@ -11,7 +11,7 @@ abstract class BaseFragment :Fragment() {
         super.onAttach(context)
         mainActivityListener = context as? MainActivityListener
         if (mainActivityListener == null) {
-            throw ClassCastException("$context must implement OnCardSelectedListener")
+            throw ClassCastException("$context must implement MainActivityListener")
         }
     }
 
@@ -22,8 +22,20 @@ abstract class BaseFragment :Fragment() {
     }
 
 
-    fun setTitle(value : String) {
+    fun setFragmentTitle(value : String) {
         mainActivityListener?.setFragmentTitle(value)
+    }
+
+    fun setDrawerEnabled(value: Boolean) {
+        mainActivityListener?.setDrawerEnabled(value)
+    }
+
+    fun setUpBackButton(value: Boolean) {
+        mainActivityListener?.setUpBackButton(value)
+    }
+
+    fun showActionBar(value: Boolean) {
+        mainActivityListener?.showActionBar(value)
     }
 
 }

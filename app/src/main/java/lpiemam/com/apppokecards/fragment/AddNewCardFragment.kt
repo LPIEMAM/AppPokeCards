@@ -15,10 +15,7 @@ import lpiemam.com.apppokecards.MainActivityListener
  * A simple [Fragment] subclass.
  *
  */
-class AddNewCardFragment : Fragment() {
-
-    var mainActivityListener: MainActivityListener? = null
-
+class AddNewCardFragment : BaseFragment() {
 
     companion object {
 
@@ -26,25 +23,6 @@ class AddNewCardFragment : Fragment() {
             return AddNewCardFragment()
         }
     }
-
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        mainActivityListener = context as? MainActivityListener
-        if (mainActivityListener == null) {
-            throw ClassCastException("$context must implement OnCardSelectedListener")
-        }
-    }
-
-    override fun onDetach() {
-
-        mainActivityListener!!.setUpBackButton(false)
-        mainActivityListener!!.setDrawerEnabled(true)
-
-        mainActivityListener = null
-        super.onDetach()
-    }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,13 +38,10 @@ class AddNewCardFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        mainActivityListener!!.setDrawerEnabled(false)
-        mainActivityListener!!.setUpBackButton(true)
-
+        setDrawerEnabled(false)
+        setUpBackButton(true)
 
         super.onViewCreated(view, savedInstanceState)
     }
-
-
 
 }

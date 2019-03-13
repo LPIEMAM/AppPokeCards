@@ -23,12 +23,11 @@ import lpiemam.com.apppokecards.model.UserCard
  * A simple [Fragment] subclass.
  *
  */
-class UserCardDetailFragment : Fragment() {
+class UserCardDetailFragment : BaseFragment() {
 
     lateinit var pokemonCardsViewModel: PokemonCardsViewModel
 
     lateinit var userCard: UserCard
-    var mainActivityListener: MainActivityListener? = null
 
     companion object {
 
@@ -48,59 +47,37 @@ class UserCardDetailFragment : Fragment() {
         }
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        mainActivityListener = context as? MainActivityListener
-        if (mainActivityListener == null) {
-            throw ClassCastException("$context must implement OnCardSelectedListener")
-        }
-    }
-
-    override fun onDetach() {
-
-        mainActivityListener!!.setUpBackButton(false)
-        mainActivityListener!!.setDrawerEnabled(true)
-        mainActivityListener = null
-        super.onDetach()
-    }
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
 
-        mainActivityListener!!.setFragmentTitle(userCard.pokemonCard.name)
+        setFragmentTitle(userCard.pokemonCard.name)
+
         return inflater.inflate(R.layout.fragment_user_card_detail, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
+        super.onViewCreated(view, savedInstanceState)
 
         pokemonCardsViewModel = ViewModelProviders.of(activity!!).get(PokemonCardsViewModel::class.java)
 
-        super.onViewCreated(view, savedInstanceState)
-        mainActivityListener!!.setDrawerEnabled(false)
-        mainActivityListener!!.setUpBackButton(true)
+        setDrawerEnabled(false)
+        setUpBackButton(true)
 
         userDust.text = User.dusts.toString()
         userCardDetailDust.text = userCard.pokemonCard.getCostForDecraft().toString()
-//        userCardDetailCardVersion.text = userCard.pokemonCard.version
-//        userCardDetailPokedexNumber.text = userCard.pokemonCard.pokemon.pokedexNumber.toString()
-//        userCardDetailPokemonDescription.text = userCard.pokemonCard.description
-//        userCardDetailPokemonName.text = userCard.pokemonCard.pokemon.name
-//        userCardDetailPokemonType.text = userCard.pokemonCard.pokemon.type
         Picasso.get().load(userCard.pokemonCard.imageUrlHiRes).placeholder(R.drawable.pokemon_card_back).into(userCardDetailImageViewCard)
         userCardDetailImageViewCard.setOnClickListener{
-            mainActivityListener!!.replaceWithFullScreenCard(userCard.pokemonCard, true)
+            mainActivityListener?.replaceWithFullScreenCard(userCard.pokemonCard, true)
         }
-
 
         userCardDetailButtonDust.setOnClickListener {
             User.dusts += userCard.pokemonCard.getCostForDecraft()
             pokemonCardsViewModel.removeUserCard(userCard)
-            mainActivityListener!!.replaceWithCollectionFragment()
+            mainActivityListener?.replaceWithCollectionFragment()
         }
     }
 
