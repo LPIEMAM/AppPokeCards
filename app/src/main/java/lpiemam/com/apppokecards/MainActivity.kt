@@ -20,6 +20,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.nav_header_main.*
 import kotlinx.android.synthetic.main.nav_header_main.view.*
@@ -82,6 +83,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         pokemonCardsViewModel = ViewModelProviders.of(this).get(PokemonCardsViewModel::class.java)
         pokemonCardsViewModel!!.initializeData()
 
+        drawer.nav_view.getHeaderView(0).userNickNameTextField.text = User.nickName
         nav_view.setNavigationItemSelectedListener(this)
     }
 

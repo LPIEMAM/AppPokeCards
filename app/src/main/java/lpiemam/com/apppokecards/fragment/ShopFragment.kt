@@ -25,12 +25,11 @@ import lpiemam.com.apppokecards.viewmodel.PokemonCardsViewModel
 /**
  * A simple [Fragment] subclass.
  */
-class ShopFragment : Fragment() {
+class ShopFragment : BaseFragment() {
 
     lateinit var pokemonCardsViewModel: PokemonCardsViewModel
 
     var shopAdapter: ShopAdapter? = null
-    var mainActivityListener: MainActivityListener? = null
 
     companion object {
 
@@ -39,19 +38,7 @@ class ShopFragment : Fragment() {
         }
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        mainActivityListener = context as? MainActivityListener
-        if (mainActivityListener == null) {
-            throw ClassCastException("$context must implement OnCardSelectedListener")
-        }
-    }
 
-    override fun onDetach() {
-
-        mainActivityListener = null
-        super.onDetach()
-    }
 
     override fun onResume() {
 
@@ -71,7 +58,9 @@ class ShopFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        mainActivityListener!!.setFragmentTitle("Shop")
+        setTitle("Shop")
+
+        //mainActivityListener!!.setFragmentTitle("Shop")
 
         setHasOptionsMenu(true)
 

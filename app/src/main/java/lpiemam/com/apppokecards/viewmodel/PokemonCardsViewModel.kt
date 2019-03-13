@@ -22,11 +22,15 @@ class PokemonCardsViewModel : ViewModel() {
     fun fetchPokemonCardsForName(name: String) {
 
         PokemonCardsRepository.fetchPokemonCardsForName(name).observeForever {
-            if (it.isEmpty()) {
 
+
+            pokemonCardsForNameLiveData.postValue(it)
+
+            /*if (it.isEmpty()) {
+                pokemonCardsForNameLiveData.postValue(it)
             } else {
                 pokemonCardsForNameLiveData.postValue(it)
-            }
+            }*/
         }
     }
 
