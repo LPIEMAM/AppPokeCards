@@ -16,9 +16,8 @@ import lpiemam.com.apppokecards.MainActivityListener
  * A simple [Fragment] subclass.
  *
  */
-class QuizzEndedFragment : Fragment() {
+class QuizzEndedFragment : BaseFragment() {
 
-    var mainActivityListener: MainActivityListener? = null
     var userWonQuizz: Boolean = false
 
     companion object {
@@ -39,24 +38,10 @@ class QuizzEndedFragment : Fragment() {
         }
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        mainActivityListener = context as? MainActivityListener
-        if (mainActivityListener == null) {
-            throw ClassCastException("$context must implement OnCardSelectedListener")
-        }
-    }
-
-    override fun onDetach() {
-
-        mainActivityListener = null
-        super.onDetach()
-    }
-
     override fun onResume() {
 
-        mainActivityListener!!.setUpBackButton(false)
-        mainActivityListener!!.setDrawerEnabled(true)
+        setUpBackButton(false)
+        setDrawerEnabled(true)
 
         super.onResume()
     }
@@ -65,6 +50,7 @@ class QuizzEndedFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_quizz_ended, container, false)
     }
@@ -80,5 +66,4 @@ class QuizzEndedFragment : Fragment() {
             quizzFailedGroup.visibility = View.VISIBLE
         }
     }
-
 }

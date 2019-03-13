@@ -19,9 +19,7 @@ import java.util.*
  * A simple [Fragment] subclass.
  *
  */
-class QuizzStartFragment : Fragment() {
-
-    var mainActivityListener: MainActivityListener? = null
+class QuizzStartFragment : BaseFragment() {
 
     companion object {
 
@@ -30,24 +28,10 @@ class QuizzStartFragment : Fragment() {
         }
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        mainActivityListener = context as? MainActivityListener
-        if (mainActivityListener == null) {
-            throw ClassCastException("$context must implement OnCardSelectedListener")
-        }
-    }
-
-    override fun onDetach() {
-
-        mainActivityListener = null
-        super.onDetach()
-    }
-
     override fun onResume() {
 
-        mainActivityListener!!.setUpBackButton(false)
-        mainActivityListener!!.setDrawerEnabled(true)
+        setUpBackButton(false)
+        setDrawerEnabled(true)
 
         super.onResume()
     }
@@ -57,7 +41,7 @@ class QuizzStartFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        mainActivityListener!!.setFragmentTitle("Quizz")
+        setFragmentTitle("Quiz")
 
         return inflater.inflate(R.layout.fragment_quizz_start, container, false)
     }
@@ -75,8 +59,7 @@ class QuizzStartFragment : Fragment() {
         }
 
         startButton.setOnClickListener {
-            mainActivityListener!!.replaceWithQuizzFragment()
+            mainActivityListener?.replaceWithQuizzFragment()
         }
     }
-
 }
