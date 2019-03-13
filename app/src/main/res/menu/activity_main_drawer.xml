@@ -16,10 +16,6 @@
             android:icon="@drawable/ic_menu_slideshow"
             android:title="Quizz"/>
     <item
-            android:id="@+id/menuItemAchievements"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Achievements"/>
-    <item
             android:id="@+id/menuItemAllCards"
             android:icon="@drawable/ic_menu_manage"
             android:title="All Cards"/>

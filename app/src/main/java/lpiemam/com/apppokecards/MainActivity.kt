@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Rect
 import android.os.Bundle
 import android.os.Handler
+import android.util.AttributeSet
 import com.google.android.material.navigation.NavigationView
 import androidx.core.view.GravityCompat
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -11,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.MotionEvent
+import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.SearchView
@@ -19,6 +21,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
+import kotlinx.android.synthetic.main.nav_header_main.*
+import kotlinx.android.synthetic.main.nav_header_main.view.*
 import lpiemam.com.apppokecards.model.PokemonCard
 import lpiemam.com.apppokecards.fragment.*
 import lpiemam.com.apppokecards.model.User
@@ -53,6 +57,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
+
         pokemonCardsFragment = PokemonCardsFragment.newInstance()
         addNewCardFragment = AddNewCardFragment.newInstance()
         shopFragment = ShopFragment.newInstance()
@@ -67,7 +72,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
 
-
         if (savedInstanceState == null) {
             supportFragmentManager
                 .beginTransaction()
@@ -80,6 +84,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         nav_view.setNavigationItemSelectedListener(this)
     }
+
 
     private fun getVisibleFragment(): Fragment? {
         val fragmentManager = this@MainActivity.supportFragmentManager
@@ -182,12 +187,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         .commit()
                 }
 
-            }
-            R.id.menuItemAchievements -> {
-//                supportFragmentManager
-//                    .beginTransaction()
-//                    .replace(R.id.mainActivityContainer, UserCardDetailFragment.newInstance(), "userCardsFragment")
-//                    .commit()
             }
             R.id.menuItemAllCards -> {
                 supportFragmentManager
