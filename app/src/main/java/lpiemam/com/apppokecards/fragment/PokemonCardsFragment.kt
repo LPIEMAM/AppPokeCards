@@ -81,6 +81,12 @@ class PokemonCardsFragment : BaseFragment() {
             pokemonCardsAdapter.setData(it)
         })
 
+        pokemonCardsAdapter.onBottomReachedListener = object : OnBottomReachedListener {
+            override fun onBottomReached(position: Int) {
+                val currentSearch = allCardsSearchView.query.toString()
+                pokemonCardsViewModel.fetchPokemonCardsForNextPage(currentSearch)
+            }
+        }
         allCardsRecyclerView?.layoutManager = androidx.recyclerview.widget.GridLayoutManager(context, 4)
         allCardsRecyclerView?.adapter = pokemonCardsAdapter
 

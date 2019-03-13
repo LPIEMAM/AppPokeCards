@@ -12,6 +12,7 @@ class PokemonCardsViewModel : ViewModel() {
 
     var pokemonCardsForNameLiveData = MutableLiveData<ArrayList<PokemonCard>>()
     var pokemonCardsForPackLiveData = MutableLiveData<ArrayList<PokemonCard>>()
+    var currentPage = 1
 
     var userCardList = ArrayList<UserCard>()
 
@@ -20,8 +21,8 @@ class PokemonCardsViewModel : ViewModel() {
     }
 
     fun fetchPokemonCardsForName(name: String) {
-
-        PokemonCardsRepository.fetchPokemonCardsForName(name).observeForever {
+        currentPage = 1
+        PokemonCardsRepository.fetchPokemonCardsForName(1, name).observeForever {
 
 
             pokemonCardsForNameLiveData.postValue(it)
@@ -46,6 +47,16 @@ class PokemonCardsViewModel : ViewModel() {
         }
 
         return pokemonCardsForPageLiveData
+    }
+
+    fun fetchPokemonCardsForNextPage(name: String) {
+
+        currentPage++
+        PokemonCardsRepository.fetchPokemonCardsForName(currentPage, name).observeForever {
+            pokemonCardsForNameLiveData.value?.addAll(it)
+        }
+
+
     }
 
 

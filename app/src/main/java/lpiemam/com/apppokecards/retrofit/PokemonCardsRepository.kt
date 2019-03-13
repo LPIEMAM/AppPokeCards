@@ -17,8 +17,9 @@ object PokemonCardsRepository {
     var error = MutableLiveData<Boolean>()
 
 
-    fun fetchPokemonCardsForName(pokemonName: String) : LiveData<ArrayList<PokemonCard>> {
-        val call = pokemonCardApi.getPokemonCardsForName(pokemonName)
+    fun fetchPokemonCardsForName(page: Int, pokemonName: String) : LiveData<ArrayList<PokemonCard>> {
+        pokemonCardsLiveDataForName = MutableLiveData()
+        val call = pokemonCardApi.getPokemonCardsForName(page, pokemonName)
 
 
         call.enqueue(object : Callback<PokemonCardsResponse> {
