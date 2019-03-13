@@ -27,7 +27,7 @@ class PokemonCardsFragment : Fragment() {
     lateinit var pokemonCardsViewModel: PokemonCardsViewModel
 
     var pokemonCardsAdapter: PokemonCardsAdapter? = null
-    var replaceFragmentListener: ReplaceFragmentListener? = null
+    var mainActivityListener: MainActivityListener? = null
 
     companion object {
 
@@ -37,8 +37,8 @@ class PokemonCardsFragment : Fragment() {
     }
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        replaceFragmentListener = context as? ReplaceFragmentListener
-        if (replaceFragmentListener == null) {
+        mainActivityListener = context as? MainActivityListener
+        if (mainActivityListener == null) {
             throw ClassCastException("$context must implement OnCardSelectedListener")
         }
     }
@@ -48,7 +48,7 @@ class PokemonCardsFragment : Fragment() {
     }
 
     override fun onDetach() {
-        replaceFragmentListener = null
+        mainActivityListener = null
         super.onDetach()
     }
 
@@ -65,6 +65,7 @@ class PokemonCardsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
+        mainActivityListener!!.setFragmentTitle("AllCards")
         setHasOptionsMenu(true)
 
 
@@ -80,8 +81,8 @@ class PokemonCardsFragment : Fragment() {
 
 
         setUpRecyclerView()
-        replaceFragmentListener!!.setUpBackButton(false)
-        replaceFragmentListener!!.setDrawerEnabled(true)
+        mainActivityListener!!.setUpBackButton(false)
+        mainActivityListener!!.setDrawerEnabled(true)
 
         (context as MainActivity).supportActionBar!!.show()
         allCardsSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -120,13 +121,13 @@ class PokemonCardsFragment : Fragment() {
 
                         val card = pokemonCardsAdapter!!.allPokemonCardsList[position]
 
-                        replaceFragmentListener!!.replaceWithAllCardsDetailFragment(card)
+                        mainActivityListener!!.replaceWithAllCardsDetailFragment(card)
                     }
 
                     override fun onLongClick(view: View?, position: Int) {
                         val card = pokemonCardsAdapter!!.allPokemonCardsList[position]
 
-                        replaceFragmentListener!!.replaceWithAllCardsDetailFragment(card)
+                        mainActivityListener!!.replaceWithAllCardsDetailFragment(card)
                     }
                 })
         )

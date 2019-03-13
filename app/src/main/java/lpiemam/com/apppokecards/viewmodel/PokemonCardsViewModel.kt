@@ -1,6 +1,5 @@
 package lpiemam.com.apppokecards.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
@@ -24,82 +23,25 @@ class PokemonCardsViewModel : ViewModel() {
 
         PokemonCardsRepository.fetchPokemonCardsForName(name).observeForever {
             if (it.isEmpty()) {
-//                val data = DataBaseFactory.mycardsDatabase.rickCardDao().fetchAll()
-//                data.observeForever(object : Observer<List<RickCard>> {
-//                    override fun onChanged(t: List<RickCard>?) {
-//                        rickCardsLiveData.postValue(t)
-//                        data.removeObserver(this)
-//                    }
-//                })
+
             } else {
                 pokemonCardsForNameLiveData.postValue(it)
-//                Thread(Runnable {
-//                    DataBaseFactory.mycardsDatabase.rickCardDao().insertAll(rickCardsLiveData.value)
-//                }).start()
             }
         }
-
-        // gestion de l'erreur
-        /*CardsRepository.error.observeForever {
-            if (it) {
-                val data = DataBaseFactory.mycardsDatabase.rickCardDao().fetchAll()
-                data.observeForever(object : Observer<List<RickCard>> {
-                    override fun onChanged(t: List<RickCard>?) {
-                        rickCardsLiveData.postValue(t)
-                        data.removeObserver(this)
-                    }
-                })
-            }
-        }*/
-
-        // Mise en place d'une extension
-        /*CardsRepository.error.observeOnce(Observer {
-            val data = DataBaseFactory.mycardsDatabase.rickCardDao().fetchAll()
-            data.observeOnce(Observer {
-                rickCardsLiveData.postValue(it)
-            })
-        })*/
     }
 
-    private fun fetchPokemonCardsForPage(page: Int, pokemonCardsForPageLiveData: MutableLiveData<ArrayList<PokemonCard>>) {
+    private fun fetchPokemonCardsForPage(page: Int) : MutableLiveData<ArrayList<PokemonCard>> {
 
+        val pokemonCardsForPageLiveData = MutableLiveData<ArrayList<PokemonCard>>()
         PokemonCardsRepository.fetchPokemonCardsForPage(page).observeForever {
             if (it.isEmpty()) {
-//                val data = DataBaseFactory.mycardsDatabase.rickCardDao().fetchAll()
-//                data.observeForever(object : Observer<List<RickCard>> {
-//                    override fun onChanged(t: List<RickCard>?) {
-//                        rickCardsLiveData.postValue(t)
-//                        data.removeObserver(this)
-//                    }
-//                })
+
             } else {
                 pokemonCardsForPageLiveData.postValue(it)
-//                Thread(Runnable {
-//                    DataBaseFactory.mycardsDatabase.rickCardDao().insertAll(rickCardsLiveData.value)
-//                }).start()
             }
         }
 
-        // gestion de l'erreur
-        /*CardsRepository.error.observeForever {
-            if (it) {
-                val data = DataBaseFactory.mycardsDatabase.rickCardDao().fetchAll()
-                data.observeForever(object : Observer<List<RickCard>> {
-                    override fun onChanged(t: List<RickCard>?) {
-                        rickCardsLiveData.postValue(t)
-                        data.removeObserver(this)
-                    }
-                })
-            }
-        }*/
-
-        // Mise en place d'une extension
-        /*CardsRepository.error.observeOnce(Observer {
-            val data = DataBaseFactory.mycardsDatabase.rickCardDao().fetchAll()
-            data.observeOnce(Observer {
-                rickCardsLiveData.postValue(it)
-            })
-        })*/
+        return pokemonCardsForPageLiveData
     }
 
 
@@ -115,17 +57,16 @@ class PokemonCardsViewModel : ViewModel() {
             var randomPage = (0..22).random()
             var randomPosition = (0..500).random()
 
-            val pokemonCardsForPageLiveData = MutableLiveData<ArrayList<PokemonCard>>()
-
-            fetchPokemonCardsForPage(randomPage, pokemonCardsForPageLiveData)
-
+            var pokemonCardsForPageLiveData = fetchPokemonCardsForPage(randomPage)
             pokemonCardsForPageLiveData.observeForever(object : Observer<List<PokemonCard>> {
-                override fun onChanged(t: List<PokemonCard>?) {
-                    cardsPack.listPokemonCards.add(pokemonCardsForPageLiveData.value!![randomPosition])
-                    if (cardsPack.listPokemonCards.size == cardsPack.nbCards) {
-                        pokemonCardsForPackLiveData.postValue(cardsPack.listPokemonCards)
+                override fun onChanged(it: List<PokemonCard>?) {
+                    if(!it!!.isEmpty()) {
+                        cardsPack.listPokemonCards.add(it[randomPosition])
+                        if (cardsPack.listPokemonCards.size == cardsPack.nbCards) {
+                            pokemonCardsForPackLiveData.postValue(cardsPack.listPokemonCards)
+                        }
+                        pokemonCardsForPageLiveData.removeObserver(this)
                     }
-                    pokemonCardsForPageLiveData.removeObserver(this)
                 }
             })
         }
@@ -164,6 +105,4 @@ class PokemonCardsViewModel : ViewModel() {
         }
         userCardList = ArrayList(userCardList.sortedWith(compareBy { it.pokemonCard.nationalPokedexNumber }))
     }
-
-
 }

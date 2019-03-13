@@ -28,7 +28,7 @@ import java.util.*
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
-    ReplaceFragmentListener {
+    MainActivityListener {
 
 
     lateinit var toggle: ActionBarDrawerToggle
@@ -244,7 +244,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 R.id.mainActivityContainer,
                 FullScreenCardFragment.newInstance(pokemonCard, boolean),
                 "fullScreenCardFragment"
-            )
+            ).addToBackStack(null)
             .commit()
     }
 
@@ -257,11 +257,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun replaceWithUserDetailFragment(userCard: UserCard) {
-        val userCardDetailFragment = UserCardDetailFragment.newInstance()
-        userCardDetailFragment.userCard = userCard
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.mainActivityContainer, userCardDetailFragment, "userCardDetailFragment")
+            .replace(R.id.mainActivityContainer, UserCardDetailFragment.newInstance(userCard), "userCardDetailFragment")
             .addToBackStack(null)
             .commit()
     }
@@ -274,11 +272,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun replaceWithAllCardsDetailFragment(pokemonCard: PokemonCard) {
-        val allCardsDetailFragment = PokemonCardDetailFragment.newInstance()
-        allCardsDetailFragment.pokemonCard = pokemonCard
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.mainActivityContainer, allCardsDetailFragment, "allCardsDetailFragment")
+            .replace(R.id.mainActivityContainer, PokemonCardDetailFragment.newInstance(pokemonCard), "allCardsDetailFragment")
             .addToBackStack(null)
             .commit()
     }
@@ -345,5 +341,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         }
         return super.dispatchTouchEvent(event)
+    }
+
+    override fun setFragmentTitle(title: String) {
+        supportActionBar!!.title = title
+    }
+
+    override fun showActionBar(value: Boolean) {
+        if(value) supportActionBar!!.show() else supportActionBar!!.hide()
     }
 }

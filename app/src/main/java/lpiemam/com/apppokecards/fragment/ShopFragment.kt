@@ -3,7 +3,6 @@ package lpiemam.com.apppokecards.fragment
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -31,7 +30,7 @@ class ShopFragment : Fragment() {
     lateinit var pokemonCardsViewModel: PokemonCardsViewModel
 
     var shopAdapter: ShopAdapter? = null
-    var replaceFragmentListener: ReplaceFragmentListener? = null
+    var mainActivityListener: MainActivityListener? = null
 
     companion object {
 
@@ -42,22 +41,22 @@ class ShopFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        replaceFragmentListener = context as? ReplaceFragmentListener
-        if (replaceFragmentListener == null) {
+        mainActivityListener = context as? MainActivityListener
+        if (mainActivityListener == null) {
             throw ClassCastException("$context must implement OnCardSelectedListener")
         }
     }
 
     override fun onDetach() {
 
-        replaceFragmentListener = null
+        mainActivityListener = null
         super.onDetach()
     }
 
     override fun onResume() {
 
-        replaceFragmentListener!!.setUpBackButton(false)
-        replaceFragmentListener!!.setDrawerEnabled(true)
+        mainActivityListener!!.setUpBackButton(false)
+        mainActivityListener!!.setDrawerEnabled(true)
 
         for (cardPack in shopAdapter!!.cardsPackList) {
             cardPack.isSelected = false
@@ -72,6 +71,7 @@ class ShopFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
+        mainActivityListener!!.setFragmentTitle("Shop")
 
         setHasOptionsMenu(true)
 
@@ -111,17 +111,21 @@ class ShopFragment : Fragment() {
             if (onePackSelected) {
                 if (User.canBuyAPack(selectedPack)) {
                     try {
-                        pokemonCardsViewModel.generateRandomCards(selectedPack)
+
+                        pokemonCardsViewModel.pokemonCardsForPackLiveData = MutableLiveData()
 
                         pokemonCardsViewModel.pokemonCardsForPackLiveData.observe(this, Observer {
 
                             var packOpeningDialogFragment = PackOpeningDialogFragment()
-                            packOpeningDialogFragment.listCardsPack = ArrayList(selectedPack.listPokemonCards)
+                            packOpeningDialogFragment.listCardsPack = ArrayList(it)
                             packOpeningDialogFragment.show(childFragmentManager, "Contenu du Pack")
 
                             pokemonCardsViewModel.buyAPack(selectedPack)
                             selectedPack.clearCardList()
+                            userCoinsTextView.text = User.coins.toString()
                         })
+
+                        pokemonCardsViewModel.generateRandomCards(selectedPack)
 
 
                     } catch (e: Exception) {
@@ -134,7 +138,6 @@ class ShopFragment : Fragment() {
                     snackbar.show()
                 }
             }
-            userCoinsTextView.text = User.coins.toString()
         }
 
 
@@ -164,9 +167,6 @@ class ShopFragment : Fragment() {
                         }
                         shopAdapter!!.cardsPackList[position].isSelected = !temp
                         shopAdapter!!.notifyDataSetChanged()
-                        //val pokemonCard = shopAdapter!!.cardList[position]
-
-                        //replaceFragmentListener!!.replaceWithUserDetailFragment(pokemonCard)
                     }
 
                     override fun onLongClick(view: View?, position: Int) {
@@ -176,9 +176,6 @@ class ShopFragment : Fragment() {
                         }
                         shopAdapter!!.cardsPackList[position].isSelected = !temp
                         shopAdapter!!.notifyDataSetChanged()
-                        //val pokemonCard = userCardAdapter!!.cardList[position]
-
-                        //replaceFragmentListener!!.replaceWithUserDetailFragment(pokemonCard)
                     }
                 })
         )

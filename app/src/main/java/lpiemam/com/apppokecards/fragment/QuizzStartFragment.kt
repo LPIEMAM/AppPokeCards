@@ -10,7 +10,7 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_quizz_start.*
 
 import lpiemam.com.apppokecards.R
-import lpiemam.com.apppokecards.ReplaceFragmentListener
+import lpiemam.com.apppokecards.MainActivityListener
 
 
 /**
@@ -19,7 +19,7 @@ import lpiemam.com.apppokecards.ReplaceFragmentListener
  */
 class QuizzStartFragment : Fragment() {
 
-    var replaceFragmentListener: ReplaceFragmentListener? = null
+    var mainActivityListener: MainActivityListener? = null
 
     companion object {
 
@@ -30,22 +30,22 @@ class QuizzStartFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        replaceFragmentListener = context as? ReplaceFragmentListener
-        if (replaceFragmentListener == null) {
+        mainActivityListener = context as? MainActivityListener
+        if (mainActivityListener == null) {
             throw ClassCastException("$context must implement OnCardSelectedListener")
         }
     }
 
     override fun onDetach() {
 
-        replaceFragmentListener = null
+        mainActivityListener = null
         super.onDetach()
     }
 
     override fun onResume() {
 
-        replaceFragmentListener!!.setUpBackButton(false)
-        replaceFragmentListener!!.setDrawerEnabled(true)
+        mainActivityListener!!.setUpBackButton(false)
+        mainActivityListener!!.setDrawerEnabled(true)
 
         super.onResume()
     }
@@ -55,6 +55,7 @@ class QuizzStartFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        mainActivityListener!!.setFragmentTitle("Quizz")
         return inflater.inflate(R.layout.fragment_quizz_start, container, false)
     }
 
@@ -62,7 +63,7 @@ class QuizzStartFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         startButton.setOnClickListener {
-            replaceFragmentListener!!.replaceWithQuizzFragment()
+            mainActivityListener!!.replaceWithQuizzFragment()
         }
     }
 

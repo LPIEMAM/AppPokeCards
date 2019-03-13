@@ -1,7 +1,11 @@
 package lpiemam.com.apppokecards.model
 
-class UserCard (val pokemonCard: PokemonCard) {
-    var numberOfCard : Int = 1
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
+class UserCard (val pokemonCard: PokemonCard) : Parcelable {
+    @Transient
+    var numberOfCard : Int = 1
 
 }

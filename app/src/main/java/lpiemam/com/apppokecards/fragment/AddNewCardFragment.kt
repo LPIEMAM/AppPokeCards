@@ -8,7 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import lpiemam.com.apppokecards.R
-import lpiemam.com.apppokecards.ReplaceFragmentListener
+import lpiemam.com.apppokecards.MainActivityListener
 
 
 /**
@@ -17,7 +17,7 @@ import lpiemam.com.apppokecards.ReplaceFragmentListener
  */
 class AddNewCardFragment : Fragment() {
 
-    var replaceFragmentListener: ReplaceFragmentListener? = null
+    var mainActivityListener: MainActivityListener? = null
 
 
     companion object {
@@ -30,18 +30,18 @@ class AddNewCardFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        replaceFragmentListener = context as? ReplaceFragmentListener
-        if (replaceFragmentListener == null) {
+        mainActivityListener = context as? MainActivityListener
+        if (mainActivityListener == null) {
             throw ClassCastException("$context must implement OnCardSelectedListener")
         }
     }
 
     override fun onDetach() {
 
-        replaceFragmentListener!!.setUpBackButton(false)
-        replaceFragmentListener!!.setDrawerEnabled(true)
+        mainActivityListener!!.setUpBackButton(false)
+        mainActivityListener!!.setDrawerEnabled(true)
 
-        replaceFragmentListener = null
+        mainActivityListener = null
         super.onDetach()
     }
 
@@ -60,8 +60,8 @@ class AddNewCardFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        replaceFragmentListener!!.setDrawerEnabled(false)
-        replaceFragmentListener!!.setUpBackButton(true)
+        mainActivityListener!!.setDrawerEnabled(false)
+        mainActivityListener!!.setUpBackButton(true)
 
 
         super.onViewCreated(view, savedInstanceState)

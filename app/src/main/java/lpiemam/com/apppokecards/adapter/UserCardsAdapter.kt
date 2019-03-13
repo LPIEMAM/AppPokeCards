@@ -56,7 +56,7 @@ class UserCardsAdapter(val userCardList: ArrayList<UserCard>) : androidx.recycle
             override fun publishResults(charSequence: CharSequence, filterResults: Filter.FilterResults) {
                 userCardsListFiltered = filterResults.values as java.util.ArrayList<UserCard>
 
-                // refresh the replaceFragmentListener with filtered data
+                // refresh the mainActivityListener with filtered data
                 notifyDataSetChanged()
             }
         }

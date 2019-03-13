@@ -10,7 +10,7 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_full_screen_card.view.*
 import lpiemam.com.apppokecards.MainActivity
 import lpiemam.com.apppokecards.R
-import lpiemam.com.apppokecards.ReplaceFragmentListener
+import lpiemam.com.apppokecards.MainActivityListener
 import lpiemam.com.apppokecards.model.PokemonCard
 
 
@@ -19,7 +19,7 @@ import lpiemam.com.apppokecards.model.PokemonCard
 class FullScreenCardFragment : Fragment() {
     private var pokemonCard : PokemonCard? = null
     private var wasPreviousScreenUserDetail : Boolean? = null
-    private var listener: ReplaceFragmentListener? = null
+    private var listener: MainActivityListener? = null
 
     companion object {
         fun newInstance(pokemonCard: PokemonCard, boolean: Boolean) =
@@ -50,9 +50,10 @@ class FullScreenCardFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (context as MainActivity).supportActionBar!!.hide()
+        listener!!.showActionBar(false)
         Picasso.get().load(pokemonCard?.imageUrlHiRes).placeholder(R.drawable.pokemon_card_back).into(view.cardImageView)
         view.cardImageView.setOnClickListener{
+            listener!!.showActionBar(true)
             if(wasPreviousScreenUserDetail!!) {
                 listener!!.popBackStack()
             } else {
@@ -63,10 +64,10 @@ class FullScreenCardFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is ReplaceFragmentListener) {
+        if (context is MainActivityListener) {
             listener = context
         } else {
-            throw RuntimeException(context.toString() + " must implement ReplaceFragmentListener")
+            throw RuntimeException(context.toString() + " must implement MainActivityListener")
         }
     }
 

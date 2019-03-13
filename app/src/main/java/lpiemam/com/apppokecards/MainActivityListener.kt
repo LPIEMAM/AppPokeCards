@@ -3,7 +3,7 @@ package lpiemam.com.apppokecards
 import lpiemam.com.apppokecards.model.PokemonCard
 import lpiemam.com.apppokecards.model.UserCard
 
-interface ReplaceFragmentListener {
+interface MainActivityListener {
 
     fun setDrawerEnabled(enabled: Boolean)
     fun setUpBackButton(enabled: Boolean)
@@ -20,5 +20,7 @@ interface ReplaceFragmentListener {
     fun popBackStack()
     fun notifyCollectionDataSetChanged()
     fun goBackFromFullScreenToAllCardsFragment()
+    fun setFragmentTitle(title: String)
+    fun showActionBar(value: Boolean)
 
 }

@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.fragment_user_cards.*
 import lpiemam.com.apppokecards.R
 import lpiemam.com.apppokecards.RecyclerTouchListener
-import lpiemam.com.apppokecards.ReplaceFragmentListener
+import lpiemam.com.apppokecards.MainActivityListener
 import lpiemam.com.apppokecards.adapter.UserCardsAdapter
 import lpiemam.com.apppokecards.viewmodel.PokemonCardsViewModel
 
@@ -28,7 +28,7 @@ class UserCardsFragment : androidx.fragment.app.Fragment() {
     lateinit var pokemonCardsViewModel: PokemonCardsViewModel
 
     var userCardAdapter: UserCardsAdapter? = null
-    var replaceFragmentListener: ReplaceFragmentListener? = null
+    var mainActivityListener: MainActivityListener? = null
 
 
     companion object {
@@ -39,22 +39,22 @@ class UserCardsFragment : androidx.fragment.app.Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        replaceFragmentListener = context as? ReplaceFragmentListener
-        if (replaceFragmentListener == null) {
+        mainActivityListener = context as? MainActivityListener
+        if (mainActivityListener == null) {
             throw ClassCastException("$context must implement OnCardSelectedListener")
         }
     }
 
     override fun onDetach() {
 
-        replaceFragmentListener = null
+        mainActivityListener = null
         super.onDetach()
     }
 
     override fun onResume() {
 
-        replaceFragmentListener!!.setUpBackButton(false)
-        replaceFragmentListener!!.setDrawerEnabled(true)
+        mainActivityListener!!.setUpBackButton(false)
+        mainActivityListener!!.setDrawerEnabled(true)
         super.onResume()
     }
 
@@ -63,6 +63,7 @@ class UserCardsFragment : androidx.fragment.app.Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
+        mainActivityListener!!.setFragmentTitle("Collection")
 
         setHasOptionsMenu(true)
 
@@ -79,7 +80,7 @@ class UserCardsFragment : androidx.fragment.app.Fragment() {
         setUpRecyclerView()
 
         /*floatingActionButtonAddPokemon.setOnClickListener {
-            replaceFragmentListener!!.replaceWithAddNewCardFragment()
+            mainActivityListener!!.replaceWithAddNewCardFragment()
         }*/
 
         collectionSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -116,13 +117,13 @@ class UserCardsFragment : androidx.fragment.app.Fragment() {
 
                         val userCard = userCardAdapter!!.userCardList[position]
 
-                        replaceFragmentListener!!.replaceWithUserDetailFragment(userCard)
+                        mainActivityListener!!.replaceWithUserDetailFragment(userCard)
                     }
 
                     override fun onLongClick(view: View?, position: Int) {
                         val userCard = userCardAdapter!!.userCardList[position]
 
-                        replaceFragmentListener!!.replaceWithUserDetailFragment(userCard)
+                        mainActivityListener!!.replaceWithUserDetailFragment(userCard)
                     }
                 })
         )

@@ -29,7 +29,7 @@ class QuizzFragment : Fragment(){
 
     lateinit var quizzViewModel: QuizzViewModel
 
-    var replaceFragmentListener: ReplaceFragmentListener? = null
+    var mainActivityListener: MainActivityListener? = null
     private var mQuestionTextView: TextView? = null
     private var mAnswerButton1: Button? = null
     private var mAnswerButton2: Button? = null
@@ -65,16 +65,16 @@ class QuizzFragment : Fragment(){
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        replaceFragmentListener = context as? ReplaceFragmentListener
-        if (replaceFragmentListener == null) {
+        mainActivityListener = context as? MainActivityListener
+        if (mainActivityListener == null) {
             throw ClassCastException("$context must implement OnCardSelectedListener")
         }
     }
 
     override fun onDetach() {
 
-        replaceFragmentListener!!.setDrawerEnabled(true)
-        replaceFragmentListener = null
+        mainActivityListener!!.setDrawerEnabled(true)
+        mainActivityListener = null
         super.onDetach()
     }
 
@@ -117,7 +117,7 @@ class QuizzFragment : Fragment(){
 
         quizzViewModel = ViewModelProviders.of(activity!!).get(QuizzViewModel::class.java)
 
-        replaceFragmentListener!!.setDrawerEnabled(false)
+        mainActivityListener!!.setDrawerEnabled(false)
 
         mPokemonQuestions = quizzViewModel.generateQuestions()
 
@@ -213,7 +213,7 @@ class QuizzFragment : Fragment(){
     }*/
 
     private fun endGame() {
-        replaceFragmentListener!!.replaceWithQuizzEndedFragment()
+        mainActivityListener!!.replaceWithQuizzEndedFragment()
     }
 
     private fun displayQuestion(q: Question) {

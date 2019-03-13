@@ -13,7 +13,7 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_pokemon_card_detail.*
 import lpiemam.com.apppokecards.MainActivity
 import lpiemam.com.apppokecards.R
-import lpiemam.com.apppokecards.ReplaceFragmentListener
+import lpiemam.com.apppokecards.MainActivityListener
 import lpiemam.com.apppokecards.model.PokemonCard
 import lpiemam.com.apppokecards.model.User
 import lpiemam.com.apppokecards.viewmodel.PokemonCardsViewModel
@@ -28,28 +28,39 @@ class PokemonCardDetailFragment : Fragment() {
     lateinit var pokemonCardsViewModel: PokemonCardsViewModel
 
     lateinit var pokemonCard: PokemonCard
-    var replaceFragmentListener: ReplaceFragmentListener? = null
+    var mainActivityListener: MainActivityListener? = null
 
     companion object {
 
-        fun newInstance(): PokemonCardDetailFragment {
-            return PokemonCardDetailFragment()
+        fun newInstance(pokemonCard: PokemonCard): PokemonCardDetailFragment {
+            val pokemonCardDetailFragment = PokemonCardDetailFragment()
+            val args = Bundle()
+            args.putParcelable("pokeCard", pokemonCard)
+            pokemonCardDetailFragment.arguments = args
+            return pokemonCardDetailFragment
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            pokemonCard = it.getParcelable("pokeCard")!!
         }
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        replaceFragmentListener = context as? ReplaceFragmentListener
-        if (replaceFragmentListener == null) {
+        mainActivityListener = context as? MainActivityListener
+        if (mainActivityListener == null) {
             throw ClassCastException("$context must implement OnCardSelectedListener")
         }
     }
 
     override fun onDetach() {
 
-        replaceFragmentListener!!.setUpBackButton(false)
-        replaceFragmentListener!!.setDrawerEnabled(true)
-        replaceFragmentListener = null
+        mainActivityListener!!.setUpBackButton(false)
+        mainActivityListener!!.setDrawerEnabled(true)
+        mainActivityListener = null
         super.onDetach()
     }
 
@@ -60,6 +71,7 @@ class PokemonCardDetailFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
 
+        mainActivityListener!!.setFragmentTitle(pokemonCard.name)
         return inflater.inflate(R.layout.fragment_pokemon_card_detail, container, false)
     }
 
@@ -74,8 +86,8 @@ class PokemonCardDetailFragment : Fragment() {
 
         (context as MainActivity).supportActionBar!!.show()
 
-        replaceFragmentListener!!.setDrawerEnabled(false)
-        replaceFragmentListener!!.setUpBackButton(true)
+        mainActivityListener!!.setDrawerEnabled(false)
+        mainActivityListener!!.setUpBackButton(true)
 
         userDust.text = User.dusts.toString()
 //        pokemonCard.costDustToCraft = 350
@@ -92,7 +104,7 @@ class PokemonCardDetailFragment : Fragment() {
             if(User.dusts >= pokemonCard.getCostToCraft()) {
                 User.dusts -= pokemonCard.getCostToCraft()
                 pokemonCardsViewModel.addUserCard(pokemonCard)
-                replaceFragmentListener!!.replaceWithFullScreenCard(pokemonCard, false)
+                mainActivityListener!!.replaceWithFullScreenCard(pokemonCard, false)
             } else {
                 val snackbar = Snackbar.make(view, "Vous n'avez pas assez de poussières.", Snackbar.LENGTH_SHORT)
                 snackbar.show()
