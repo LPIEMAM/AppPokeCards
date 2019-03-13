@@ -11,6 +11,8 @@ import kotlinx.android.synthetic.main.fragment_quizz_start.*
 
 import lpiemam.com.apppokecards.R
 import lpiemam.com.apppokecards.MainActivityListener
+import lpiemam.com.apppokecards.model.User
+import java.util.*
 
 
 /**
@@ -56,11 +58,21 @@ class QuizzStartFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         mainActivityListener!!.setFragmentTitle("Quizz")
+
         return inflater.inflate(R.layout.fragment_quizz_start, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        var dateOfDay = Calendar.getInstance()
+        if (User.dateLastQuizzEnded == null || (dateOfDay.timeInMillis - User.dateLastQuizzEnded!!.timeInMillis >= 86400000)) {
+            quizzEndedGroup.visibility = View.GONE
+            quizzStartGroup.visibility = View.VISIBLE
+        } else {
+            quizzEndedGroup.visibility = View.VISIBLE
+            quizzStartGroup.visibility = View.GONE
+        }
 
         startButton.setOnClickListener {
             mainActivityListener!!.replaceWithQuizzFragment()

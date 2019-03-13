@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import kotlinx.android.synthetic.main.fragment_quizz_ended.*
 
 import lpiemam.com.apppokecards.R
 import lpiemam.com.apppokecards.MainActivityListener
@@ -18,11 +19,23 @@ import lpiemam.com.apppokecards.MainActivityListener
 class QuizzEndedFragment : Fragment() {
 
     var mainActivityListener: MainActivityListener? = null
+    var userWonQuizz: Boolean = false
 
     companion object {
 
-        fun newInstance(): QuizzEndedFragment {
-            return QuizzEndedFragment()
+        fun newInstance(userWonQuizz: Boolean): QuizzEndedFragment {
+            val quizzEndedFragment = QuizzEndedFragment()
+            var args = Bundle()
+            args.putBoolean("userWonQuiz", userWonQuizz)
+            quizzEndedFragment.arguments = args
+            return quizzEndedFragment
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            userWonQuizz = it.getBoolean("userWonQuiz")
         }
     }
 
@@ -59,6 +72,13 @@ class QuizzEndedFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        if (userWonQuizz) {
+            quizzPassedGroup.visibility = View.VISIBLE
+            quizzFailedGroup.visibility = View.GONE
+        } else {
+            quizzPassedGroup.visibility = View.GONE
+            quizzFailedGroup.visibility = View.VISIBLE
+        }
     }
 
 }

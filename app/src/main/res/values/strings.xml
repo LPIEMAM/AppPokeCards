@@ -12,6 +12,8 @@
     </string>
     <string name="quizzStart">"Après avoir cliqué sur le bouton "Commencer", trois questions vous seront posées. Répondez correctement à au moins deux d'entre elles dans le temps qui vous est imparti pour obtenir 50 poképièces !"
     </string>
+    <string name="quizzPassed">"Bravo, vous avez remporté vos 50 pièces journalières pour avoir répondu correctement au quizz ! Revenez demain pour en remporter d'autres !"</string>
+    <string name="quizzFailed">"Vous n'avez pas répondu correctement à au moins deux questions, revenez demain pour retenter votre chance !"</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

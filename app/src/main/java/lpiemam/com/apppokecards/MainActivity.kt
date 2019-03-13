@@ -59,10 +59,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 
         pokemonCardsFragment = PokemonCardsFragment.newInstance()
-        addNewCardFragment = AddNewCardFragment.newInstance()
         shopFragment = ShopFragment.newInstance()
-        quizzEndedFragment = QuizzEndedFragment.newInstance()
-        quizzStartFragment = QuizzStartFragment.newInstance()
         userCardsFragment = UserCardsFragment()
 
         drawer = drawer_layout
@@ -174,18 +171,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     .commit()
             }
             R.id.menuItemQuizz -> {
-                var dateOfDay = Calendar.getInstance()
-                if (User.dateLastQuizzEnded == null || (dateOfDay.timeInMillis - User.dateLastQuizzEnded!!.timeInMillis >= 86400000)) {
+
                     supportFragmentManager
                         .beginTransaction()
                         .replace(R.id.mainActivityContainer, QuizzStartFragment.newInstance(), "quizzStartFragment")
                         .commit()
-                } else {
-                    supportFragmentManager
-                        .beginTransaction()
-                        .replace(R.id.mainActivityContainer, QuizzEndedFragment.newInstance(), "quizzEndedFragment")
-                        .commit()
-                }
 
             }
             R.id.menuItemAllCards -> {
@@ -297,10 +287,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             .commit()
     }
 
-    override fun replaceWithQuizzEndedFragment() {
+    override fun replaceWithQuizzEndedFragment(userWonQuiz: Boolean) {
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.mainActivityContainer, QuizzEndedFragment.newInstance(), "quizzEndedFragment")
+            .replace(R.id.mainActivityContainer, QuizzEndedFragment.newInstance(userWonQuiz), "quizzEndedFragment")
             .commit()
     }
 

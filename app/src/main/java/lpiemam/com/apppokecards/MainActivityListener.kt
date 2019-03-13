@@ -15,7 +15,7 @@ interface MainActivityListener {
     fun replaceWithAddNewCardFragment()
     fun replaceWithQuizzFragment()
     fun replaceWithQuizzStartFragment()
-    fun replaceWithQuizzEndedFragment()
+    fun replaceWithQuizzEndedFragment(userWonQuiz: Boolean)
     fun replaceWithFragment(fragment: androidx.fragment.app.Fragment, tag : String?)
     fun popBackStack()
     fun notifyCollectionDataSetChanged()

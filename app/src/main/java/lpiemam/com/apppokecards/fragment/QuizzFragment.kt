@@ -45,6 +45,7 @@ class QuizzFragment : Fragment(){
     var hasAnswer : Boolean = false
     var hasAnswerCorrectly : Boolean = false
     var hasFinishedQuizzToday : Boolean = false
+    var userWonQuiz : Boolean = false
     private lateinit var dateLastQuizzEnded : Calendar
 
     lateinit var countDownTimer: CountDownTimer
@@ -208,12 +209,8 @@ class QuizzFragment : Fragment(){
         }
     }
 
- /*  fun dispatchTouchEvent(ev: MotionEvent): Boolean {
-        return mEnableTouchEvents && super.dispatchTouchEvent(ev)
-    }*/
-
     private fun endGame() {
-        mainActivityListener!!.replaceWithQuizzEndedFragment()
+        mainActivityListener!!.replaceWithQuizzEndedFragment(userWonQuiz)
     }
 
     private fun displayQuestion(q: Question) {
@@ -251,6 +248,7 @@ class QuizzFragment : Fragment(){
         } else {
             if (nbCorrectAnswer >= 2) {
                 User.coins += 50
+                userWonQuiz = true
             }
             hasFinishedQuizzToday = true
             dateLastQuizzEnded = Calendar.getInstance()
