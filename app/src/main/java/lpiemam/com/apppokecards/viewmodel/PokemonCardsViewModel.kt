@@ -3,9 +3,11 @@ package lpiemam.com.apppokecards.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
+import lpiemam.com.apppokecards.DataBaseFactory
 import lpiemam.com.apppokecards.Utils
 import lpiemam.com.apppokecards.model.*
 import lpiemam.com.apppokecards.retrofit.PokemonCardsRepository
+import java.util.*
 
 class PokemonCardsViewModel : ViewModel() {
 
@@ -19,7 +21,14 @@ class PokemonCardsViewModel : ViewModel() {
 
 
     fun initializeData() {
-        user?.setUpUser("Annabelle", "Braye", "Siam", "annabelle.braye@gmail.com", 100000, 100000)
+        user = User("Annabelle", "Braye", "Siam", "annabelle.braye@gmail.com", Calendar.getInstance(), 100000, 100000)
+        DataBaseFactory.userCardsDataBase.userDAO().insertUser(user!!)
+        DataBaseFactory.userCardsDataBase.userDAO().getUser().observeForever{
+            user = it
+        }
+        DataBaseFactory.userCardsDataBase.userCardDAO().fetchAll().observeForever{
+            userCardList.addAll(it)
+        }
     }
 
     fun fetchPokemonCardsForName(name: String) {
@@ -111,5 +120,11 @@ class PokemonCardsViewModel : ViewModel() {
             userCardList.remove(userCard)
         }
         userCardList = ArrayList(userCardList.sortedWith(compareBy { it.pokemonCard.nationalPokedexNumber }))
+    }
+
+    override fun onCleared() {
+        DataBaseFactory.userCardsDataBase.userDAO().updateUser(user!!)
+        DataBaseFactory.userCardsDataBase.userCardDAO().insertAll(userCardList)
+        super.onCleared()
     }
 }

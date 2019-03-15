@@ -3,6 +3,8 @@ package lpiemam.com.apppokecards.model
 import android.os.Parcelable
 import android.view.inputmethod.InputMethodSubtype
 import androidx.room.Entity
+import androidx.room.TypeConverter
+import androidx.room.TypeConverters
 import com.google.gson.annotations.Expose
 import kotlinx.android.parcel.Parcelize
 import java.io.Serializable
@@ -14,15 +16,21 @@ data class PokemonCard(val id: String,
                   val nationalPokedexNumber: Int,
                   val hp: String,
                   val imageUrlHiRes: String,
+                       @TypeConverters(Converter::class)
                   val types: ArrayList<String>,
                   val number: String,
                   val subtype: String,
                   val supertype: String,
+                       @TypeConverters(Converter::class)
                   val attacks: ArrayList<PokemonAttack>,
-                  val text: ArrayList<String>,
-                  val weaknesses: ArrayList<PokemonWeaknesses>,
-                  val resistances: ArrayList<PokemonResistances>,
-                  val retreatCost: ArrayList<String>,
+//                       @TypeConverters(Converter::class)
+//                  val text: ArrayList<String>,
+//                       @TypeConverters(Converter::class)
+//                  val weaknesses: ArrayList<PokemonWeaknesses>,
+//                       @TypeConverters(Converter::class)
+//                  val resistances: ArrayList<PokemonResistances>,
+//                       @TypeConverters(Converter::class)
+//                  val retreatCost: ArrayList<String>,
                   val convertedRetreatCost: Int,
                   val artist: String,
                   val set: String,

@@ -1,11 +1,13 @@
 package lpiemam.com.apppokecards.model
 
 import androidx.room.Entity
+import androidx.room.PrimaryKey
 import java.util.*
 
 @Entity
 class User (var firstName : String?,
             var lastName : String?,
+            @PrimaryKey
             var nickName : String?,
             var email : String?,
             var dateLastQuizzEnded : Calendar?,
@@ -29,7 +31,4 @@ object UserManager {
         user?.coins = coins
         user?.dusts = dusts
     }*/
-
-
-
 }

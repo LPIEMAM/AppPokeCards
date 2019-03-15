@@ -60,6 +60,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
+        DataBaseFactory.initialize(applicationContext)
+
 
         pokemonCardsFragment = PokemonCardsFragment.newInstance()
         shopFragment = ShopFragment.newInstance()

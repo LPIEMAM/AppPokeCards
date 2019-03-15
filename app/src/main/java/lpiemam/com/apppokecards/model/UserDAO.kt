@@ -1,23 +1,18 @@
 package lpiemam.com.apppokecards.model
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 
 @Dao
 interface UserDAO {
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertAll(listCard: List<UserCard>?)
+    @Query("SELECT * FROM User")
+    fun getUser(): LiveData<User>
 
-    @Query("SELECT * FROM RickCard")
-    fun fetchAll(): LiveData<List<RickCard>>
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    fun updateUser(user: User)
 
-    @Query("SELECT * FROM RickCard")
-    fun fetchAll2(): List<RickCard>
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertUser(user:User)
 
-    @Query("SELECT * FROM RickCard WHERE id =:rickId")
-    fun get(rickId: Int): LiveData<RickCard>
 }
