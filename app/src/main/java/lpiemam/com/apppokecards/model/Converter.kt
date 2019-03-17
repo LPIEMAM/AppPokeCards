@@ -3,6 +3,11 @@ package lpiemam.com.apppokecards.model
 import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import java.util.*
+import jdk.nashorn.internal.objects.NativeDate.getTime
+
+
+
 
 class Converter {
 
@@ -61,6 +66,8 @@ class Converter {
         return gson.fromJson(value, type)
     }
 
+
+
     @TypeConverter
     fun pokemonAttackListToString(list: ArrayList<PokemonAttack>) : String? {
         if (list == null) {
@@ -83,5 +90,32 @@ class Converter {
         }.type
         return gson.fromJson(value, type)
     }
+
+
+    @TypeConverter
+    fun toDate(timestamp: Long?): Date? {
+        return if (timestamp == null) null else Date(timestamp)
+    }
+
+    @TypeConverter
+    fun toTimestamp(date: Date?): Long? {
+        return date?.time
+    }
+
+    //Convertir le calendrier pour l'insérer dans la bdd
+    /*@TypeConverter
+    fun dateToLong(date: Calendar?): Long? {
+        if (date == null) {
+            return null
+        }
+        val gson = GsonBuilder()
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                .create()
+        val type = object : TypeToken<Calendar>() {
+
+        }.type
+        return gson.fromJson(date, type)
+
+    }*/
 
 }
