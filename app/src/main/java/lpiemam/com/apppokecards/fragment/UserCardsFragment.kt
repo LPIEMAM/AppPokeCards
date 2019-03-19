@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.fragment_user_cards.*
 import lpiemam.com.apppokecards.R
@@ -36,6 +37,7 @@ class UserCardsFragment : BaseFragment() {
         setUpBackButton(false)
         setDrawerEnabled(true)
 
+        userCardAdapter?.filter?.filter(collectionSearchView.query)
         super.onResume()
     }
 
@@ -57,9 +59,20 @@ class UserCardsFragment : BaseFragment() {
 
         super.onViewCreated(view, savedInstanceState)
 
+
         pokemonCardsViewModel = ViewModelProviders.of(activity!!).get(PokemonCardsViewModel::class.java)
 
         setUpRecyclerView()
+
+
+        pokemonCardsViewModel.userCardListLiveData.observe(this, Observer {
+
+            userCardAdapter?.setUpLists(it)
+            pokemonCardsViewModel.userCardList = it
+            userCardAdapter?.notifyDataSetChanged()
+
+        })
+
 
         collectionSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(s: String): Boolean {
@@ -87,13 +100,13 @@ class UserCardsFragment : BaseFragment() {
                 collectionRecyclerView!!,
                 object : RecyclerTouchListener.ClickListener {
                     override fun onClick(view: View, position: Int) {
-                        val userCard = userCardAdapter?.userCardList!![position]
+                        val userCard = userCardAdapter?.userCardsListFiltered!![position]
 
                         mainActivityListener?.replaceWithUserDetailFragment(userCard)
                     }
 
                     override fun onLongClick(view: View?, position: Int) {
-                        val userCard = userCardAdapter?.userCardList!![position]
+                        val userCard = userCardAdapter?.userCardsListFiltered!![position]
 
                         mainActivityListener?.replaceWithUserDetailFragment(userCard)
                     }

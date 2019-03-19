@@ -3,14 +3,22 @@ package lpiemam.com.apppokecards.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Filter
-import lpiemam.com.apppokecards.R
-import lpiemam.com.apppokecards.viewholder.UserCardViewHolder
 import android.widget.Filterable
+import lpiemam.com.apppokecards.R
 import lpiemam.com.apppokecards.model.UserCard
+import lpiemam.com.apppokecards.viewholder.UserCardViewHolder
 
-class UserCardsAdapter(val userCardList: ArrayList<UserCard>) : androidx.recyclerview.widget.RecyclerView.Adapter<UserCardViewHolder>(), Filterable {
+class UserCardsAdapter(val userCardList: ArrayList<UserCard>) :
+    androidx.recyclerview.widget.RecyclerView.Adapter<UserCardViewHolder>(), Filterable {
 
-    private var userCardsListFiltered: ArrayList<UserCard>? = ArrayList(userCardList)
+    var userCardsListFiltered: ArrayList<UserCard> = ArrayList(userCardList)
+
+    fun setUpLists(userCardList: ArrayList<UserCard>) {
+        this.userCardList.clear()
+        this.userCardList.addAll(userCardList)
+        this.userCardsListFiltered.clear()
+        this.userCardsListFiltered.addAll(this.userCardList)
+    }
 
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): UserCardViewHolder {
@@ -19,11 +27,11 @@ class UserCardsAdapter(val userCardList: ArrayList<UserCard>) : androidx.recycle
     }
 
     override fun getItemCount(): Int {
-        return userCardsListFiltered!!.size
+        return userCardsListFiltered.size
     }
 
     override fun onBindViewHolder(userCardViewHolder: UserCardViewHolder, i: Int) {
-        val card = userCardsListFiltered!![i]
+        val card = userCardsListFiltered[i]
         userCardViewHolder.bind(card)
     }
 
@@ -32,8 +40,8 @@ class UserCardsAdapter(val userCardList: ArrayList<UserCard>) : androidx.recycle
             override fun performFiltering(charSequence: CharSequence): Filter.FilterResults {
                 val charString = charSequence.toString()
                 if (charString.isEmpty()) {
-                    userCardsListFiltered?.clear()
-                    userCardsListFiltered?.addAll(userCardList)
+                    userCardsListFiltered.clear()
+                    userCardsListFiltered.addAll(userCardList)
                 } else {
                     val filteredList = java.util.ArrayList<UserCard>()
                     for (userCard in userCardList) {

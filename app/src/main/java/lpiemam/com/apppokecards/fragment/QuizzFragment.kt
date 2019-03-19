@@ -15,7 +15,6 @@ import kotlinx.android.synthetic.main.fragment_quizz.*
 import lpiemam.com.apppokecards.R
 import lpiemam.com.apppokecards.model.PokemonQuestions
 import lpiemam.com.apppokecards.model.Question
-import lpiemam.com.apppokecards.model.User
 import lpiemam.com.apppokecards.model.UserManager
 import lpiemam.com.apppokecards.viewmodel.QuizzViewModel
 import java.util.*
@@ -25,7 +24,7 @@ import kotlin.collections.ArrayList
 /**
  * A simple [Fragment] subclass.
  */
-class QuizzFragment : BaseFragment(){
+class QuizzFragment : BaseFragment() {
 
     var user = UserManager.user
 
@@ -39,16 +38,16 @@ class QuizzFragment : BaseFragment(){
     private var nbQuestion = 0
     private var nbCorrectAnswer = 0
 
-    var hasAnswer : Boolean = false
-    var hasAnswerCorrectly : Boolean = false
+    var hasAnswer: Boolean = false
+    var hasAnswerCorrectly: Boolean = false
 
-    var userWonQuiz : Boolean = false
+    var userWonQuiz: Boolean = false
     lateinit var countDownTimer: CountDownTimer
     private var counter = 5
 
-    private var remainingTime : Long = 0
+    private var remainingTime: Long = 0
 
-    private lateinit var chrono : TextView
+    private lateinit var chrono: TextView
 
     companion object {
 
@@ -59,7 +58,7 @@ class QuizzFragment : BaseFragment(){
 
     override fun onResume() {
 
-        if(remainingTime != 0L) {
+        if (remainingTime != 0L) {
             chrono.text = "0"
             setUpCountDownTimer(0)
         }
@@ -113,13 +112,13 @@ class QuizzFragment : BaseFragment(){
         activity_game_answer1_btn?.setOnClickListener {
             onClick(it)
         }
-        activity_game_answer2_btn?.setOnClickListener{
+        activity_game_answer2_btn?.setOnClickListener {
             onClick(it)
         }
-        activity_game_answer3_btn?.setOnClickListener{
+        activity_game_answer3_btn?.setOnClickListener {
             onClick(it)
         }
-        activity_game_answer4_btn?.setOnClickListener{
+        activity_game_answer4_btn?.setOnClickListener {
             onClick(it)
         }
 
@@ -136,7 +135,7 @@ class QuizzFragment : BaseFragment(){
         activity_game_answer2_btn?.isEnabled = false
         activity_game_answer3_btn?.isEnabled = false
         activity_game_answer4_btn?.isEnabled = false
-        if(counter > -1) {
+        if (counter > -1) {
 
             countDownTimer.cancel()
 
@@ -209,16 +208,15 @@ class QuizzFragment : BaseFragment(){
     }
 
 
-
-    private fun setUpCountDownTimer(remainingTime : Long) {
-        var countDownTimerRemaining : Long = if(remainingTime == 0L) {
+    private fun setUpCountDownTimer(remainingTime: Long) {
+        var countDownTimerRemaining: Long = if (remainingTime == 0L) {
             6L
         } else {
             remainingTime * 1000
         }
         countDownTimer = object : CountDownTimer(countDownTimerRemaining, 1000) {
             override fun onTick(millisUntilFinished: Long) {
-                this@QuizzFragment.remainingTime = millisUntilFinished/1000
+                this@QuizzFragment.remainingTime = millisUntilFinished / 1000
                 chrono.text = counter.toString()
                 counter--
             }

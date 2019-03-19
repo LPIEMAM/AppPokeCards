@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.fragment.app.Fragment
 import lpiemam.com.apppokecards.MainActivityListener
 
-abstract class BaseFragment :Fragment() {
+abstract class BaseFragment : Fragment() {
     var mainActivityListener: MainActivityListener? = null
 
     override fun onAttach(context: Context) {
@@ -22,7 +22,7 @@ abstract class BaseFragment :Fragment() {
     }
 
 
-    fun setFragmentTitle(value : String) {
+    fun setFragmentTitle(value: String) {
         mainActivityListener?.setFragmentTitle(value)
     }
 

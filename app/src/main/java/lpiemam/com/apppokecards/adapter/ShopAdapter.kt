@@ -9,7 +9,8 @@ import lpiemam.com.apppokecards.viewholder.CardsPackViewHolder
 /**
  * Created by lpiem on 02/02/2019.
  */
-class ShopAdapter (val cardsPackList: ArrayList<CardsPack>) : androidx.recyclerview.widget.RecyclerView.Adapter<CardsPackViewHolder>() {
+class ShopAdapter(val cardsPackList: ArrayList<CardsPack>) :
+    androidx.recyclerview.widget.RecyclerView.Adapter<CardsPackViewHolder>() {
 
     private var allCardPackList: ArrayList<CardsPack>? = ArrayList(cardsPackList)
 

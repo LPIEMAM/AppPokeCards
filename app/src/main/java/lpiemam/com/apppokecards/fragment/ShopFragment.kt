@@ -2,23 +2,21 @@ package lpiemam.com.apppokecards.fragment
 
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_shop.*
-import lpiemam.com.apppokecards.*
-
+import lpiemam.com.apppokecards.R
+import lpiemam.com.apppokecards.RecyclerTouchListener
 import lpiemam.com.apppokecards.adapter.ShopAdapter
 import lpiemam.com.apppokecards.model.CardsPack
-import lpiemam.com.apppokecards.model.User
 import lpiemam.com.apppokecards.model.UserManager
 import lpiemam.com.apppokecards.viewmodel.PokemonCardsViewModel
-
 
 
 /**
@@ -28,7 +26,6 @@ class ShopFragment : BaseFragment() {
 
     lateinit var pokemonCardsViewModel: PokemonCardsViewModel
 
-    var user = UserManager.user
 
     var shopAdapter: ShopAdapter? = null
 
@@ -81,7 +78,7 @@ class ShopFragment : BaseFragment() {
             shopAdapter?.notifyDataSetChanged()
         }
 
-        userCoinsTextView.text = user?.coins.toString()
+        userCoinsTextView.text = UserManager.user?.coins.toString()
 
         setUpRecyclerView()
 
@@ -95,7 +92,7 @@ class ShopFragment : BaseFragment() {
                 }
             }
             if (onePackSelected) {
-                if (user!!.canBuyAPack(selectedPack)) {
+                if (UserManager.user!!.canBuyAPack(selectedPack)) {
                     try {
 
                         pokemonCardsViewModel.pokemonCardsForPackLiveData = MutableLiveData()
@@ -108,7 +105,7 @@ class ShopFragment : BaseFragment() {
 
                             pokemonCardsViewModel.buyAPack(selectedPack)
                             selectedPack.clearCardList()
-                            userCoinsTextView.text = user?.coins.toString()
+                            userCoinsTextView.text = UserManager.user?.coins.toString()
                         })
 
                         pokemonCardsViewModel.generateRandomCards(selectedPack)
@@ -128,8 +125,6 @@ class ShopFragment : BaseFragment() {
 
         super.onViewCreated(view, savedInstanceState)
     }
-
-
 
 
     private fun setUpRecyclerView() {

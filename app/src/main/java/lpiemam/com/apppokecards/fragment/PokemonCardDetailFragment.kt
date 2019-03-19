@@ -1,6 +1,7 @@
 package lpiemam.com.apppokecards.fragment
 
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,9 +11,9 @@ import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_pokemon_card_detail.*
+import lpiemam.com.apppokecards.MainActivityListener
 import lpiemam.com.apppokecards.R
 import lpiemam.com.apppokecards.model.PokemonCard
-import lpiemam.com.apppokecards.model.User
 import lpiemam.com.apppokecards.model.UserManager
 import lpiemam.com.apppokecards.viewmodel.PokemonCardsViewModel
 
@@ -50,6 +51,17 @@ class PokemonCardDetailFragment : BaseFragment() {
         return inflater.inflate(R.layout.fragment_pokemon_card_detail, container, false)
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mainActivityListener = context as? MainActivityListener
+        if (mainActivityListener == null) {
+            throw ClassCastException("$context must implement MainActivityListener")
+        }
+        arguments?.let {
+            pokemonCard = it.getParcelable("pokeCard")!!
+        }
+    }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
@@ -65,11 +77,12 @@ class PokemonCardDetailFragment : BaseFragment() {
         userDust.text = user?.dusts.toString()
         allCardsDetailDust.text = pokemonCard.getCostToCraft().toString()
 
-        Picasso.get().load(pokemonCard.imageUrlHiRes).placeholder(R.drawable.pokemon_card_back).into(allCardsDetailImageViewCard)
+        Picasso.get().load(pokemonCard.imageUrlHiRes).placeholder(R.drawable.pokemon_card_back)
+            .into(allCardsDetailImageViewCard)
 
 
         allCardsDetailButtonDust.setOnClickListener {
-            if(user?.dusts!! >= pokemonCard.getCostToCraft()) {
+            if (user?.dusts!! >= pokemonCard.getCostToCraft()) {
                 user!!.dusts -= pokemonCard.getCostToCraft()
                 pokemonCardsViewModel.addUserCard(pokemonCard)
                 mainActivityListener?.replaceWithFullScreenCard(pokemonCard, false)

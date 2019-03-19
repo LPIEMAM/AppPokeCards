@@ -1,21 +1,19 @@
 package lpiemam.com.apppokecards.fragment
 
 
-import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.appcompat.widget.SearchView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.fragment_pokemon_cards.*
-import lpiemam.com.apppokecards.*
+import lpiemam.com.apppokecards.R
+import lpiemam.com.apppokecards.RecyclerTouchListener
 import lpiemam.com.apppokecards.adapter.PokemonCardsAdapter
 import lpiemam.com.apppokecards.viewmodel.PokemonCardsViewModel
-
 
 
 /**

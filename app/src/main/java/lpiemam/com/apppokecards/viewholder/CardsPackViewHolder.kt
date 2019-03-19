@@ -8,19 +8,16 @@ import lpiemam.com.apppokecards.model.CardsPack
 /**
  * Created by lpiem on 03/02/2019.
  */
-class CardsPackViewHolder (itemView: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {
-
-//    private var ivCard  : ImageView = itemView.findViewById(R.id.cardsPackImageViewCard)
+class CardsPackViewHolder(itemView: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {
 
     fun bind(cardPack: CardsPack) {
         itemView.packTypeTextView.text = cardPack.name
         itemView.packPriceTextView.text = cardPack.costPack.toString()
         itemView.packCardsNumberTextView.text = cardPack.nbCards.toString()
-        if(cardPack.isSelected) {
+        if (cardPack.isSelected) {
             itemView.setBackgroundResource(R.drawable.pack_layout_border)
         } else {
             itemView.background = null
         }
-        //Picasso.get().load(cardPack).placeholder(R.drawable.pokemon_card_back).into(ivCard)
     }
 }

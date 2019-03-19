@@ -12,7 +12,7 @@ import lpiemam.com.apppokecards.model.PokemonCard
 
 class PackOpeningDialogFragment : DialogFragment() {
 
-    lateinit var listCardsPack : ArrayList<PokemonCard>
+    lateinit var listCardsPack: ArrayList<PokemonCard>
     private val carouselViews = ArrayList<View>()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -24,20 +24,21 @@ class PackOpeningDialogFragment : DialogFragment() {
         return builder.create()
     }
 
-    private fun initCarousel(view : View) {
+    private fun initCarousel(view: View) {
         for (stubItem in carouselViews) {
             view.packOpeningCarousel.addView(stubItem)
         }
-
         view.packOpeningCarousel.notifyDataSetChanged()
     }
 
     private fun initStubItems() {
 
-        var imagePanel : ImagePanel
+        var imagePanel: ImagePanel
         for (card in listCardsPack) {
             imagePanel = ImagePanel(context!!)
-            imagePanel.setImageUrl(card.imageUrlHiRes)
+            if (card.imageUrlHiRes != null) {
+                imagePanel.setImageUrl(card.imageUrlHiRes!!)
+            }
             carouselViews.add(imagePanel)
         }
     }

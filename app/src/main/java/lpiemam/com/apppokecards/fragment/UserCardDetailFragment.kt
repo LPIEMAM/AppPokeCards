@@ -1,7 +1,6 @@
 package lpiemam.com.apppokecards.fragment
 
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,14 +9,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_user_card_detail.*
-import lpiemam.com.apppokecards.MainActivity
 import lpiemam.com.apppokecards.R
-import lpiemam.com.apppokecards.MainActivityListener
-import lpiemam.com.apppokecards.model.PokemonCard
-import lpiemam.com.apppokecards.model.User
-import lpiemam.com.apppokecards.viewmodel.PokemonCardsViewModel
 import lpiemam.com.apppokecards.model.UserCard
 import lpiemam.com.apppokecards.model.UserManager
+import lpiemam.com.apppokecards.viewmodel.PokemonCardsViewModel
 
 
 /**
@@ -72,8 +67,9 @@ class UserCardDetailFragment : BaseFragment() {
 
         userDust.text = user?.dusts.toString()
         userCardDetailDust.text = userCard.pokemonCard.getCostForDecraft().toString()
-        Picasso.get().load(userCard.pokemonCard.imageUrlHiRes).placeholder(R.drawable.pokemon_card_back).into(userCardDetailImageViewCard)
-        userCardDetailImageViewCard.setOnClickListener{
+        Picasso.get().load(userCard.pokemonCard.imageUrlHiRes).placeholder(R.drawable.pokemon_card_back)
+            .into(userCardDetailImageViewCard)
+        userCardDetailImageViewCard.setOnClickListener {
             mainActivityListener?.replaceWithFullScreenCard(userCard.pokemonCard, true)
         }
 

@@ -1,7 +1,8 @@
-package lpiemam.com.apppokecards.model
+package lpiemam.com.apppokecards.room
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import lpiemam.com.apppokecards.model.User
 
 @Dao
 interface UserDAO {
@@ -13,6 +14,6 @@ interface UserDAO {
     fun updateUser(user: User)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertUser(user:User)
+    fun insertUser(user: User)
 
 }

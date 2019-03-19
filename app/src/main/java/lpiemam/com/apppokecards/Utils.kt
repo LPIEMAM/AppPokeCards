@@ -16,8 +16,5 @@ object Utils {
         cardsPackList.add(moyenPack)
         cardsPackList.add(grandPack)
     }
-
-
-
 }
 

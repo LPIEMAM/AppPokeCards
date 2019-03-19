@@ -7,7 +7,7 @@ interface MainActivityListener {
 
     fun setDrawerEnabled(enabled: Boolean)
     fun setUpBackButton(enabled: Boolean)
-    fun replaceWithFullScreenCard(pokemonCard : PokemonCard, boolean: Boolean)
+    fun replaceWithFullScreenCard(pokemonCard: PokemonCard, boolean: Boolean)
     fun replaceWithCollectionFragment()
     fun replaceWithUserDetailFragment(userCard: UserCard)
     fun replaceWithAllCardsFragment()
@@ -16,7 +16,7 @@ interface MainActivityListener {
     fun replaceWithQuizzFragment()
     fun replaceWithQuizzStartFragment()
     fun replaceWithQuizzEndedFragment(userWonQuiz: Boolean)
-    fun replaceWithFragment(fragment: androidx.fragment.app.Fragment, tag : String?)
+    fun replaceWithFragment(fragment: androidx.fragment.app.Fragment, tag: String?)
     fun popBackStack()
     fun notifyCollectionDataSetChanged()
     fun goBackFromFullScreenToAllCardsFragment()

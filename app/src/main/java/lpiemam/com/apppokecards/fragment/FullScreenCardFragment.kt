@@ -11,11 +11,11 @@ import lpiemam.com.apppokecards.model.PokemonCard
 
 
 class FullScreenCardFragment : BaseFragment() {
-    private var pokemonCard : PokemonCard? = null
-    private var wasPreviousScreenUserDetail : Boolean? = null
+    private var pokemonCard: PokemonCard? = null
+    private var wasPreviousScreenUserDetail: Boolean? = null
 
     companion object {
-        fun newInstance(pokemonCard: PokemonCard, boolean: Boolean) : FullScreenCardFragment {
+        fun newInstance(pokemonCard: PokemonCard, boolean: Boolean): FullScreenCardFragment {
             val fullScreenCardFragment = FullScreenCardFragment()
             val args = Bundle()
             args.putParcelable("pokemonCard", pokemonCard)
@@ -46,11 +46,12 @@ class FullScreenCardFragment : BaseFragment() {
 
         showActionBar(false)
 
-        Picasso.get().load(pokemonCard?.imageUrlHiRes).placeholder(R.drawable.pokemon_card_back).into(view.cardImageView)
+        Picasso.get().load(pokemonCard?.imageUrlHiRes).placeholder(R.drawable.pokemon_card_back)
+            .into(view.cardImageView)
 
-        view.cardImageView.setOnClickListener{
+        view.cardImageView.setOnClickListener {
             mainActivityListener?.showActionBar(true)
-            if(wasPreviousScreenUserDetail!!) {
+            if (wasPreviousScreenUserDetail!!) {
                 mainActivityListener?.popBackStack()
             } else {
                 mainActivityListener?.goBackFromFullScreenToAllCardsFragment()

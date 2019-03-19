@@ -3,7 +3,11 @@ package lpiemam.com.apppokecards.model
 /**
  * Created by lpiem on 02/02/2019.
  */
-class CardsPack(val name : String, var listPokemonCards : ArrayList<PokemonCard> = ArrayList(), var isSelected : Boolean = false) {
+class CardsPack(
+    val name: String,
+    var listPokemonCards: ArrayList<PokemonCard> = ArrayList(),
+    var isSelected: Boolean = false
+) {
     val nbCards = when (name) {
         "Petit" -> 3
         "Moyen" -> 6
