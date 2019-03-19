@@ -6,8 +6,8 @@ import retrofit2.http.Query
 
 interface PokemonCardsWebService {
 
-    @GET("cards?page=1")
-    fun getPokemonCardsForName(@Query("name") name: String) : Call<PokemonCardsResponse>
+    @GET("cards?pageSize=100")
+    fun getPokemonCardsForName(@Query("page") page: Int, @Query("name") name: String) : Call<PokemonCardsResponse>
 
 
     @GET("cards?pageSize=500")

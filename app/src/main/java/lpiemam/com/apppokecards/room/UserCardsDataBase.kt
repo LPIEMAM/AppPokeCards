@@ -9,7 +9,7 @@ import lpiemam.com.apppokecards.retrofit.Converter
 
 
 @Database(
-    version = 13,
+    version = 15,
     entities = [
         UserCard::class,
         User::class

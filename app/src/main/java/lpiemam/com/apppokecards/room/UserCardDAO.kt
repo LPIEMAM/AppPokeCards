@@ -1,11 +1,13 @@
 package lpiemam.com.apppokecards.room
 
 import androidx.lifecycle.LiveData
+import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import lpiemam.com.apppokecards.model.UserCard
 
+@Dao
 interface UserCardDAO {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)

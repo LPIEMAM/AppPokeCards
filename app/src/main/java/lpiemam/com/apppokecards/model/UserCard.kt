@@ -23,12 +23,6 @@ class UserCard() : Parcelable {
         this.pokemonCard = pokemonCard
     }
 
-    @Ignore
-    constructor(userCardId: Int, pokemonCard: PokemonCard, number: Int) : this(pokemonCard) {
-        this.userCardID = userCardId
-        this.pokemonCard = pokemonCard
-        this.numberOfCard = number
-    }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeInt(userCardID)

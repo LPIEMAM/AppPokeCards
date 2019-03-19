@@ -91,11 +91,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun getVisibleFragment(): Fragment? {
         val fragmentManager = this@MainActivity.supportFragmentManager
         val fragments = fragmentManager.fragments
-        if (fragments != null) {
-            for (fragment in fragments) {
-                if (fragment != null && fragment.isVisible)
-                    return fragment
-            }
+        for (fragment in fragments) {
+            if (fragment != null && fragment.isVisible)
+                return fragment
         }
         return null
     }

@@ -15,6 +15,7 @@ class PokemonCardsViewModel : ViewModel() {
 
     var pokemonCardsForNameLiveData = MutableLiveData<ArrayList<PokemonCard>>()
     var pokemonCardsForPackLiveData = MutableLiveData<ArrayList<PokemonCard>>()
+    var currentPage = 1
 
     var userCardListLiveData = MutableLiveData<ArrayList<UserCard>>()
     var userLiveData = MutableLiveData<User>()
@@ -26,9 +27,8 @@ class PokemonCardsViewModel : ViewModel() {
         val liveDataUser = MutableLiveData<User>()
         liveDataUser.observeForever(object : Observer<User> {
             override fun onChanged(it: User?) {
-                userLiveData.postValue(it)
-                if (UserManager.user == null) {
-                    UserManager.user =
+                if (it == null) {
+                    val user =
                         User(
                             "Annabelle",
                             "Braye",
@@ -39,10 +39,12 @@ class PokemonCardsViewModel : ViewModel() {
                             100000
                         )
 
-                    DataBaseFactory.userCardsDataBase.userDAO().insertUser(UserManager.user!!)
+                    DataBaseFactory.userCardsDataBase.userDAO().insertUser(user)
+                    userLiveData.postValue(user)
 
                 } else {
-                    Log.d("Test", UserManager.user!!.nickName)
+                    userLiveData.postValue(it)
+                    Log.d("Test", it.nickName)
                 }
                 liveDataUser.removeObserver(this)
             }
@@ -60,8 +62,8 @@ class PokemonCardsViewModel : ViewModel() {
     }
 
     fun fetchPokemonCardsForName(name: String) {
-
-        PokemonCardsRepository.fetchPokemonCardsForName(name).observeForever {
+        currentPage = 1
+        PokemonCardsRepository.fetchPokemonCardsForName(1, name).observeForever {
 
 
             pokemonCardsForNameLiveData.postValue(it)
@@ -86,6 +88,16 @@ class PokemonCardsViewModel : ViewModel() {
         }
 
         return pokemonCardsForPageLiveData
+    }
+
+    fun fetchPokemonCardsForNextPage(name: String) {
+
+        currentPage++
+        PokemonCardsRepository.fetchPokemonCardsForName(currentPage, name).observeForever {
+            pokemonCardsForNameLiveData.value?.addAll(it)
+        }
+
+
     }
 
 

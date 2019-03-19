@@ -37,7 +37,7 @@ class PackOpeningDialogFragment : DialogFragment() {
         for (card in listCardsPack) {
             imagePanel = ImagePanel(context!!)
             if (card.imageUrlHiRes != null) {
-                imagePanel.setImageUrl(card.imageUrlHiRes!!)
+                imagePanel.setImageUrl(card.imageUrlHiRes)
             }
             carouselViews.add(imagePanel)
         }
