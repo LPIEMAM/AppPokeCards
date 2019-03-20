@@ -7,6 +7,7 @@ import android.widget.Filterable
 import lpiemam.com.apppokecards.R
 import lpiemam.com.apppokecards.model.UserCard
 import lpiemam.com.apppokecards.viewholder.UserCardViewHolder
+import java.util.*
 
 class UserCardsAdapter(val userCardList: ArrayList<UserCard>) :
     androidx.recyclerview.widget.RecyclerView.Adapter<UserCardViewHolder>(), Filterable {
@@ -63,6 +64,7 @@ class UserCardsAdapter(val userCardList: ArrayList<UserCard>) :
 
             override fun publishResults(charSequence: CharSequence, filterResults: Filter.FilterResults) {
                 userCardsListFiltered = filterResults.values as java.util.ArrayList<UserCard>
+                Collections.sort(userCardsListFiltered)
 
                 // refresh the mainActivityListener with filtered data
                 notifyDataSetChanged()

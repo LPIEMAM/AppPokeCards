@@ -14,6 +14,7 @@ import lpiemam.com.apppokecards.R
 import lpiemam.com.apppokecards.RecyclerTouchListener
 import lpiemam.com.apppokecards.adapter.UserCardsAdapter
 import lpiemam.com.apppokecards.viewmodel.PokemonCardsViewModel
+import java.util.*
 
 
 /**
@@ -49,6 +50,16 @@ class UserCardsFragment : BaseFragment() {
         setHasOptionsMenu(true)
 
         setFragmentTitle("My Pokemons")
+        pokemonCardsViewModel = ViewModelProviders.of(activity!!).get(PokemonCardsViewModel::class.java)
+
+        pokemonCardsViewModel.userCardListLiveData.observe(this, Observer {
+
+            it.sort()
+            userCardAdapter?.setUpLists(it)
+            pokemonCardsViewModel.userCardList = it
+            userCardAdapter?.notifyDataSetChanged()
+
+        })
 
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_user_cards, container, false)
@@ -60,19 +71,8 @@ class UserCardsFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-        pokemonCardsViewModel = ViewModelProviders.of(activity!!).get(PokemonCardsViewModel::class.java)
 
         setUpRecyclerView()
-
-
-        pokemonCardsViewModel.userCardListLiveData.observe(this, Observer {
-
-            userCardAdapter?.setUpLists(it)
-            pokemonCardsViewModel.userCardList = it
-            userCardAdapter?.notifyDataSetChanged()
-
-        })
-
 
         collectionSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(s: String): Boolean {

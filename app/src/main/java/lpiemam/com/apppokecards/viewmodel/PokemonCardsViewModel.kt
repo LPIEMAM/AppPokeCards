@@ -1,6 +1,5 @@
 package lpiemam.com.apppokecards.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
@@ -8,7 +7,7 @@ import lpiemam.com.apppokecards.Utils
 import lpiemam.com.apppokecards.model.*
 import lpiemam.com.apppokecards.retrofit.PokemonCardsRepository
 import lpiemam.com.apppokecards.room.DataBaseFactory
-import java.util.*
+import lpiemam.com.apppokecards.room.UserCardsRepository
 import kotlin.collections.ArrayList
 
 class PokemonCardsViewModel : ViewModel() {
@@ -24,57 +23,82 @@ class PokemonCardsViewModel : ViewModel() {
 
 
     fun initializeData() {
-        val liveDataUser = MutableLiveData<User>()
-        liveDataUser.observeForever(object : Observer<User> {
-            override fun onChanged(it: User?) {
-                if (it == null) {
-                    val user =
-                        User(
-                            "Annabelle",
-                            "Braye",
-                            "Siam",
-                            "annabelle.braye@gmail.com",
-                            Calendar.getInstance(),
-                            100000,
-                            100000
-                        )
+        fetchUserFromDB()
+        fetchUserCardsFromDB()
+//        val liveDataUser = MutableLiveData<User>()
+//        liveDataUser.observeForever(object : Observer<User> {
+//            override fun onChanged(it: User?) {
+//                if (it == null) {
+//                    val user =
+//                        User(
+//                            "Annabelle",
+//                            "Braye",
+//                            "Siam",
+//                            "annabelle.braye@gmail.com",
+//                            Calendar.getInstance(),
+//                            100000,
+//                            100000
+//                        )
+//
+//                    DataBaseFactory.userCardsDataBase.userDAO().saveUser(user)
+//                    userLiveData.postValue(user)
+//
+//                } else {
+//                    userLiveData.postValue(it)
+//                    Log.d("Test", it.nickName)
+//                }
+//                liveDataUser.removeObserver(this)
+//            }
+//        })
+//        DataBaseFactory.userCardsDataBase.userDAO().fetchUser().observeForever {
+//            liveDataUser.postValue(it)
+//        }
 
-                    DataBaseFactory.userCardsDataBase.userDAO().insertUser(user)
-                    userLiveData.postValue(user)
+//        DataBaseFactory.userCardsDataBase.userCardDAO().fetchAll().observeForever {
+//            val tempUserCardList = ArrayList<UserCard>()
+//            tempUserCardList.addAll(it)
+//            userCardListLiveData.postValue(tempUserCardList)
+//        }
 
-                } else {
-                    userLiveData.postValue(it)
-                    Log.d("Test", it.nickName)
-                }
-                liveDataUser.removeObserver(this)
-            }
-        })
-        DataBaseFactory.userCardsDataBase.userDAO().getUser().observeForever {
-            liveDataUser.postValue(it)
+
+    }
+
+    fun fetchUserCardsFromDB() {
+        UserCardsRepository.fetchUserCards().observeForever {
+            userCardListLiveData.postValue(it)
         }
-        DataBaseFactory.userCardsDataBase.userCardDAO().fetchAll().observeForever {
-            val tempUserCardList = ArrayList<UserCard>()
-            tempUserCardList.addAll(it)
-            userCardListLiveData.postValue(tempUserCardList)
+    }
+
+    fun saveUserCardsToDB() {
+        UserCardsRepository.saveUserCards(userCardList)
+    }
+
+    fun clearUserCards() {
+        UserCardsRepository.clearUserCards()
+    }
+
+    fun fetchUserFromDB() {
+        UserCardsRepository.fetchUser().observeForever {
+            userLiveData.postValue(it)
         }
+    }
 
+    fun saveUserToDB(user: User) {
+        UserCardsRepository.saveUser(user)
+    }
 
+    fun updateUserInDB(user: User) {
+        UserCardsRepository.updateUser(user)
     }
 
     fun fetchPokemonCardsForName(name: String) {
         currentPage = 1
         PokemonCardsRepository.fetchPokemonCardsForName(1, name).observeForever {
 
-
             pokemonCardsForNameLiveData.postValue(it)
-
-            /*if (it.isEmpty()) {
-                pokemonCardsForNameLiveData.postValue(it)
-            } else {
-                pokemonCardsForNameLiveData.postValue(it)
-            }*/
         }
     }
+
 
     private fun fetchPokemonCardsForPage(page: Int): MutableLiveData<ArrayList<PokemonCard>> {
 
@@ -138,7 +162,7 @@ class PokemonCardsViewModel : ViewModel() {
                 userCardList.add(UserCard(card))
             }
         }
-        userCardList = ArrayList(userCardList.sortedWith(compareBy { it.pokemonCard.nationalPokedexNumber }))
+        userCardList.sort()
         UserManager.user!!.coins -= pack.costPack
     }
 
@@ -150,7 +174,7 @@ class PokemonCardsViewModel : ViewModel() {
         } else {
             userCardList.add(UserCard(pokemonCard))
         }
-        userCardList = ArrayList(userCardList.sortedWith(compareBy { it.pokemonCard.nationalPokedexNumber }))
+        userCardList.sort()
     }
 
     fun removeUserCard(userCard: UserCard) {
@@ -159,7 +183,7 @@ class PokemonCardsViewModel : ViewModel() {
         } else {
             userCardList.remove(userCard)
         }
-        userCardList = ArrayList(userCardList.sortedWith(compareBy { it.pokemonCard.nationalPokedexNumber }))
+        userCardList.sort()
     }
 
     override fun onCleared() {
@@ -168,8 +192,8 @@ class PokemonCardsViewModel : ViewModel() {
     }
 
     fun saveData() {
-        DataBaseFactory.userCardsDataBase.userDAO().updateUser(UserManager.user!!)
-        DataBaseFactory.userCardsDataBase.userCardDAO().clearTable()
-        DataBaseFactory.userCardsDataBase.userCardDAO().insertAll(userCardList)
+        updateUserInDB(UserManager.user!!)
+        clearUserCards()
+        saveUserCardsToDB()
     }
 }

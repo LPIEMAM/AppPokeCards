@@ -8,12 +8,12 @@ import lpiemam.com.apppokecards.model.User
 interface UserDAO {
 
     @Query("SELECT * FROM User")
-    fun getUser(): LiveData<User>
+    fun fetchUser(): LiveData<User>
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     fun updateUser(user: User)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertUser(user: User)
+    fun saveUser(user: User)
 
 }
