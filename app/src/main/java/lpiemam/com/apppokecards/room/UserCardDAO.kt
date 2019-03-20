@@ -1,10 +1,7 @@
 package lpiemam.com.apppokecards.room
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import lpiemam.com.apppokecards.model.UserCard
 
 @Dao
@@ -14,7 +11,10 @@ interface UserCardDAO {
     fun deleteCard(id: Int)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertCard(userCard: UserCard)
+    fun insertCard(userCard: UserCard) : Long
+
+    @Update
+    fun updateCard(userCard: UserCard)
 
     @Query("SELECT * FROM UserCard")
     fun fetchAll(): LiveData<List<UserCard>>

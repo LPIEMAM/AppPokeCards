@@ -36,6 +36,10 @@ class PokemonCardsViewModel : ViewModel() {
         UserCardsRepository.insertCard(userCard)
     }
 
+    fun updateCardInDB(userCard: UserCard) {
+        UserCardsRepository.updateCard(userCard)
+    }
+
     fun deleteCardFromDB(id: Int) {
         UserCardsRepository.deleteCard(id)
     }
@@ -119,11 +123,16 @@ class PokemonCardsViewModel : ViewModel() {
             if (card.isCardInArray(userCardList)) {
                 userCard = card.getInstanceOfUserCard(userCardList)
                 userCard.numberOfCard++
+                if(userCard.userCardID != 0) {
+                    updateCardInDB(userCard)
+                } else {
+                    insertCardToDB(userCard)
+                }
             } else {
                 userCard = UserCard(card)
                 userCardList.add(userCard)
+                insertCardToDB(userCard)
             }
-            insertCardToDB(userCard)
         }
         userCardList.sort()
         UserManager.user!!.coins -= pack.costPack
@@ -136,11 +145,16 @@ class PokemonCardsViewModel : ViewModel() {
         if (pokemonCard.isCardInArray(userCardList)) {
             userCard = pokemonCard.getInstanceOfUserCard(userCardList)
             userCard.numberOfCard++
+//            if(userCard.userCardID != 0) {
+//                updateCardInDB(userCard)
+//            } else {
+                insertCardToDB(userCard)
+//            }
         } else {
             userCard = UserCard(pokemonCard)
             userCardList.add(userCard)
+            insertCardToDB(userCard)
         }
-        insertCardToDB(userCard)
         userCardList.sort()
         UserManager.user!!.dusts -= pokemonCard.getCostToCraft()
         updateUserInDB(UserManager.user!!)
@@ -149,6 +163,9 @@ class PokemonCardsViewModel : ViewModel() {
     fun removeUserCard(userCard: UserCard) {
         if (userCard.numberOfCard > 1) {
             userCard.numberOfCard--
+            if(userCard.userCardID != 0) {
+                updateCardInDB(userCard)
+            }
         } else {
             userCardList.remove(userCard)
             if(userCard.userCardID != 0) {

@@ -41,6 +41,11 @@ object UserCardsRepository {
     }
 
     fun insertCard(userCard: UserCard) {
-        DataBaseFactory.userCardsDataBase.userCardDAO().insertCard(userCard)
+        val newID = DataBaseFactory.userCardsDataBase.userCardDAO().insertCard(userCard)
+        userCard.userCardID = newID.toInt()
+    }
+
+    fun updateCard(userCard: UserCard) {
+        DataBaseFactory.userCardsDataBase.userCardDAO().updateCard(userCard)
     }
 }
