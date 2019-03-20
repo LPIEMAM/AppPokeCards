@@ -11,11 +11,11 @@ import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_pokemon_card_detail.*
-import lpiemam.com.apppokecards.MainActivity
-import lpiemam.com.apppokecards.R
+import kotlinx.android.synthetic.main.fragment_user_card_detail.*
 import lpiemam.com.apppokecards.MainActivityListener
+import lpiemam.com.apppokecards.R
 import lpiemam.com.apppokecards.model.PokemonCard
-import lpiemam.com.apppokecards.model.User
+import lpiemam.com.apppokecards.model.UserManager
 import lpiemam.com.apppokecards.viewmodel.PokemonCardsViewModel
 
 
@@ -23,12 +23,12 @@ import lpiemam.com.apppokecards.viewmodel.PokemonCardsViewModel
  * A simple [Fragment] subclass.
  *
  */
-class PokemonCardDetailFragment : Fragment() {
+class PokemonCardDetailFragment : BaseFragment() {
 
     lateinit var pokemonCardsViewModel: PokemonCardsViewModel
 
     lateinit var pokemonCard: PokemonCard
-    var mainActivityListener: MainActivityListener? = null
+    var user = UserManager.user
 
     companion object {
 
@@ -41,74 +41,81 @@ class PokemonCardDetailFragment : Fragment() {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            pokemonCard = it.getParcelable("pokeCard")!!
-        }
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        mainActivityListener = context as? MainActivityListener
-        if (mainActivityListener == null) {
-            throw ClassCastException("$context must implement OnCardSelectedListener")
-        }
-    }
-
-    override fun onDetach() {
-
-        mainActivityListener!!.setUpBackButton(false)
-        mainActivityListener!!.setDrawerEnabled(true)
-        mainActivityListener = null
-        super.onDetach()
-    }
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
 
-        mainActivityListener!!.setFragmentTitle(pokemonCard.name)
+        setFragmentTitle(pokemonCard.name)
+
         return inflater.inflate(R.layout.fragment_pokemon_card_detail, container, false)
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mainActivityListener = context as? MainActivityListener
+        if (mainActivityListener == null) {
+            throw ClassCastException("$context must implement MainActivityListener")
+        }
+        arguments?.let {
+            pokemonCard = it.getParcelable("pokeCard")!!
+        }
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
 
         pokemonCardsViewModel = ViewModelProviders.of(activity!!).get(PokemonCardsViewModel::class.java)
 
 
         super.onViewCreated(view, savedInstanceState)
 
-        (context as MainActivity).supportActionBar!!.show()
+        showActionBar(true)
+        setDrawerEnabled(false)
+        setUpBackButton(true)
 
-        mainActivityListener!!.setDrawerEnabled(false)
-        mainActivityListener!!.setUpBackButton(true)
-
-        userDust.text = User.dusts.toString()
-//        pokemonCard.costDustToCraft = 350
+        allCardsUserDust.text = user?.dusts.toString()
         allCardsDetailDust.text = pokemonCard.getCostToCraft().toString()
-//        allCardsDetailCardVersion.text = pokemonCard.version
-//        allCardsDetailPokedexNumber.text = pokemonCard.pokemon.pokedexNumber.toString()
-//        allCardsDetailPokemonDescription.text = pokemonCard.description
-//        allCardsDetailPokemonName.text = pokemonCard.pokemon.name
-//        allCardsDetailPokemonType.text = pokemonCard.pokemon.type
-        Picasso.get().load(pokemonCard.imageUrlHiRes).placeholder(R.drawable.pokemon_card_back).into(allCardsDetailImageViewCard)
+
+        Picasso.get().load(pokemonCard.imageUrlHiRes).placeholder(R.drawable.pokemon_card_back)
+            .into(allCardsDetailImageViewCard)
 
 
         allCardsDetailButtonDust.setOnClickListener {
-            if(User.dusts >= pokemonCard.getCostToCraft()) {
-                User.dusts -= pokemonCard.getCostToCraft()
+            if (user?.dusts!! >= pokemonCard.getCostToCraft()) {
                 pokemonCardsViewModel.addUserCard(pokemonCard)
-                mainActivityListener!!.replaceWithFullScreenCard(pokemonCard, false)
+                updateUserInfos()
+                mainActivityListener?.replaceWithFullScreenCard(pokemonCard, false)
             } else {
                 val snackbar = Snackbar.make(view, "Vous n'avez pas assez de poussières.", Snackbar.LENGTH_SHORT)
                 snackbar.show()
             }
+        }
+
+        if (pokemonCard.name != null) {
+            allCardsDetailPokemonName.text = pokemonCard.name
+        }
+
+        if (pokemonCard.nationalPokedexNumber != null) {
+            allCardsPokedexNumber.text = pokemonCard.nationalPokedexNumber.toString()
+            withPokedexNumber.visibility = View.VISIBLE
+        } else{
+            withPokedexNumber.visibility = View.GONE
+        }
+
+        if (pokemonCard.rarity != "") {
+            allCardsRarity.text = pokemonCard.rarity
+            withRarity.visibility = View.VISIBLE
+        } else{
+            withRarity.visibility = View.GONE
+        }
+
+        if (pokemonCard.artist != "") {
+            allCardsArtist.text = pokemonCard.artist
+            withArtist.visibility = View.VISIBLE
+        } else {
+            withArtist.visibility = View.GONE
         }
     }
 

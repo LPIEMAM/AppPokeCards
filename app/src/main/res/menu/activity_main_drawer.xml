@@ -5,19 +5,19 @@
 
     <item
             android:id="@+id/menuItemCollection"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Collection"/>
+            android:icon="@drawable/ic_pokeball_black_24px"
+            android:title="My Pokemons"/>
     <item
             android:id="@+id/menuItemShop"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@drawable/ic_shop_black_24px"
             android:title="Shop"/>
     <item
             android:id="@+id/menuItemQuizz"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/ic_quiz_black_24px"
             android:title="Quizz"/>
     <item
             android:id="@+id/menuItemAllCards"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="All Cards"/>
+            android:icon="@drawable/ic_pokedex_black_24px"
+            android:title="Pokedex"/>
 
 </menu>

@@ -1,12 +1,15 @@
 package lpiemam.com.apppokecards
 
 import android.content.Context
-import androidx.recyclerview.widget.RecyclerView
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
 
-class RecyclerTouchListener(context: Context, recyclerView: androidx.recyclerview.widget.RecyclerView, private val clickListener: ClickListener?) :
+class RecyclerTouchListener(
+    context: Context,
+    recyclerView: androidx.recyclerview.widget.RecyclerView,
+    private val clickListener: ClickListener?
+) :
     androidx.recyclerview.widget.RecyclerView.OnItemTouchListener {
 
     private val gestureDetector: GestureDetector

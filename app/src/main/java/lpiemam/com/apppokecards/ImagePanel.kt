@@ -22,11 +22,7 @@ class ImagePanel @JvmOverloads constructor(context: Context, attrs: AttributeSet
         initImagePanel()
     }
 
-    fun setImageResId(resId: Int) {
-        mImageViewHolder!!.setImageResource(resId)
-    }
-
-    fun setImageUrl(url : String) {
+    fun setImageUrl(url: String) {
         Picasso.get().load(url).placeholder(R.drawable.pokemon_card_back).into(mImageViewHolder)
     }
 
@@ -43,4 +39,4 @@ class ImagePanel @JvmOverloads constructor(context: Context, attrs: AttributeSet
         mImageViewHolder!!.layoutParams = lp
         mPanelContainer!!.addView(mImageViewHolder)
     }
-}//Constructors
+}

@@ -1,6 +1,6 @@
 package lpiemam.com.apppokecards.model
 
-import java.util.Collections
+import java.util.*
 
 class PokemonQuestions(var questionList: List<Question>?) {
     var nextQuestionIndex = 0

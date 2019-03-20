@@ -1,61 +1,53 @@
 package lpiemam.com.apppokecards.fragment
 
 
-import android.content.Context
-import android.os.*
-import androidx.fragment.app.Fragment
+import android.os.Bundle
+import android.os.CountDownTimer
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.fragment_quizz.*
-import lpiemam.com.apppokecards.*
-
+import lpiemam.com.apppokecards.R
 import lpiemam.com.apppokecards.model.PokemonQuestions
 import lpiemam.com.apppokecards.model.Question
-import java.util.*
-import android.os.CountDownTimer
-import androidx.lifecycle.ViewModelProviders
-import lpiemam.com.apppokecards.model.User
+import lpiemam.com.apppokecards.model.UserManager
 import lpiemam.com.apppokecards.viewmodel.QuizzViewModel
+import java.util.*
 import kotlin.collections.ArrayList
 
 
 /**
  * A simple [Fragment] subclass.
  */
-class QuizzFragment : Fragment(){
+class QuizzFragment : BaseFragment() {
+
+    var user = UserManager.user
 
     lateinit var quizzViewModel: QuizzViewModel
-
-    var mainActivityListener: MainActivityListener? = null
-    private var mQuestionTextView: TextView? = null
-    private var mAnswerButton1: Button? = null
-    private var mAnswerButton2: Button? = null
-    private var mAnswerButton3: Button? = null
-    private var mAnswerButton4: Button? = null
 
     private var mPokemonQuestions: PokemonQuestions? = null
     private var mCurrentQuestion: Question? = null
 
+    private var buttonList = ArrayList<Button?>()
 
     private var nbQuestion = 0
     private var nbCorrectAnswer = 0
-    var hasAnswer : Boolean = false
-    var hasAnswerCorrectly : Boolean = false
-    var hasFinishedQuizzToday : Boolean = false
-    var userWonQuiz : Boolean = false
-    private lateinit var dateLastQuizzEnded : Calendar
 
+    var hasAnswer: Boolean = false
+    var hasAnswerCorrectly: Boolean = false
+
+    var userWonQuiz: Boolean = false
     lateinit var countDownTimer: CountDownTimer
-    private var mEnableTouchEvents: Boolean = false
     private var counter = 5
-    private lateinit var chrono : TextView
 
-    private var buttonList = ArrayList<Button?>()
+    private var remainingTime: Long = 0
 
-    private var remainingTime : Long = 0
+    private lateinit var chrono: TextView
 
     companion object {
 
@@ -64,26 +56,9 @@ class QuizzFragment : Fragment(){
         }
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        mainActivityListener = context as? MainActivityListener
-        if (mainActivityListener == null) {
-            throw ClassCastException("$context must implement OnCardSelectedListener")
-        }
-    }
-
-    override fun onDetach() {
-
-        mainActivityListener!!.setDrawerEnabled(true)
-        mainActivityListener = null
-        super.onDetach()
-    }
-
     override fun onResume() {
 
-
-
-        if(remainingTime != 0L) {
+        if (remainingTime != 0L) {
             chrono.text = "0"
             setUpCountDownTimer(0)
         }
@@ -118,38 +93,32 @@ class QuizzFragment : Fragment(){
 
         quizzViewModel = ViewModelProviders.of(activity!!).get(QuizzViewModel::class.java)
 
-        mainActivityListener!!.setDrawerEnabled(false)
+        setDrawerEnabled(false)
 
         mPokemonQuestions = quizzViewModel.generateQuestions()
 
-        mEnableTouchEvents = true
 
-        mQuestionTextView = activity_game_question_text
-        mAnswerButton1 = activity_game_answer1_btn
-        buttonList.add(mAnswerButton1)
-        mAnswerButton2 = activity_game_answer2_btn
-        buttonList.add(mAnswerButton2)
-        mAnswerButton3 = activity_game_answer3_btn
-        buttonList.add(mAnswerButton3)
-        mAnswerButton4 = activity_game_answer4_btn
-        buttonList.add(mAnswerButton4)
+        buttonList.add(activity_game_answer1_btn)
+        buttonList.add(activity_game_answer2_btn)
+        buttonList.add(activity_game_answer3_btn)
+        buttonList.add(activity_game_answer4_btn)
 
         // Use the tag property to 'name' the buttons
-        mAnswerButton1!!.tag = 0
-        mAnswerButton2!!.tag = 1
-        mAnswerButton3!!.tag = 2
-        mAnswerButton4!!.tag = 3
+        activity_game_answer1_btn?.tag = 0
+        activity_game_answer2_btn?.tag = 1
+        activity_game_answer3_btn?.tag = 2
+        activity_game_answer4_btn?.tag = 3
 
-        mAnswerButton1!!.setOnClickListener {
+        activity_game_answer1_btn?.setOnClickListener {
             onClick(it)
         }
-        mAnswerButton2!!.setOnClickListener{
+        activity_game_answer2_btn?.setOnClickListener {
             onClick(it)
         }
-        mAnswerButton3!!.setOnClickListener{
+        activity_game_answer3_btn?.setOnClickListener {
             onClick(it)
         }
-        mAnswerButton4!!.setOnClickListener{
+        activity_game_answer4_btn?.setOnClickListener {
             onClick(it)
         }
 
@@ -162,11 +131,11 @@ class QuizzFragment : Fragment(){
     }
 
     fun onClick(v: View) {
-        mAnswerButton1!!.isEnabled = false
-        mAnswerButton2!!.isEnabled = false
-        mAnswerButton3!!.isEnabled = false
-        mAnswerButton4!!.isEnabled = false
-        if(counter > -1) {
+        activity_game_answer1_btn?.isEnabled = false
+        activity_game_answer2_btn?.isEnabled = false
+        activity_game_answer3_btn?.isEnabled = false
+        activity_game_answer4_btn?.isEnabled = false
+        if (counter > -1) {
 
             countDownTimer.cancel()
 
@@ -182,25 +151,12 @@ class QuizzFragment : Fragment(){
                 // Wrong answer
                 hasAnswer = true
                 v.setBackgroundResource(R.drawable.wrong_selected_quizz_answer)
-                buttonList[mCurrentQuestion!!.answerIndex]!!.setBackgroundResource(R.drawable.correct_unselected_quizz_answer)
+                buttonList[mCurrentQuestion?.answerIndex!!]?.setBackgroundResource(R.drawable.correct_unselected_quizz_answer)
             }
 
-
-            /*if (hasAnswer) {
-            countDownTimer.cancel()
-            mCurrentQuestion = mPokemonQuestions!!.question
-            this.displayQuestion(mCurrentQuestion!!)
-
-            setUpQuestions()
-        }*/
-
-
             nbQuestion++
-            mEnableTouchEvents = false
 
             Handler().postDelayed({
-                mEnableTouchEvents = true
-
 
                 setUpQuestions()
                 // If this is the last question, ends the game.
@@ -210,34 +166,30 @@ class QuizzFragment : Fragment(){
     }
 
     private fun endGame() {
-        mainActivityListener!!.replaceWithQuizzEndedFragment(userWonQuiz)
+        mainActivityListener?.replaceWithQuizzEndedFragment(userWonQuiz)
     }
 
     private fun displayQuestion(q: Question) {
-        mQuestionTextView!!.text = q.question
-        mAnswerButton1!!.isEnabled = true
-        mAnswerButton2!!.isEnabled = true
-        mAnswerButton3!!.isEnabled = true
-        mAnswerButton4!!.isEnabled = true
-        mAnswerButton1!!.text = q.choiceList!![0]
-        mAnswerButton2!!.text = q.choiceList!![1]
-        mAnswerButton3!!.text = q.choiceList!![2]
-        mAnswerButton4!!.text = q.choiceList!![3]
+        activity_game_question_text?.text = q.question
+        activity_game_answer1_btn?.isEnabled = true
+        activity_game_answer2_btn?.isEnabled = true
+        activity_game_answer3_btn?.isEnabled = true
+        activity_game_answer4_btn?.isEnabled = true
+        activity_game_answer1_btn?.text = q.choiceList!![0]
+        activity_game_answer2_btn?.text = q.choiceList!![1]
+        activity_game_answer3_btn?.text = q.choiceList!![2]
+        activity_game_answer4_btn?.text = q.choiceList!![3]
     }
 
     private fun setUpQuestions() {
-        mAnswerButton1!!.setBackgroundResource(R.drawable.unselected_quizz_answer)
-        mAnswerButton2!!.setBackgroundResource(R.drawable.unselected_quizz_answer)
-        mAnswerButton3!!.setBackgroundResource(R.drawable.unselected_quizz_answer)
-        mAnswerButton4!!.setBackgroundResource(R.drawable.unselected_quizz_answer)
+        activity_game_answer1_btn?.setBackgroundResource(R.drawable.unselected_quizz_answer)
+        activity_game_answer2_btn?.setBackgroundResource(R.drawable.unselected_quizz_answer)
+        activity_game_answer3_btn?.setBackgroundResource(R.drawable.unselected_quizz_answer)
+        activity_game_answer4_btn?.setBackgroundResource(R.drawable.unselected_quizz_answer)
 
         if (hasAnswer) {
             hasAnswer = false
             counter = 5
-
-
-
-
         }
 
         if (nbQuestion < 3) {
@@ -247,43 +199,39 @@ class QuizzFragment : Fragment(){
 
         } else {
             if (nbCorrectAnswer >= 2) {
-                User.coins += 50
+                user!!.coins += 50
                 userWonQuiz = true
             }
-            hasFinishedQuizzToday = true
-            dateLastQuizzEnded = Calendar.getInstance()
-            User.dateLastQuizzEnded = dateLastQuizzEnded
+            user?.dateLastQuizzEnded = Calendar.getInstance()
+            quizzViewModel.updateUserInDB(UserManager.user!!)
+            updateUserInfos()
             endGame()
         }
     }
 
 
-
-    private fun setUpCountDownTimer(remainingTime : Long) {
-        var countDownTimerRemaining : Long
-        if(remainingTime == 0L) {
-            countDownTimerRemaining = 6L
+    private fun setUpCountDownTimer(remainingTime: Long) {
+        var countDownTimerRemaining: Long = if (remainingTime == 0L) {
+            6L
         } else {
-            countDownTimerRemaining = remainingTime * 1000
+            remainingTime * 1000
         }
         countDownTimer = object : CountDownTimer(countDownTimerRemaining, 1000) {
             override fun onTick(millisUntilFinished: Long) {
-                this@QuizzFragment.remainingTime = millisUntilFinished/1000
+                this@QuizzFragment.remainingTime = millisUntilFinished / 1000
                 chrono.text = counter.toString()
                 counter--
             }
 
             override fun onFinish() {
 
-                mAnswerButton1!!.setBackgroundResource(R.drawable.wrong_unselected_quizz_answer)
-                mAnswerButton2!!.setBackgroundResource(R.drawable.wrong_unselected_quizz_answer)
-                mAnswerButton3!!.setBackgroundResource(R.drawable.wrong_unselected_quizz_answer)
-                mAnswerButton4!!.setBackgroundResource(R.drawable.wrong_unselected_quizz_answer)
+                activity_game_answer1_btn?.setBackgroundResource(R.drawable.wrong_unselected_quizz_answer)
+                activity_game_answer2_btn?.setBackgroundResource(R.drawable.wrong_unselected_quizz_answer)
+                activity_game_answer3_btn?.setBackgroundResource(R.drawable.wrong_unselected_quizz_answer)
+                activity_game_answer4_btn?.setBackgroundResource(R.drawable.wrong_unselected_quizz_answer)
                 buttonList[mCurrentQuestion!!.answerIndex]!!.setBackgroundResource(R.drawable.correct_unselected_quizz_answer)
 
                 Handler().postDelayed({
-                    mEnableTouchEvents = true
-
 
                     setUpQuestions()
                     // If this is the last question, ends the game.

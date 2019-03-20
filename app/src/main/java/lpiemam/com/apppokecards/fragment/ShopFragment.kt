@@ -1,36 +1,33 @@
 package lpiemam.com.apppokecards.fragment
 
 
-import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_shop.*
-import lpiemam.com.apppokecards.*
-
+import lpiemam.com.apppokecards.R
+import lpiemam.com.apppokecards.RecyclerTouchListener
 import lpiemam.com.apppokecards.adapter.ShopAdapter
 import lpiemam.com.apppokecards.model.CardsPack
-import lpiemam.com.apppokecards.model.PokemonCard
-import lpiemam.com.apppokecards.model.User
+import lpiemam.com.apppokecards.model.UserManager
 import lpiemam.com.apppokecards.viewmodel.PokemonCardsViewModel
-
 
 
 /**
  * A simple [Fragment] subclass.
  */
-class ShopFragment : Fragment() {
+class ShopFragment : BaseFragment() {
 
     lateinit var pokemonCardsViewModel: PokemonCardsViewModel
+    var canClick: Boolean = true
 
     var shopAdapter: ShopAdapter? = null
-    var mainActivityListener: MainActivityListener? = null
 
     companion object {
 
@@ -39,29 +36,15 @@ class ShopFragment : Fragment() {
         }
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        mainActivityListener = context as? MainActivityListener
-        if (mainActivityListener == null) {
-            throw ClassCastException("$context must implement OnCardSelectedListener")
-        }
-    }
-
-    override fun onDetach() {
-
-        mainActivityListener = null
-        super.onDetach()
-    }
-
     override fun onResume() {
 
-        mainActivityListener!!.setUpBackButton(false)
-        mainActivityListener!!.setDrawerEnabled(true)
+        setUpBackButton(false)
+        setDrawerEnabled(true)
 
         for (cardPack in shopAdapter!!.cardsPackList) {
             cardPack.isSelected = false
         }
-        shopAdapter!!.notifyDataSetChanged()
+        shopAdapter?.notifyDataSetChanged()
 
         super.onResume()
     }
@@ -71,7 +54,9 @@ class ShopFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        mainActivityListener!!.setFragmentTitle("Shop")
+        setFragmentTitle("Shop")
+
+        //mainActivityListener!!.setFragmentTitle("Shop")
 
         setHasOptionsMenu(true)
 
@@ -90,92 +75,90 @@ class ShopFragment : Fragment() {
             for (cardPack in shopAdapter!!.cardsPackList) {
                 cardPack.isSelected = false
             }
-            shopAdapter!!.notifyDataSetChanged()
+            shopAdapter?.notifyDataSetChanged()
         }
 
-
-
-        userCoinsTextView.text = User.coins.toString()
+        userCoinsTextView.text = UserManager.user?.coins.toString()
 
         setUpRecyclerView()
 
         buyPackButton.setOnClickListener {
-            lateinit var selectedPack: CardsPack
-            var onePackSelected = false
-            for (pack in shopAdapter!!.cardsPackList) {
-                if (pack.isSelected) {
-                    selectedPack = pack
-                    onePackSelected = true
+            if(pokemonCardsViewModel.canClick) {
+                pokemonCardsViewModel.canClick = false
+                lateinit var selectedPack: CardsPack
+                var onePackSelected = false
+                for (pack in shopAdapter!!.cardsPackList) {
+                    if (pack.isSelected) {
+                        selectedPack = pack
+                        onePackSelected = true
+                    }
                 }
-            }
-            if (onePackSelected) {
-                if (User.canBuyAPack(selectedPack)) {
-                    try {
+                if (onePackSelected) {
+                    if (UserManager.user!!.canBuyAPack(selectedPack)) {
+                        try {
 
-                        pokemonCardsViewModel.pokemonCardsForPackLiveData = MutableLiveData()
+                            pokemonCardsViewModel.pokemonCardsForPackLiveData = MutableLiveData()
 
-                        pokemonCardsViewModel.pokemonCardsForPackLiveData.observe(this, Observer {
+                            pokemonCardsViewModel.pokemonCardsForPackLiveData.observe(this, Observer {
 
-                            var packOpeningDialogFragment = PackOpeningDialogFragment()
-                            packOpeningDialogFragment.listCardsPack = ArrayList(it)
-                            packOpeningDialogFragment.show(childFragmentManager, "Contenu du Pack")
+                                var packOpeningDialogFragment = PackOpeningDialogFragment()
+                                packOpeningDialogFragment.listCardsPack = ArrayList(it)
+                                packOpeningDialogFragment.show(childFragmentManager, "Pack Content")
 
-                            pokemonCardsViewModel.buyAPack(selectedPack)
-                            selectedPack.clearCardList()
-                            userCoinsTextView.text = User.coins.toString()
-                        })
+                                pokemonCardsViewModel.buyAPack(selectedPack)
+                                updateUserInfos()
+                                selectedPack.clearCardList()
+                                userCoinsTextView.text = UserManager.user?.coins.toString()
+                            })
 
-                        pokemonCardsViewModel.generateRandomCards(selectedPack)
+                            pokemonCardsViewModel.generateRandomCards(selectedPack)
 
 
-                    } catch (e: Exception) {
-                        val snackbar = Snackbar.make(view, e.message!!, Snackbar.LENGTH_LONG)
+                        } catch (e: Exception) {
+                            val snackbar = Snackbar.make(view, e.message!!, Snackbar.LENGTH_LONG)
+                            snackbar.show()
+                        }
+
+                    } else {
+                        val snackbar = Snackbar.make(view, "Vous n'avez pas suffisament de pièces.", Snackbar.LENGTH_LONG)
                         snackbar.show()
                     }
-
-                } else {
-                    val snackbar = Snackbar.make(view, "Vous n'avez pas suffisament de pièces.", Snackbar.LENGTH_LONG)
-                    snackbar.show()
                 }
             }
         }
-
-
 
         super.onViewCreated(view, savedInstanceState)
     }
 
 
-
-
     private fun setUpRecyclerView() {
         shopAdapter = ShopAdapter(ArrayList(pokemonCardsViewModel.getCardsPackList()))
 
-        shopRecyclerView!!.layoutManager = androidx.recyclerview.widget.GridLayoutManager(context, 3)
-        shopRecyclerView!!.adapter = shopAdapter
+        shopRecyclerView?.layoutManager = androidx.recyclerview.widget.GridLayoutManager(context, 3)
+        shopRecyclerView?.adapter = shopAdapter
 
-        shopRecyclerView!!.addOnItemTouchListener(
+        shopRecyclerView?.addOnItemTouchListener(
             RecyclerTouchListener(
                 context!!,
                 shopRecyclerView!!,
                 object : RecyclerTouchListener.ClickListener {
                     override fun onClick(view: View, position: Int) {
 
-                        val temp = shopAdapter!!.cardsPackList[position].isSelected
+                        val temp = shopAdapter?.cardsPackList!![position].isSelected
                         for (cardPack in shopAdapter!!.cardsPackList) {
                             cardPack.isSelected = false
                         }
-                        shopAdapter!!.cardsPackList[position].isSelected = !temp
-                        shopAdapter!!.notifyDataSetChanged()
+                        shopAdapter?.cardsPackList!![position].isSelected = !temp
+                        shopAdapter?.notifyDataSetChanged()
                     }
 
                     override fun onLongClick(view: View?, position: Int) {
-                        val temp = shopAdapter!!.cardsPackList[position].isSelected
+                        val temp = shopAdapter?.cardsPackList!![position].isSelected
                         for (cardPack in shopAdapter!!.cardsPackList) {
                             cardPack.isSelected = false
                         }
-                        shopAdapter!!.cardsPackList[position].isSelected = !temp
-                        shopAdapter!!.notifyDataSetChanged()
+                        shopAdapter?.cardsPackList!![position].isSelected = !temp
+                        shopAdapter?.notifyDataSetChanged()
                     }
                 })
         )

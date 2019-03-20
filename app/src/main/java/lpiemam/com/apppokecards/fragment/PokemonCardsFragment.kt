@@ -1,33 +1,29 @@
 package lpiemam.com.apppokecards.fragment
 
 
-import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.appcompat.widget.SearchView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.fragment_pokemon_cards.*
-import lpiemam.com.apppokecards.*
+import lpiemam.com.apppokecards.OnBottomReachedListener
+import lpiemam.com.apppokecards.R
+import lpiemam.com.apppokecards.RecyclerTouchListener
 import lpiemam.com.apppokecards.adapter.PokemonCardsAdapter
 import lpiemam.com.apppokecards.viewmodel.PokemonCardsViewModel
-
 
 
 /**
  * A simple [Fragment] subclass.
  *
  */
-class PokemonCardsFragment : Fragment() {
+class PokemonCardsFragment : BaseFragment() {
 
     lateinit var pokemonCardsViewModel: PokemonCardsViewModel
-
-    var pokemonCardsAdapter: PokemonCardsAdapter? = null
-    var mainActivityListener: MainActivityListener? = null
 
     companion object {
 
@@ -35,23 +31,6 @@ class PokemonCardsFragment : Fragment() {
             return PokemonCardsFragment()
         }
     }
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        mainActivityListener = context as? MainActivityListener
-        if (mainActivityListener == null) {
-            throw ClassCastException("$context must implement OnCardSelectedListener")
-        }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-    }
-
-    override fun onDetach() {
-        mainActivityListener = null
-        super.onDetach()
-    }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,10 +44,8 @@ class PokemonCardsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        mainActivityListener!!.setFragmentTitle("AllCards")
+        setFragmentTitle("Pokedex")
         setHasOptionsMenu(true)
-
-
 
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_pokemon_cards, container, false)
@@ -76,25 +53,19 @@ class PokemonCardsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-
-
-
-
         setUpRecyclerView()
-        mainActivityListener!!.setUpBackButton(false)
-        mainActivityListener!!.setDrawerEnabled(true)
 
-        (context as MainActivity).supportActionBar!!.show()
+        showActionBar(true)
+        setUpBackButton(false)
+        setDrawerEnabled(true)
+
         allCardsSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(s: String): Boolean {
-                Log.d("", "onQueryTextChange: $s")
                 pokemonCardsViewModel.fetchPokemonCardsForName(s)
                 return false
             }
 
             override fun onQueryTextChange(s: String): Boolean {
-                //CharSequence charSequence = searchView.getQuery();
-                Log.d("", "onQueryTextChange: $s")
                 pokemonCardsViewModel.fetchPokemonCardsForName(s)
                 return false
             }
@@ -109,29 +80,34 @@ class PokemonCardsFragment : Fragment() {
             pokemonCardsAdapter.setData(it)
         })
 
-        allCardsRecyclerView!!.layoutManager = androidx.recyclerview.widget.GridLayoutManager(context, 4)
-        allCardsRecyclerView!!.adapter = pokemonCardsAdapter
+        pokemonCardsAdapter.onBottomReachedListener = object : OnBottomReachedListener {
+            override fun onBottomReached(position: Int) {
+                val currentSearch = allCardsSearchView.query.toString()
+                pokemonCardsViewModel.fetchPokemonCardsForNextPage(currentSearch)
+            }
+        }
+        allCardsRecyclerView?.layoutManager = androidx.recyclerview.widget.GridLayoutManager(context, 4)
+        allCardsRecyclerView?.adapter = pokemonCardsAdapter
 
-        allCardsRecyclerView!!.addOnItemTouchListener(
+        allCardsRecyclerView?.addOnItemTouchListener(
             RecyclerTouchListener(
                 context!!,
                 allCardsRecyclerView!!,
                 object : RecyclerTouchListener.ClickListener {
                     override fun onClick(view: View, position: Int) {
 
-                        val card = pokemonCardsAdapter!!.allPokemonCardsList[position]
+                        val card = pokemonCardsAdapter.allPokemonCardsList[position]
 
-                        mainActivityListener!!.replaceWithAllCardsDetailFragment(card)
+                        mainActivityListener?.replaceWithAllCardsDetailFragment(card)
                     }
 
                     override fun onLongClick(view: View?, position: Int) {
-                        val card = pokemonCardsAdapter!!.allPokemonCardsList[position]
+                        val card = pokemonCardsAdapter.allPokemonCardsList[position]
 
-                        mainActivityListener!!.replaceWithAllCardsDetailFragment(card)
+                        mainActivityListener?.replaceWithAllCardsDetailFragment(card)
                     }
                 })
         )
-
     }
 
 }
