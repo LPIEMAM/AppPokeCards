@@ -24,9 +24,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/userCardArtist"
             tools:text="Artist"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="8dp" app:layout_constraintTop_toTopOf="@+id/tvArtist"
-            app:layout_constraintStart_toStartOf="@+id/userCardRarity"/>
+            app:layout_constraintTop_toTopOf="@+id/tvArtist"
+            app:layout_constraintStart_toStartOf="@+id/userCardDetailPokedexNumber"/>
 
 
     <androidx.constraintlayout.widget.Group android:layout_width="wrap_content" android:layout_height="wrap_content"
@@ -112,26 +111,21 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/userCardDetailPokemonName"
-            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
             app:layout_constraintTop_toTopOf="@+id/tvName"
-            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="@+id/userCardDetailPokedexNumber"/>
     <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/userCardDetailPokedexNumber"
-            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
             app:layout_constraintStart_toEndOf="@+id/tvName" android:layout_marginStart="76dp"
             app:layout_constraintTop_toTopOf="@+id/tvPokedexNumber"
-            app:layout_constraintHorizontal_bias="0.0" android:text="pokedex number"/>
+            android:text="pokedex number"/>
     <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/userCardRarity"
             tools:text="Card Rarity"
             app:layout_constraintTop_toTopOf="@+id/tvRarity"
-            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
-            app:layout_constraintHorizontal_bias="0.872"
             app:layout_constraintStart_toStartOf="@+id/userCardDetailPokedexNumber"/>
     <TextView
             android:layout_width="wrap_content"

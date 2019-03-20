@@ -89,8 +89,11 @@ class UserCardDetailFragment : BaseFragment() {
             userDetailWithPokedexNumber.visibility = View.GONE
         }
 
-        if (userCard.pokemonCard.rarity != "null") {
+        if (userCard.pokemonCard.rarity != "") {
             userCardRarity.text = userCard.pokemonCard.rarity
+            userDetailWithRarity.visibility = View.VISIBLE
+        } else{
+            userDetailWithRarity.visibility = View.GONE
         }
 
         if (userCard.pokemonCard.artist != "") {
