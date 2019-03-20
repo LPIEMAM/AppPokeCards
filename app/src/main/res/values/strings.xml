@@ -14,6 +14,10 @@
     </string>
     <string name="quizzPassed">"Bravo, vous avez remporté vos 50 pièces journalières pour avoir répondu correctement au quizz ! Revenez demain pour en remporter d'autres !"</string>
     <string name="quizzFailed">"Vous n'avez pas répondu correctement à au moins deux questions, revenez demain pour retenter votre chance !"</string>
+    <string name="pokemonName">"Name :  "</string>
+    <string name="pokedexNumber">Pokedex number :  </string>
+    <string name="cardRarity">Rarity :  </string>
+    <string name="cardArtist">Artist :  </string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

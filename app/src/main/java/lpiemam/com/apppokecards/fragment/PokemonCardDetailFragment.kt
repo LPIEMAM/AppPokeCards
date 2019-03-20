@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_pokemon_card_detail.*
+import kotlinx.android.synthetic.main.fragment_user_card_detail.*
 import lpiemam.com.apppokecards.MainActivityListener
 import lpiemam.com.apppokecards.R
 import lpiemam.com.apppokecards.model.PokemonCard
@@ -74,7 +75,7 @@ class PokemonCardDetailFragment : BaseFragment() {
         setDrawerEnabled(false)
         setUpBackButton(true)
 
-        userDust.text = user?.dusts.toString()
+        allCardsUserDust.text = user?.dusts.toString()
         allCardsDetailDust.text = pokemonCard.getCostToCraft().toString()
 
         Picasso.get().load(pokemonCard.imageUrlHiRes).placeholder(R.drawable.pokemon_card_back)
@@ -89,6 +90,31 @@ class PokemonCardDetailFragment : BaseFragment() {
                 val snackbar = Snackbar.make(view, "Vous n'avez pas assez de poussières.", Snackbar.LENGTH_SHORT)
                 snackbar.show()
             }
+        }
+
+        if (pokemonCard.name != null) {
+            allCardsDetailPokemonName.text = pokemonCard.name
+        }
+
+        if (pokemonCard.nationalPokedexNumber != null) {
+            allCardsPokedexNumber.text = pokemonCard.nationalPokedexNumber.toString()
+            withPokedexNumber.visibility = View.VISIBLE
+        } else{
+            withPokedexNumber.visibility = View.GONE
+        }
+
+        if (pokemonCard.rarity != "") {
+            allCardsRarity.text = pokemonCard.rarity
+            withRarity.visibility = View.VISIBLE
+        } else{
+            withRarity.visibility = View.GONE
+        }
+
+        if (pokemonCard.artist != "") {
+            allCardsArtist.text = pokemonCard.artist
+            withArtist.visibility = View.VISIBLE
+        } else {
+            withArtist.visibility = View.GONE
         }
     }
 
