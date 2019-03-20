@@ -79,7 +79,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
 
         pokemonCardsViewModel?.userLiveData?.observe(this, androidx.lifecycle.Observer {
-            UserManager.user = it
             if(it != null) {
                 UserManager.user = it
             } else {
@@ -117,37 +116,47 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return null
     }
 
+    private fun endQuizz() {
+        toast!!.cancel()
+        UserManager.user?.dateLastQuizzEnded = Calendar.getInstance()
+        pokemonCardsViewModel!!.updateUserInDB(UserManager.user!!)
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.mainActivityContainer, userCardsFragment, "userCardsFragment")
+            .commit()
+        toast = Toast.makeText(this, "Echec du quizz.", Toast.LENGTH_SHORT)
+        toast!!.show()
+    }
+
+    private fun warnQuizz() {
+        toast =
+            Toast.makeText(
+                this,
+                "Si vous recliquez, votre quizz quotidien sera considéré comme un echec.",
+                Toast.LENGTH_SHORT
+            )
+        toast!!.show()
+        hasClickedBack = true
+        Handler().postDelayed({
+            hasClickedBack = false
+            // If this is the last question, ends the game.
+            // Else, display the next question.
+        }, 3000) // LENGTH_SHORT is usually 2 second long
+    }
+
     override fun onBackPressed() {
         if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
             drawer_layout.closeDrawer(GravityCompat.START)
         } else if (hasClickedBack) {
-            toast!!.cancel()
-            UserManager.user?.dateLastQuizzEnded = Calendar.getInstance()
-            supportFragmentManager
-                .beginTransaction()
-                .replace(R.id.mainActivityContainer, userCardsFragment, "userCardsFragment")
-                .commit()
-            toast = Toast.makeText(this, "Echec du quizz.", Toast.LENGTH_SHORT)
-            toast!!.show()
+            endQuizz()
         } else {
             var currentFragment = getVisibleFragment()
             when (currentFragment) {
                 is PokemonCardDetailFragment -> supportFragmentManager.popBackStack()
+                is FullScreenCardFragment -> supportFragmentManager.popBackStack()
                 is UserCardsFragment -> super.onBackPressed()
                 is QuizzFragment -> {
-                    toast =
-                        Toast.makeText(
-                            this,
-                            "Si vous recliquez, votre quizz quotidien sera considéré comme un echec.",
-                            Toast.LENGTH_SHORT
-                        )
-                    toast!!.show()
-                    hasClickedBack = true
-                    Handler().postDelayed({
-                        hasClickedBack = false
-                        // If this is the last question, ends the game.
-                        // Else, display the next question.
-                    }, 3000) // LENGTH_SHORT is usually 2 second long
+                    warnQuizz()
                 }
                 else -> {
                     for (i in 0 until supportFragmentManager.getBackStackEntryCount()) {

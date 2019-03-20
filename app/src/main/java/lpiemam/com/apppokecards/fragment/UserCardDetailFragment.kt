@@ -39,6 +39,11 @@ class UserCardDetailFragment : BaseFragment() {
         }
     }
 
+    override fun onResume() {
+        showActionBar(true)
+        super.onResume()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {

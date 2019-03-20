@@ -50,12 +50,8 @@ class FullScreenCardFragment : BaseFragment() {
             .into(view.cardImageView)
 
         view.cardImageView.setOnClickListener {
-            mainActivityListener?.showActionBar(true)
-            if (wasPreviousScreenUserDetail!!) {
-                mainActivityListener?.popBackStack()
-            } else {
-                mainActivityListener?.goBackFromFullScreenToAllCardsFragment()
-            }
+            showActionBar(true)
+            mainActivityListener?.popBackStack()
         }
     }
 }
