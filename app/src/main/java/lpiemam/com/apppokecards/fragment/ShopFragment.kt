@@ -25,7 +25,7 @@ import lpiemam.com.apppokecards.viewmodel.PokemonCardsViewModel
 class ShopFragment : BaseFragment() {
 
     lateinit var pokemonCardsViewModel: PokemonCardsViewModel
-
+    var canClick: Boolean = true
 
     var shopAdapter: ShopAdapter? = null
 
@@ -83,42 +83,45 @@ class ShopFragment : BaseFragment() {
         setUpRecyclerView()
 
         buyPackButton.setOnClickListener {
-            lateinit var selectedPack: CardsPack
-            var onePackSelected = false
-            for (pack in shopAdapter!!.cardsPackList) {
-                if (pack.isSelected) {
-                    selectedPack = pack
-                    onePackSelected = true
+            if(pokemonCardsViewModel.canClick) {
+                pokemonCardsViewModel.canClick = false
+                lateinit var selectedPack: CardsPack
+                var onePackSelected = false
+                for (pack in shopAdapter!!.cardsPackList) {
+                    if (pack.isSelected) {
+                        selectedPack = pack
+                        onePackSelected = true
+                    }
                 }
-            }
-            if (onePackSelected) {
-                if (UserManager.user!!.canBuyAPack(selectedPack)) {
-                    try {
+                if (onePackSelected) {
+                    if (UserManager.user!!.canBuyAPack(selectedPack)) {
+                        try {
 
-                        pokemonCardsViewModel.pokemonCardsForPackLiveData = MutableLiveData()
+                            pokemonCardsViewModel.pokemonCardsForPackLiveData = MutableLiveData()
 
-                        pokemonCardsViewModel.pokemonCardsForPackLiveData.observe(this, Observer {
+                            pokemonCardsViewModel.pokemonCardsForPackLiveData.observe(this, Observer {
 
-                            var packOpeningDialogFragment = PackOpeningDialogFragment()
-                            packOpeningDialogFragment.listCardsPack = ArrayList(it)
-                            packOpeningDialogFragment.show(childFragmentManager, "Pack Content")
+                                var packOpeningDialogFragment = PackOpeningDialogFragment()
+                                packOpeningDialogFragment.listCardsPack = ArrayList(it)
+                                packOpeningDialogFragment.show(childFragmentManager, "Pack Content")
 
-                            pokemonCardsViewModel.buyAPack(selectedPack)
-                            selectedPack.clearCardList()
-                            userCoinsTextView.text = UserManager.user?.coins.toString()
-                        })
+                                pokemonCardsViewModel.buyAPack(selectedPack)
+                                selectedPack.clearCardList()
+                                userCoinsTextView.text = UserManager.user?.coins.toString()
+                            })
 
-                        pokemonCardsViewModel.generateRandomCards(selectedPack)
+                            pokemonCardsViewModel.generateRandomCards(selectedPack)
 
 
-                    } catch (e: Exception) {
-                        val snackbar = Snackbar.make(view, e.message!!, Snackbar.LENGTH_LONG)
+                        } catch (e: Exception) {
+                            val snackbar = Snackbar.make(view, e.message!!, Snackbar.LENGTH_LONG)
+                            snackbar.show()
+                        }
+
+                    } else {
+                        val snackbar = Snackbar.make(view, "Vous n'avez pas suffisament de pièces.", Snackbar.LENGTH_LONG)
                         snackbar.show()
                     }
-
-                } else {
-                    val snackbar = Snackbar.make(view, "Vous n'avez pas suffisament de pièces.", Snackbar.LENGTH_LONG)
-                    snackbar.show()
                 }
             }
         }

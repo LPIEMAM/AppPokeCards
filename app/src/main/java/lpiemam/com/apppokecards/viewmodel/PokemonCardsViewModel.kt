@@ -11,6 +11,8 @@ import kotlin.collections.ArrayList
 
 class PokemonCardsViewModel : ViewModel() {
 
+    var canClick: Boolean = true
+
     var pokemonCardsForNameLiveData = MutableLiveData<ArrayList<PokemonCard>>()
     var pokemonCardsForPackLiveData = MutableLiveData<ArrayList<PokemonCard>>()
     var currentPage = 1

@@ -5,13 +5,17 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.pack_opening_dialog_layout.view.*
 import lpiemam.com.apppokecards.ImagePanel
 import lpiemam.com.apppokecards.R
 import lpiemam.com.apppokecards.model.PokemonCard
+import lpiemam.com.apppokecards.viewmodel.PokemonCardsViewModel
 
 class PackOpeningDialogFragment : DialogFragment() {
 
+
+    lateinit var pokemonCardsViewModel: PokemonCardsViewModel
     lateinit var listCardsPack: ArrayList<PokemonCard>
     private val carouselViews = ArrayList<View>()
 
@@ -21,6 +25,8 @@ class PackOpeningDialogFragment : DialogFragment() {
         initStubItems()
         initCarousel(view!!)
         builder.setTitle("Contenu du Pack").setView(view)
+
+        pokemonCardsViewModel = ViewModelProviders.of(activity!!).get(PokemonCardsViewModel::class.java)
         return builder.create()
     }
 
@@ -41,6 +47,11 @@ class PackOpeningDialogFragment : DialogFragment() {
             }
             carouselViews.add(imagePanel)
         }
+    }
+
+    override fun onDestroy() {
+        pokemonCardsViewModel.canClick = true
+        super.onDestroy()
     }
 
 }
