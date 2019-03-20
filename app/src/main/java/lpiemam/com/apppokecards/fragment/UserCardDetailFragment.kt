@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.fragment_pokemon_card_detail.*
 import kotlinx.android.synthetic.main.fragment_user_card_detail.*
 import lpiemam.com.apppokecards.R
 import lpiemam.com.apppokecards.model.UserCard
@@ -77,6 +78,26 @@ class UserCardDetailFragment : BaseFragment() {
             user!!.dusts += userCard.pokemonCard.getCostForDecraft()
             pokemonCardsViewModel.removeUserCard(userCard)
             mainActivityListener?.replaceWithCollectionFragment()
+        }
+
+            userCardDetailPokemonName.text = userCard.pokemonCard.name
+
+        if (userCard.pokemonCard.nationalPokedexNumber.toString() != "null" ) {
+            userCardDetailPokedexNumber.text = userCard.pokemonCard.nationalPokedexNumber.toString()
+            userDetailWithPokedexNumber.visibility = View.VISIBLE
+        } else{
+            userDetailWithPokedexNumber.visibility = View.GONE
+        }
+
+        if (userCard.pokemonCard.rarity != "null") {
+            userCardRarity.text = userCard.pokemonCard.rarity
+        }
+
+        if (userCard.pokemonCard.artist != "") {
+            userCardArtist.text = userCard.pokemonCard.artist
+            userDetailWithArtist.visibility = View.VISIBLE
+        } else {
+            userDetailWithArtist.visibility = View.GONE
         }
     }
 
