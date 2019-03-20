@@ -10,11 +10,11 @@ import lpiemam.com.apppokecards.model.UserCard
 @Dao
 interface UserCardDAO {
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun saveAll(listCard: List<UserCard>?)
+    @Query("DELETE FROM UserCard WHERE UserCard.userCardID = :id")
+    fun deleteCard(id: Int)
 
-    @Query("DELETE FROM UserCard")
-    fun clearTable()
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertCard(userCard: UserCard)
 
     @Query("SELECT * FROM UserCard")
     fun fetchAll(): LiveData<List<UserCard>>

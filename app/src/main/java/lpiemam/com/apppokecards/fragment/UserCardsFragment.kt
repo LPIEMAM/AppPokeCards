@@ -70,8 +70,6 @@ class UserCardsFragment : BaseFragment() {
 
         super.onViewCreated(view, savedInstanceState)
 
-
-
         setUpRecyclerView()
 
         collectionSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {

@@ -8,7 +8,7 @@ object UserCardsRepository {
     var userCardListLiveData = MutableLiveData<ArrayList<UserCard>>()
     var userLiveData = MutableLiveData<User>()
 
-    fun fetchUserCards() : MutableLiveData<ArrayList<UserCard>> {
+    fun fetchUserCards(): MutableLiveData<ArrayList<UserCard>> {
 
         DataBaseFactory.userCardsDataBase.userCardDAO().fetchAll().observeForever {
             val tempUserCardList = ArrayList<UserCard>()
@@ -19,15 +19,7 @@ object UserCardsRepository {
         return userCardListLiveData
     }
 
-    fun saveUserCards(userCards: ArrayList<UserCard>) {
-        DataBaseFactory.userCardsDataBase.userCardDAO().saveAll(userCards)
-    }
-
-    fun clearUserCards() {
-        DataBaseFactory.userCardsDataBase.userCardDAO().clearTable()
-    }
-
-    fun fetchUser() : MutableLiveData<User> {
+    fun fetchUser(): MutableLiveData<User> {
 
         DataBaseFactory.userCardsDataBase.userDAO().fetchUser().observeForever {
             userLiveData.postValue(it)
@@ -42,5 +34,13 @@ object UserCardsRepository {
 
     fun updateUser(user: User) {
         DataBaseFactory.userCardsDataBase.userDAO().updateUser(user)
+    }
+
+    fun deleteCard(id: Int) {
+        DataBaseFactory.userCardsDataBase.userCardDAO().deleteCard(id)
+    }
+
+    fun insertCard(userCard: UserCard) {
+        DataBaseFactory.userCardsDataBase.userCardDAO().insertCard(userCard)
     }
 }

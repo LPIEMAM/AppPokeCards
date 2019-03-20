@@ -74,7 +74,6 @@ class UserCardDetailFragment : BaseFragment() {
         }
 
         userCardDetailButtonDust.setOnClickListener {
-            user!!.dusts += userCard.pokemonCard.getCostForDecraft()
             pokemonCardsViewModel.removeUserCard(userCard)
             mainActivityListener?.replaceWithCollectionFragment()
         }

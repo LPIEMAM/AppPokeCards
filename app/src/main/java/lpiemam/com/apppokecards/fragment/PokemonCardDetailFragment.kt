@@ -83,7 +83,6 @@ class PokemonCardDetailFragment : BaseFragment() {
 
         allCardsDetailButtonDust.setOnClickListener {
             if (user?.dusts!! >= pokemonCard.getCostToCraft()) {
-                user!!.dusts -= pokemonCard.getCostToCraft()
                 pokemonCardsViewModel.addUserCard(pokemonCard)
                 mainActivityListener?.replaceWithFullScreenCard(pokemonCard, false)
             } else {

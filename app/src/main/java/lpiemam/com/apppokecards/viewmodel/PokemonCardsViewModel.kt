@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import lpiemam.com.apppokecards.Utils
 import lpiemam.com.apppokecards.model.*
 import lpiemam.com.apppokecards.retrofit.PokemonCardsRepository
-import lpiemam.com.apppokecards.room.DataBaseFactory
 import lpiemam.com.apppokecards.room.UserCardsRepository
 import kotlin.collections.ArrayList
 
@@ -25,42 +24,6 @@ class PokemonCardsViewModel : ViewModel() {
     fun initializeData() {
         fetchUserFromDB()
         fetchUserCardsFromDB()
-//        val liveDataUser = MutableLiveData<User>()
-//        liveDataUser.observeForever(object : Observer<User> {
-//            override fun onChanged(it: User?) {
-//                if (it == null) {
-//                    val user =
-//                        User(
-//                            "Annabelle",
-//                            "Braye",
-//                            "Siam",
-//                            "annabelle.braye@gmail.com",
-//                            Calendar.getInstance(),
-//                            100000,
-//                            100000
-//                        )
-//
-//                    DataBaseFactory.userCardsDataBase.userDAO().saveUser(user)
-//                    userLiveData.postValue(user)
-//
-//                } else {
-//                    userLiveData.postValue(it)
-//                    Log.d("Test", it.nickName)
-//                }
-//                liveDataUser.removeObserver(this)
-//            }
-//        })
-//        DataBaseFactory.userCardsDataBase.userDAO().fetchUser().observeForever {
-//            liveDataUser.postValue(it)
-//        }
-
-//        DataBaseFactory.userCardsDataBase.userCardDAO().fetchAll().observeForever {
-//            val tempUserCardList = ArrayList<UserCard>()
-//            tempUserCardList.addAll(it)
-//            userCardListLiveData.postValue(tempUserCardList)
-//        }
-
-
     }
 
     fun fetchUserCardsFromDB() {
@@ -69,12 +32,12 @@ class PokemonCardsViewModel : ViewModel() {
         }
     }
 
-    fun saveUserCardsToDB() {
-        UserCardsRepository.saveUserCards(userCardList)
+    fun insertCardToDB(userCard: UserCard) {
+        UserCardsRepository.insertCard(userCard)
     }
 
-    fun clearUserCards() {
-        UserCardsRepository.clearUserCards()
+    fun deleteCardFromDB(id: Int) {
+        UserCardsRepository.deleteCard(id)
     }
 
     fun fetchUserFromDB() {
@@ -115,13 +78,10 @@ class PokemonCardsViewModel : ViewModel() {
     }
 
     fun fetchPokemonCardsForNextPage(name: String) {
-
         currentPage++
         PokemonCardsRepository.fetchPokemonCardsForName(currentPage, name).observeForever {
             pokemonCardsForNameLiveData.value?.addAll(it)
         }
-
-
     }
 
 
@@ -155,26 +115,35 @@ class PokemonCardsViewModel : ViewModel() {
     fun buyAPack(pack: CardsPack) {
         for (card in pack.listPokemonCards) {
 
+            var userCard: UserCard?
             if (card.isCardInArray(userCardList)) {
-                var userCard = card.getInstanceOfUserCard(userCardList)
+                userCard = card.getInstanceOfUserCard(userCardList)
                 userCard.numberOfCard++
             } else {
-                userCardList.add(UserCard(card))
+                userCard = UserCard(card)
+                userCardList.add(userCard)
             }
+            insertCardToDB(userCard)
         }
         userCardList.sort()
         UserManager.user!!.coins -= pack.costPack
+        updateUserInDB(UserManager.user!!)
     }
 
 
     fun addUserCard(pokemonCard: PokemonCard) {
+        var userCard: UserCard?
         if (pokemonCard.isCardInArray(userCardList)) {
-            var userCard = pokemonCard.getInstanceOfUserCard(userCardList)
+            userCard = pokemonCard.getInstanceOfUserCard(userCardList)
             userCard.numberOfCard++
         } else {
-            userCardList.add(UserCard(pokemonCard))
+            userCard = UserCard(pokemonCard)
+            userCardList.add(userCard)
         }
+        insertCardToDB(userCard)
         userCardList.sort()
+        UserManager.user!!.dusts -= pokemonCard.getCostToCraft()
+        updateUserInDB(UserManager.user!!)
     }
 
     fun removeUserCard(userCard: UserCard) {
@@ -182,18 +151,12 @@ class PokemonCardsViewModel : ViewModel() {
             userCard.numberOfCard--
         } else {
             userCardList.remove(userCard)
+            if(userCard.userCardID != 0) {
+                deleteCardFromDB(userCard.userCardID)
+            }
         }
         userCardList.sort()
-    }
-
-    override fun onCleared() {
-        saveData()
-        super.onCleared()
-    }
-
-    fun saveData() {
+        UserManager.user!!.dusts += userCard.pokemonCard.getCostForDecraft()
         updateUserInDB(UserManager.user!!)
-        clearUserCards()
-        saveUserCardsToDB()
     }
 }
