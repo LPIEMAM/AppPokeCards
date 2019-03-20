@@ -7,7 +7,9 @@ import androidx.room.Ignore
 import androidx.room.PrimaryKey
 
 @Entity
-class UserCard() : Parcelable {
+class UserCard() : Parcelable, Comparable<UserCard> {
+
+
     @PrimaryKey(autoGenerate = true)
     var userCardID: Int = 0
     lateinit var pokemonCard: PokemonCard
@@ -41,6 +43,16 @@ class UserCard() : Parcelable {
 
         override fun newArray(size: Int): Array<UserCard?> {
             return arrayOfNulls(size)
+        }
+    }
+
+    override fun compareTo(other: UserCard): Int {
+
+        return when {
+            other.pokemonCard.nationalPokedexNumber == null && this.pokemonCard.nationalPokedexNumber != null -> -1
+            this.pokemonCard.nationalPokedexNumber == null && other.pokemonCard.nationalPokedexNumber != null-> 1
+            other.pokemonCard.nationalPokedexNumber == null && this.pokemonCard.nationalPokedexNumber == null -> this.pokemonCard.supertype?.compareTo(other.pokemonCard.supertype!!)!!
+            else -> this.pokemonCard.nationalPokedexNumber!!.compareTo(other.pokemonCard.nationalPokedexNumber!!)
         }
     }
 

@@ -11,7 +11,7 @@ import lpiemam.com.apppokecards.model.UserCard
 interface UserCardDAO {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertAll(listCard: List<UserCard>?)
+    fun saveAll(listCard: List<UserCard>?)
 
     @Query("DELETE FROM UserCard")
     fun clearTable()
