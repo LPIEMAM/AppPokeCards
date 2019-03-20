@@ -106,6 +106,7 @@ class ShopFragment : BaseFragment() {
                                 packOpeningDialogFragment.show(childFragmentManager, "Pack Content")
 
                                 pokemonCardsViewModel.buyAPack(selectedPack)
+                                updateUserInfos()
                                 selectedPack.clearCardList()
                                 userCoinsTextView.text = UserManager.user?.coins.toString()
                             })

@@ -204,6 +204,7 @@ class QuizzFragment : BaseFragment() {
             }
             user?.dateLastQuizzEnded = Calendar.getInstance()
             quizzViewModel.updateUserInDB(UserManager.user!!)
+            updateUserInfos()
             endGame()
         }
     }

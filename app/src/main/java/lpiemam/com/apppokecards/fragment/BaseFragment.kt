@@ -38,4 +38,8 @@ abstract class BaseFragment : Fragment() {
         mainActivityListener?.showActionBar(value)
     }
 
+    fun updateUserInfos() {
+        mainActivityListener?.updateUserInfos()
+    }
+
 }

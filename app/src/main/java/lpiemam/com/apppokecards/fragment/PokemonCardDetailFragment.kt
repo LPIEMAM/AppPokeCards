@@ -85,6 +85,7 @@ class PokemonCardDetailFragment : BaseFragment() {
         allCardsDetailButtonDust.setOnClickListener {
             if (user?.dusts!! >= pokemonCard.getCostToCraft()) {
                 pokemonCardsViewModel.addUserCard(pokemonCard)
+                updateUserInfos()
                 mainActivityListener?.replaceWithFullScreenCard(pokemonCard, false)
             } else {
                 val snackbar = Snackbar.make(view, "Vous n'avez pas assez de poussières.", Snackbar.LENGTH_SHORT)

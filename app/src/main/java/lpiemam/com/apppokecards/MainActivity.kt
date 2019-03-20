@@ -98,7 +98,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 pokemonCardsViewModel?.saveUserToDB(user)
                 UserManager.user = user
             }
-            drawer.nav_view.getHeaderView(0).userNickNameTextField.text = UserManager.user?.nickName
+            updateUserInfos()
             pokemonCardsViewModel?.userLiveData?.removeObservers(this)
         })
 
@@ -332,13 +332,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             .commit()
     }
 
-    override fun replaceWithAddNewCardFragment() {
-        supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.mainActivityContainer, AddNewCardFragment.newInstance(), "userCardDetailFragment")
-            .commit()
-    }
-
     override fun replaceWithFragment(fragment: androidx.fragment.app.Fragment, tag: String?) {
         supportFragmentManager
             .beginTransaction()
@@ -376,5 +369,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun showActionBar(value: Boolean) {
         if (value) supportActionBar!!.show() else supportActionBar!!.hide()
+    }
+
+    override fun updateUserInfos() {
+        drawer.nav_view.getHeaderView(0).userNickNameTextField.text = UserManager.user?.nickName
+        drawer.nav_view.getHeaderView(0).userCoinsTextField.text = UserManager.user?.coins.toString()
+        drawer.nav_view.getHeaderView(0).userDustsTextField.text = UserManager.user?.dusts.toString()
     }
 }

@@ -12,7 +12,6 @@ interface MainActivityListener {
     fun replaceWithUserDetailFragment(userCard: UserCard)
     fun replaceWithAllCardsFragment()
     fun replaceWithAllCardsDetailFragment(pokemonCard: PokemonCard)
-    fun replaceWithAddNewCardFragment()
     fun replaceWithQuizzFragment()
     fun replaceWithQuizzStartFragment()
     fun replaceWithQuizzEndedFragment(userWonQuiz: Boolean)
@@ -22,5 +21,6 @@ interface MainActivityListener {
     fun goBackFromFullScreenToAllCardsFragment()
     fun setFragmentTitle(title: String)
     fun showActionBar(value: Boolean)
+    fun updateUserInfos()
 
 }
