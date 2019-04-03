@@ -7,11 +7,15 @@ import lpiemam.com.apppokecards.Utils
 import lpiemam.com.apppokecards.model.*
 import lpiemam.com.apppokecards.retrofit.PokemonCardsRepository
 import lpiemam.com.apppokecards.room.UserCardsRepository
+import java.util.*
 import kotlin.collections.ArrayList
 
 class PokemonCardsViewModel : ViewModel() {
 
     var canClick: Boolean = true
+
+    var selectedUserCardForTrade: UserCard? = null
+    var selectedTrade: Trade? = null
 
     var pokemonCardsForNameLiveData = MutableLiveData<ArrayList<PokemonCard>>()
     var pokemonCardsForPackLiveData = MutableLiveData<ArrayList<PokemonCard>>()
@@ -21,11 +25,50 @@ class PokemonCardsViewModel : ViewModel() {
     var userLiveData = MutableLiveData<User>()
 
     var userCardList = ArrayList<UserCard>()
+    var tradeList = ArrayList<Trade>()
+
 
 
     fun initializeData() {
-        fetchUserFromDB()
         fetchUserCardsFromDB()
+        fetchUserFromDB()
+
+
+
+    }
+
+    fun initDummyTrades() {
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis = calendar.timeInMillis - 86400000
+        val trade = Trade(user1 = User(
+            "Test2",
+            "User2",
+            "YOLO",
+            "lpiem@univ-lyon1.fr",
+            calendar,
+            300000,
+            300000
+        ), userCard1 =  UserCard(PokemonCard("xyp-XY174", "Pikachu", 25, "130","https://images.pokemontcg.io/xyp/XY174_hires.png", ArrayList(), "XY174", "","", ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList(), 0, "", "", "", "")), user2 = null, userCard2 =  null)
+        tradeList.add(trade)
+        tradeList.add(trade)
+        tradeList.add(trade)
+        tradeList.add(trade)
+        val tradeUser = Trade(user1 = UserManager.user!!, userCard1 = userCardList[0] , user2 = User(
+            "Test2",
+            "User2",
+            "YOLO",
+            "lpiem@univ-lyon1.fr",
+            calendar,
+            300000,
+            300000
+        ), userCard2 = UserCard(PokemonCard("xyp-XY174", "Cubone", 25, "130","https://images.pokemontcg.io/dp6/90_hires.png",
+            java.util.ArrayList(), "XY174", "","",
+            java.util.ArrayList(),
+            java.util.ArrayList(),
+            java.util.ArrayList(),
+            java.util.ArrayList(),
+            java.util.ArrayList(), 0, "", "", "", "")))
+        //tradeList.add(tradeUser)
     }
 
     fun fetchUserCardsFromDB() {

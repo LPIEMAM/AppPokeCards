@@ -23,10 +23,7 @@ import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.nav_header_main.view.*
 import lpiemam.com.apppokecards.fragment.*
-import lpiemam.com.apppokecards.model.PokemonCard
-import lpiemam.com.apppokecards.model.User
-import lpiemam.com.apppokecards.model.UserCard
-import lpiemam.com.apppokecards.model.UserManager
+import lpiemam.com.apppokecards.model.*
 import lpiemam.com.apppokecards.room.DataBaseFactory
 import lpiemam.com.apppokecards.viewmodel.PokemonCardsViewModel
 import java.util.*
@@ -62,7 +59,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         pokemonCardsFragment = PokemonCardsFragment.newInstance()
         shopFragment = ShopFragment.newInstance()
-        userCardsFragment = UserCardsFragment()
+        userCardsFragment = UserCardsFragment.newInstance("userCards")
 
         drawer = drawer_layout
         toggle = ActionBarDrawerToggle(
@@ -97,6 +94,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
                 pokemonCardsViewModel?.saveUserToDB(user)
                 UserManager.user = user
+
             }
             updateUserInfos()
             pokemonCardsViewModel?.userLiveData?.removeObservers(this)
@@ -211,6 +209,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     .replace(R.id.mainActivityContainer, QuizzStartFragment.newInstance(), "quizzStartFragment")
                     .commit()
 
+            }
+            R.id.menuItemTrade -> {
+                pokemonCardsViewModel?.initDummyTrades()
+                supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.mainActivityContainer, TradeFragment.newInstance(), "tradeFragment")
+                    .commit()
             }
             R.id.menuItemAllCards -> {
                 supportFragmentManager
@@ -332,6 +337,22 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             .commit()
     }
 
+    override fun replaceWithPickCardFragment() {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.mainActivityContainer, UserCardsFragment.newInstance("trade"), "tradeFragment")
+            .addToBackStack(null)
+            .commit()
+    }
+
+
+    override fun replaceWithChooseCardFragment() {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.mainActivityContainer, TradeListFragment.newInstance(), "tradeFragment")
+            .addToBackStack(null)
+            .commit()
+    }
     override fun replaceWithFragment(fragment: androidx.fragment.app.Fragment, tag: String?) {
         supportFragmentManager
             .beginTransaction()

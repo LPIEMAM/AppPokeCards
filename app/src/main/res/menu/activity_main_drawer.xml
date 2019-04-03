@@ -16,6 +16,10 @@
             android:icon="@drawable/ic_quiz_black_24px"
             android:title="Quizz"/>
     <item
+            android:id="@+id/menuItemTrade"
+            android:icon="@drawable/ic_trade_black_24px"
+            android:title="Trade"/>
+    <item
             android:id="@+id/menuItemAllCards"
             android:icon="@drawable/ic_pokedex_black_24px"
             android:title="Pokedex"/>

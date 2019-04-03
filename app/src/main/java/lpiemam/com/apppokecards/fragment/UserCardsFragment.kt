@@ -13,6 +13,7 @@ import kotlinx.android.synthetic.main.fragment_user_cards.*
 import lpiemam.com.apppokecards.R
 import lpiemam.com.apppokecards.RecyclerTouchListener
 import lpiemam.com.apppokecards.adapter.UserCardsAdapter
+import lpiemam.com.apppokecards.model.UserManager
 import lpiemam.com.apppokecards.viewmodel.PokemonCardsViewModel
 import java.util.*
 
@@ -27,9 +28,13 @@ class UserCardsFragment : BaseFragment() {
 
     var userCardAdapter: UserCardsAdapter? = null
 
+    lateinit var useCase: String
+
     companion object {
-        fun newInstance(): UserCardsFragment {
-            return UserCardsFragment()
+        fun newInstance(useCase: String): UserCardsFragment {
+            val fragment = UserCardsFragment()
+            fragment.useCase = useCase
+            return fragment
         }
     }
 
@@ -48,8 +53,12 @@ class UserCardsFragment : BaseFragment() {
     ): View? {
 
         setHasOptionsMenu(true)
+        if (useCase == "trade") {
+            setFragmentTitle("Pick A Card")
+        } else {
+            setFragmentTitle("My Pokemons")
+        }
 
-        setFragmentTitle("My Pokemons")
         pokemonCardsViewModel = ViewModelProviders.of(activity!!).get(PokemonCardsViewModel::class.java)
 
         pokemonCardsViewModel.userCardListLiveData.observe(this, Observer {
@@ -99,14 +108,27 @@ class UserCardsFragment : BaseFragment() {
                 object : RecyclerTouchListener.ClickListener {
                     override fun onClick(view: View, position: Int) {
                         val userCard = userCardAdapter?.userCardsListFiltered!![position]
+                        if (useCase == "trade") {
 
-                        mainActivityListener?.replaceWithUserDetailFragment(userCard)
+                            pokemonCardsViewModel.selectedUserCardForTrade = userCard
+
+                            mainActivityListener?.popBackStack()
+                        } else {
+                            mainActivityListener?.replaceWithUserDetailFragment(userCard)
+                        }
+
                     }
 
                     override fun onLongClick(view: View?, position: Int) {
                         val userCard = userCardAdapter?.userCardsListFiltered!![position]
 
-                        mainActivityListener?.replaceWithUserDetailFragment(userCard)
+                        if (useCase == "trade") {
+                            pokemonCardsViewModel.selectedUserCardForTrade = userCard
+
+                            mainActivityListener?.popBackStack()
+                        } else {
+                            mainActivityListener?.replaceWithUserDetailFragment(userCard)
+                        }
                     }
                 })
         )

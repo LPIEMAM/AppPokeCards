@@ -8,16 +8,23 @@
     <string name="action_settings">Settings</string>
     <string name="destroy">Détruire</string>
     <string name="create">Crafter</string>
-    <string name="quizzWon">"Vous avez déjà répondu au quizz aujourd'hui, revenez demain pour essayer de gagner de nouvelles pièces !"
+    <string name="quizzWon">"Vous avez déjà répondu au quizz aujourd'hui, revenez demain pour essayer de gagner de
+        nouvelles pièces !"
     </string>
-    <string name="quizzStart">"Après avoir cliqué sur le bouton "Commencer", trois questions vous seront posées. Répondez correctement à au moins deux d'entre elles dans le temps qui vous est imparti pour obtenir 50 poképièces !"
+    <string name="quizzStart">"Après avoir cliqué sur le bouton "Commencer", trois questions vous seront posées.
+        Répondez correctement à au moins deux d'entre elles dans le temps qui vous est imparti pour obtenir 50
+        poképièces !"
     </string>
-    <string name="quizzPassed">"Bravo, vous avez remporté vos 50 pièces journalières pour avoir répondu correctement au quizz ! Revenez demain pour en remporter d'autres !"</string>
-    <string name="quizzFailed">"Vous n'avez pas répondu correctement à au moins deux questions, revenez demain pour retenter votre chance !"</string>
-    <string name="pokemonName">"Name :  "</string>
-    <string name="pokedexNumber">Pokedex number :  </string>
-    <string name="cardRarity">Rarity :  </string>
-    <string name="cardArtist">Artist :  </string>
+    <string name="quizzPassed">"Bravo, vous avez remporté vos 50 pièces journalières pour avoir répondu correctement au
+        quizz ! Revenez demain pour en remporter d'autres !"
+    </string>
+    <string name="quizzFailed">"Vous n'avez pas répondu correctement à au moins deux questions, revenez demain pour
+        retenter votre chance !"
+    </string>
+    <string name="pokemonName">"Name : "</string>
+    <string name="pokedexNumber">Pokedex number :</string>
+    <string name="cardRarity">Rarity :</string>
+    <string name="cardArtist">Artist :</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

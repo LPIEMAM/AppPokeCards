@@ -27,6 +27,10 @@ class User() {
         return coins >= pack.costPack
     }
 
+    override fun toString(): String {
+        return "User(userId=$userId, firstName=$firstName, lastName=$lastName, nickName='$nickName', email=$email, dateLastQuizzEnded=$dateLastQuizzEnded, coins=$coins, dusts=$dusts)"
+    }
+
     @Ignore
     constructor(
         firstName: String,
@@ -45,6 +49,7 @@ class User() {
         this.coins = coins
         this.dusts = dusts
     }
+
 
 }
 

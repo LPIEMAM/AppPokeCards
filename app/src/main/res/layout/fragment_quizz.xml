@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="120dp"
             android:layout_weight="2"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/primaryColor"
             android:textSize="18sp"
             android:textStyle="bold"
             android:gravity="center"

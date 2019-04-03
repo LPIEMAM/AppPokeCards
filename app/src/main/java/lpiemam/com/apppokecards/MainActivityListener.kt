@@ -22,5 +22,7 @@ interface MainActivityListener {
     fun setFragmentTitle(title: String)
     fun showActionBar(value: Boolean)
     fun updateUserInfos()
+    fun replaceWithPickCardFragment()
+    fun replaceWithChooseCardFragment()
 
 }

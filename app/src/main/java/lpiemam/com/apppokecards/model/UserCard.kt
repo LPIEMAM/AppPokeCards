@@ -56,4 +56,9 @@ class UserCard() : Parcelable, Comparable<UserCard> {
         }
     }
 
+    override fun toString(): String {
+        return "UserCard(userCardID=$userCardID, pokemonCard=$pokemonCard, numberOfCard=$numberOfCard)"
+    }
+
+
 }
