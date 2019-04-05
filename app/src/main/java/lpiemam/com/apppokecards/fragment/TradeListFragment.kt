@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.fragment_trade_list.*
@@ -13,6 +14,7 @@ import lpiemam.com.apppokecards.R
 import lpiemam.com.apppokecards.RecyclerTouchListener
 import lpiemam.com.apppokecards.adapter.TradeAdapter
 import lpiemam.com.apppokecards.adapter.UserCardsAdapter
+import lpiemam.com.apppokecards.model.UserManager
 import lpiemam.com.apppokecards.viewmodel.PokemonCardsViewModel
 import java.util.ArrayList
 
@@ -48,6 +50,17 @@ class TradeListFragment : BaseFragment() {
         setFragmentTitle("Choose A Card")
 
         pokemonCardsViewModel = ViewModelProviders.of(activity!!).get(PokemonCardsViewModel::class.java)
+
+
+        pokemonCardsViewModel.tradeForUserList.observe(this, Observer {
+            it.sort()
+            tradeAdapter?.setUpLists(it)
+            tradeAdapter?.notifyDataSetChanged()
+            pokemonCardsViewModel.tradeList = it
+            pokemonCardsViewModel.tradeForUserList = MutableLiveData()
+        })
+
+        pokemonCardsViewModel.getTradesForUser(UserManager.user!!)
 
 //        pokemonCardsViewModel.userCardListLiveData.observe(this, Observer {
 //
