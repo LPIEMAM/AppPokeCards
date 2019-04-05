@@ -10,7 +10,10 @@ object ApiFactory {
 
 
     //Creating Auth Interceptor to add api_key query in front of all the requests.
-    private val baseURL = "https://api.pokemontcg.io/v1/"
+    //REMOTE API
+    //private val baseURL = "https://apppokecards.herokuapp.com/"
+    //LOCAL API
+    private val baseURL = "http://10.0.2.2:3003/"
 
 
     private val interceptorLog = HttpLoggingInterceptor().let {

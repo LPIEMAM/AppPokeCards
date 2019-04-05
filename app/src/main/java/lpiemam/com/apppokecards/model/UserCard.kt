@@ -3,17 +3,20 @@ package lpiemam.com.apppokecards.model
 import android.os.Parcel
 import android.os.Parcelable
 import androidx.room.Entity
-import androidx.room.Ignore
 import androidx.room.PrimaryKey
+import com.google.gson.annotations.SerializedName
 
-@Entity
 class UserCard() : Parcelable, Comparable<UserCard> {
 
 
-    @PrimaryKey(autoGenerate = true)
+    @SerializedName("id")
     var userCardID: Int = 0
+    @SerializedName("iduser")
+    var userId: Int = 0
     lateinit var pokemonCard: PokemonCard
+    @SerializedName("nbExemplaire")
     var numberOfCard: Int = 1
+    var name: String = ""
 
     constructor(parcel: Parcel) : this() {
         userCardID = parcel.readInt()
@@ -23,6 +26,8 @@ class UserCard() : Parcelable, Comparable<UserCard> {
 
     constructor(pokemonCard: PokemonCard) : this() {
         this.pokemonCard = pokemonCard
+        this.name = pokemonCard.name
+        this.userId = UserManager.user!!.userId
     }
 
 

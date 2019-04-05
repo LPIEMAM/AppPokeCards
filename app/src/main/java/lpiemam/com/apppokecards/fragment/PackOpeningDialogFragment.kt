@@ -20,7 +20,7 @@ class PackOpeningDialogFragment : DialogFragment() {
     private val carouselViews = ArrayList<View>()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val builder = AlertDialog.Builder(activity!!)
+        val builder = AlertDialog.Builder(activity!!, R.style.AlertDialogCustom)
         val view = activity?.layoutInflater?.inflate(R.layout.pack_opening_dialog_layout, null)
         initStubItems()
         initCarousel(view!!)

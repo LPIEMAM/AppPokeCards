@@ -28,4 +28,5 @@
     <style name="AlertDialogCustom" parent="Theme.MaterialComponents.Light.Dialog.Alert">
         <item name="android:weekSeparatorLineColor">@color/secondaryColor</item>
     </style>
+
 </resources>

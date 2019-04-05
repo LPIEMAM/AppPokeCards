@@ -6,7 +6,10 @@ import androidx.lifecycle.ViewModel
 import lpiemam.com.apppokecards.Utils
 import lpiemam.com.apppokecards.model.*
 import lpiemam.com.apppokecards.retrofit.PokemonCardsRepository
-import lpiemam.com.apppokecards.room.UserCardsRepository
+import lpiemam.com.apppokecards.retrofit.TradeRepository
+import lpiemam.com.apppokecards.retrofit.UserCardsRepository
+import lpiemam.com.apppokecards.retrofit.UsersRepository
+//import lpiemam.com.apppokecards.room.UserCardsRepository
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -27,25 +30,23 @@ class PokemonCardsViewModel : ViewModel() {
     var userCardList = ArrayList<UserCard>()
     var tradeList = ArrayList<Trade>()
 
-
+    var tradeForUserList = MutableLiveData<ArrayList<Trade>>()
+    var currentTradeForUser = MutableLiveData<Trade>()
 
     fun initializeData() {
-        fetchUserCardsFromDB()
-        fetchUserFromDB()
-
-
-
+        fetchUserCardsForName("null")
     }
 
     fun initDummyTrades() {
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = calendar.timeInMillis - 86400000
+        val date = calendar.time
         val trade = Trade(user1 = User(
             "Test2",
             "User2",
             "YOLO",
             "lpiem@univ-lyon1.fr",
-            calendar,
+            date,
             300000,
             300000
         ), userCard1 =  UserCard(PokemonCard("xyp-XY174", "Pikachu", 25, "130","https://images.pokemontcg.io/xyp/XY174_hires.png", ArrayList(), "XY174", "","", ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList(), 0, "", "", "", "")), user2 = null, userCard2 =  null)
@@ -58,7 +59,7 @@ class PokemonCardsViewModel : ViewModel() {
             "User2",
             "YOLO",
             "lpiem@univ-lyon1.fr",
-            calendar,
+            date,
             300000,
             300000
         ), userCard2 = UserCard(PokemonCard("xyp-XY174", "Cubone", 25, "130","https://images.pokemontcg.io/dp6/90_hires.png",
@@ -71,37 +72,64 @@ class PokemonCardsViewModel : ViewModel() {
         //tradeList.add(tradeUser)
     }
 
-    fun fetchUserCardsFromDB() {
-        UserCardsRepository.fetchUserCards().observeForever {
+    fun fetchUserCardsForName(name: String) {
+        UserCardsRepository.fetchUserCardsForName(UserManager.user!!.userId, name).observeForever {
             userCardListLiveData.postValue(it)
         }
     }
 
     fun insertCardToDB(userCard: UserCard) {
-        UserCardsRepository.insertCard(userCard)
-    }
-
-    fun updateCardInDB(userCard: UserCard) {
-        UserCardsRepository.updateCard(userCard)
-    }
-
-    fun deleteCardFromDB(id: Int) {
-        UserCardsRepository.deleteCard(id)
-    }
-
-    fun fetchUserFromDB() {
-        UserCardsRepository.fetchUser().observeForever {
-            userLiveData.postValue(it)
+        UserCardsRepository.postUserCard(userCard).observeForever {
+            userCard.userCardID = it
         }
     }
 
-    fun saveUserToDB(user: User) {
-        UserCardsRepository.saveUser(user)
+    fun updateCardInDB(userCard: UserCard) {
+        UserCardsRepository.patchUserCard(userCard)
+    }
+
+    fun deleteCardFromDB(userCard: UserCard) {
+        UserCardsRepository.deleteUserCard(userCard)
     }
 
     fun updateUserInDB(user: User) {
-        UserCardsRepository.updateUser(user)
+        UsersRepository.patchUser(user)
     }
+
+    fun postTrade(trade: Trade) {
+        TradeRepository.postTrade(trade).observeForever {
+            trade.id = it
+        }
+    }
+
+    fun patchTrade(trade: Trade) {
+        TradeRepository.patchTrade(trade)
+    }
+
+    fun patchTradeTraite(trade: Trade) {
+        TradeRepository.patchTradeTraite(trade)
+    }
+
+    fun patchTradeValidated(trade: Trade) {
+        TradeRepository.patchTradeValidated(trade)
+    }
+
+    fun getTradesForUser(user: User) {
+        TradeRepository.getTradesForUser(user).observeForever {
+            tradeForUserList.postValue(it)
+        }
+    }
+
+    fun getCurrentTradeForUser(user: User) {
+        TradeRepository.getCurrentTradeForUser(user).observeForever {
+            if(!it.isEmpty()) {
+                currentTradeForUser.postValue(it[0])
+            } else {
+                currentTradeForUser.postValue(null)
+            }
+        }
+    }
+
 
     fun fetchPokemonCardsForName(name: String) {
         currentPage = 1
@@ -144,7 +172,12 @@ class PokemonCardsViewModel : ViewModel() {
         for (i in 1..cardsPack.nbCards) {
 
             var randomPage = (0..22).random()
-            var randomPosition = (0..500).random()
+            var randomPosition = 0
+            if(randomPage != 22) {
+                randomPosition = (0..500).random()
+            } else {
+                randomPosition = (0..416).random()
+            }
 
             var pokemonCardsForPageLiveData = fetchPokemonCardsForPage(randomPage)
             pokemonCardsForPageLiveData.observeForever(object : Observer<List<PokemonCard>> {
@@ -168,7 +201,7 @@ class PokemonCardsViewModel : ViewModel() {
             if (card.isCardInArray(userCardList)) {
                 userCard = card.getInstanceOfUserCard(userCardList)
                 userCard.numberOfCard++
-                insertCardToDB(userCard)
+                updateCardInDB(userCard)
             } else {
                 userCard = UserCard(card)
                 userCardList.add(userCard)
@@ -186,7 +219,7 @@ class PokemonCardsViewModel : ViewModel() {
         if (pokemonCard.isCardInArray(userCardList)) {
             userCard = pokemonCard.getInstanceOfUserCard(userCardList)
             userCard.numberOfCard++
-            insertCardToDB(userCard)
+            updateCardInDB(userCard)
         } else {
             userCard = UserCard(pokemonCard)
             userCardList.add(userCard)
@@ -206,7 +239,7 @@ class PokemonCardsViewModel : ViewModel() {
         } else {
             userCardList.remove(userCard)
             if (userCard.userCardID != 0) {
-                deleteCardFromDB(userCard.userCardID)
+                deleteCardFromDB(userCard)
             }
         }
         userCardList.sort()

@@ -36,7 +36,7 @@ class PokemonCardsFragment : BaseFragment() {
         super.onCreate(savedInstanceState)
 
         pokemonCardsViewModel = ViewModelProviders.of(activity!!).get(PokemonCardsViewModel::class.java)
-        pokemonCardsViewModel.fetchPokemonCardsForName("")
+        pokemonCardsViewModel.fetchPokemonCardsForName("null")
     }
 
     override fun onCreateView(
@@ -61,12 +61,20 @@ class PokemonCardsFragment : BaseFragment() {
 
         allCardsSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(s: String): Boolean {
-                pokemonCardsViewModel.fetchPokemonCardsForName(s)
+                if (s.isEmpty()) {
+                    pokemonCardsViewModel.fetchPokemonCardsForName("null")
+                } else {
+                    pokemonCardsViewModel.fetchPokemonCardsForName(s)
+                }
                 return false
             }
 
             override fun onQueryTextChange(s: String): Boolean {
-                pokemonCardsViewModel.fetchPokemonCardsForName(s)
+                if (s.isEmpty()) {
+                    pokemonCardsViewModel.fetchPokemonCardsForName("null")
+                } else {
+                    pokemonCardsViewModel.fetchPokemonCardsForName(s)
+                }
                 return false
             }
         })
@@ -83,7 +91,11 @@ class PokemonCardsFragment : BaseFragment() {
         pokemonCardsAdapter.onBottomReachedListener = object : OnBottomReachedListener {
             override fun onBottomReached(position: Int) {
                 val currentSearch = allCardsSearchView.query.toString()
-                pokemonCardsViewModel.fetchPokemonCardsForNextPage(currentSearch)
+                if (currentSearch.isEmpty()) {
+                    pokemonCardsViewModel.fetchPokemonCardsForNextPage("null")
+                } else {
+                    pokemonCardsViewModel.fetchPokemonCardsForNextPage(currentSearch)
+                }
             }
         }
         allCardsRecyclerView?.layoutManager = androidx.recyclerview.widget.GridLayoutManager(context, 4)

@@ -24,7 +24,6 @@ import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.nav_header_main.view.*
 import lpiemam.com.apppokecards.fragment.*
 import lpiemam.com.apppokecards.model.*
-import lpiemam.com.apppokecards.room.DataBaseFactory
 import lpiemam.com.apppokecards.viewmodel.PokemonCardsViewModel
 import java.util.*
 
@@ -52,7 +51,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        DataBaseFactory.initialize(applicationContext)
 
         pokemonCardsViewModel = ViewModelProviders.of(this).get(PokemonCardsViewModel::class.java)
         pokemonCardsViewModel!!.initializeData()
@@ -75,30 +73,31 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 .commit()
         }
 
-        pokemonCardsViewModel?.userLiveData?.observe(this, androidx.lifecycle.Observer {
-            if(it != null) {
-                UserManager.user = it
-            } else {
-                val calendar = Calendar.getInstance()
-                calendar.timeInMillis = calendar.timeInMillis - 86400000
-                val user =
-                    User(
-                        "Test",
-                        "User",
-                        "YOLO",
-                        "lpiem@univ-lyon1.fr",
-                        calendar,
-                        300000,
-                        300000
-                    )
-
-                pokemonCardsViewModel?.saveUserToDB(user)
-                UserManager.user = user
-
-            }
-            updateUserInfos()
-            pokemonCardsViewModel?.userLiveData?.removeObservers(this)
-        })
+        updateUserInfos()
+//        pokemonCardsViewModel?.userLiveData?.observe(this, androidx.lifecycle.Observer {
+//            if(it != null) {
+//                UserManager.user = it
+//            } else {
+//                val calendar = Calendar.getInstance()
+//                calendar.timeInMillis = calendar.timeInMillis - 86400000
+//                val user =
+//                    User(
+//                        "Test",
+//                        "User",
+//                        "YOLO",
+//                        "lpiem@univ-lyon1.fr",
+//                        calendar,
+//                        300000,
+//                        300000
+//                    )
+//
+//                pokemonCardsViewModel?.saveUserToDB(user)
+//                UserManager.user = user
+//
+//            }
+//            updateUserInfos()
+//            pokemonCardsViewModel?.userLiveData?.removeObservers(this)
+//        })
 
         nav_view.setNavigationItemSelectedListener(this)
     }
@@ -116,7 +115,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun endQuizz() {
         toast!!.cancel()
-        UserManager.user?.dateLastQuizzEnded = Calendar.getInstance()
+        UserManager.user?.dateLastQuizzEndedDate = Calendar.getInstance().time
         pokemonCardsViewModel!!.updateUserInDB(UserManager.user!!)
         supportFragmentManager
             .beginTransaction()

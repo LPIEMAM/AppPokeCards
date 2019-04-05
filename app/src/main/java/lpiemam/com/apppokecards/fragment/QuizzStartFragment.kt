@@ -47,13 +47,21 @@ class QuizzStartFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        var dateOfDay = Calendar.getInstance()
-        if (user?.dateLastQuizzEnded == null || (dateOfDay.timeInMillis - user?.dateLastQuizzEnded!!.timeInMillis >= 86400000)) {
+        if (user?.dateLastQuizzEndedDate == null) {
             quizzEndedGroup.visibility = View.GONE
             quizzStartGroup.visibility = View.VISIBLE
         } else {
-            quizzEndedGroup.visibility = View.VISIBLE
-            quizzStartGroup.visibility = View.GONE
+
+            var dateOfDay = Calendar.getInstance()
+            val calendar = Calendar.getInstance()
+            calendar.time = user!!.dateLastQuizzEndedDate
+            if(dateOfDay.timeInMillis - calendar.timeInMillis >= 86400000) {
+                quizzEndedGroup.visibility = View.GONE
+                quizzStartGroup.visibility = View.VISIBLE
+            } else {
+                quizzEndedGroup.visibility = View.VISIBLE
+                quizzStartGroup.visibility = View.GONE
+            }
         }
 
         startButton.setOnClickListener {

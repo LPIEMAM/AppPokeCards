@@ -1,26 +1,29 @@
 package lpiemam.com.apppokecards.model
 
-import androidx.annotation.NonNull
-import androidx.room.Entity
 import androidx.room.Ignore
-import androidx.room.PrimaryKey
-import androidx.room.TypeConverters
-import lpiemam.com.apppokecards.retrofit.Converter
+import com.google.gson.annotations.SerializedName
 import java.util.*
 
-@Entity
 class User() {
 
-    @PrimaryKey(autoGenerate = true)
+    @SerializedName("id")
     var userId: Int = 1
+    @SerializedName("firstname")
     var firstName: String? = ""
+    @SerializedName("lastname")
     var lastName: String? = ""
-    @NonNull
+    @SerializedName("nickname")
     var nickName: String = ""
+    @SerializedName("email")
     var email: String? = ""
-    @TypeConverters(Converter::class)
-    var dateLastQuizzEnded: Calendar? = null
+//    @TypeConverters(Converter::class)
+    //var dateLastQuizzEnded: Calendar? = null
+
+    @SerializedName("datelastquizz")
+    var dateLastQuizzEndedDate: Date? = null
+    @SerializedName("gold")
     var coins: Int = 0
+    @SerializedName("dust")
     var dusts: Int = 0
 
     fun canBuyAPack(pack: CardsPack): Boolean {
@@ -28,7 +31,7 @@ class User() {
     }
 
     override fun toString(): String {
-        return "User(userId=$userId, firstName=$firstName, lastName=$lastName, nickName='$nickName', email=$email, dateLastQuizzEnded=$dateLastQuizzEnded, coins=$coins, dusts=$dusts)"
+        return nickName
     }
 
     @Ignore
@@ -37,7 +40,8 @@ class User() {
         lastName: String,
         nickName: String,
         email: String,
-        dateLastQuizzEnded: Calendar?,
+//        dateLastQuizzEnded: Calendar?,
+        dateLastQuizzEndedDate: Date,
         coins: Int,
         dusts: Int
     ) : this() {
@@ -45,7 +49,8 @@ class User() {
         this.lastName = lastName
         this.nickName = nickName
         this.email = email
-        this.dateLastQuizzEnded = dateLastQuizzEnded
+//        this.dateLastQuizzEnded = dateLastQuizzEnded
+        this.dateLastQuizzEndedDate = dateLastQuizzEndedDate
         this.coins = coins
         this.dusts = dusts
     }

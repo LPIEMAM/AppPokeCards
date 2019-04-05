@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_trade.*
@@ -61,6 +62,14 @@ class TradeFragment : BaseFragment() {
 
         pokemonCardsViewModel = ViewModelProviders.of(activity!!).get(PokemonCardsViewModel::class.java)
 
+        pokemonCardsViewModel.currentTradeForUser.observe(this, Observer {
+            if(it != null) {
+                showPopUp(it)
+            }
+        })
+
+        pokemonCardsViewModel.getCurrentTradeForUser(UserManager.user!!)
+
         return inflater.inflate(R.layout.fragment_trade, container, false)
     }
 
@@ -69,7 +78,7 @@ class TradeFragment : BaseFragment() {
 
         setUpVisibility()
         setUpButtons()
-        showPopUp()
+//        showPopUp()
 
 
         if(pokemonCardsViewModel.selectedUserCardForTrade != null) {
@@ -188,26 +197,18 @@ class TradeFragment : BaseFragment() {
         }
     }
 
-    private fun showPopUp() {
-        var hasSomeOnGoingTrade = false
-        var lastOngoingTrade: Trade? = null
-        for (trade in pokemonCardsViewModel.tradeList) {
-            if(trade.user1 == UserManager.user) {
-                hasSomeOnGoingTrade = true
-                lastOngoingTrade = trade
-            }
-        }
+    private fun showPopUp(currentTrade : Trade) {
 
-        if (hasSomeOnGoingTrade) {
-            currentTrade = lastOngoingTrade!!
+        if (currentTrade.user1.nickName == UserManager.user!!.nickName) {
+
             val builder = AlertDialog.Builder(context, R.style.AlertDialogCustom)
 
-            if(currentTrade!!.user2 == null) {
+            if(currentTrade.user2 == null) {
                 builder.setTitle("Ongoing Trade")
 
                 builder.setMessage("You have a trade going.")
 
-                Picasso.get().load(currentTrade!!.userCard1!!.pokemonCard.imageUrlHiRes).placeholder(R.drawable.pokemon_card_back).into(tradeUserCard1ImageView)
+                Picasso.get().load(currentTrade.userCard1!!.pokemonCard.imageUrlHiRes).placeholder(R.drawable.pokemon_card_back).into(tradeUserCard1ImageView)
 
                 tradeToggleButton.isChecked = false
                 chooseACardButton.visibility = View.GONE
@@ -221,8 +222,8 @@ class TradeFragment : BaseFragment() {
                 builder.setTitle("Trading")
 
                 builder.setMessage("Someone has an offer for you.")
-                Picasso.get().load(currentTrade!!.userCard1!!.pokemonCard.imageUrlHiRes).placeholder(R.drawable.pokemon_card_back).into(tradeUserCard1ImageView)
-                Picasso.get().load(currentTrade!!.userCard2!!.pokemonCard.imageUrlHiRes).placeholder(R.drawable.pokemon_card_back).into(tradeUserCard2ImageView)
+                Picasso.get().load(currentTrade.userCard1!!.pokemonCard.imageUrlHiRes).placeholder(R.drawable.pokemon_card_back).into(tradeUserCard1ImageView)
+                Picasso.get().load(currentTrade.userCard2!!.pokemonCard.imageUrlHiRes).placeholder(R.drawable.pokemon_card_back).into(tradeUserCard2ImageView)
 
                 tradeToggleButton.isChecked = false
                 chooseACardButton.visibility = View.GONE
@@ -241,28 +242,16 @@ class TradeFragment : BaseFragment() {
 
             // Display the alert dialog on app interface
             dialog.show()
-        }
-
-        var hasSomeOutGoingTrade = false
-        var lastOutgoingTrade: Trade? = null
-        for (trade in pokemonCardsViewModel.tradeList) {
-            if(trade.user2 == UserManager.user) {
-                hasSomeOutGoingTrade = true
-                lastOutgoingTrade = trade
-            }
-        }
-
-        if (hasSomeOutGoingTrade) {
-            currentTrade = lastOutgoingTrade!!
+        } else {
             val builder = AlertDialog.Builder(context, R.style.AlertDialogCustom)
 
             when {
-                currentTrade!!.isValidated == true -> {
+                currentTrade.isValidated == true -> {
                     builder.setTitle("Trade accepted")
 
                     builder.setMessage("Your trade has been accepted, your new card made it to your collection.")
-                    Picasso.get().load(currentTrade!!.userCard1!!.pokemonCard.imageUrlHiRes).placeholder(R.drawable.pokemon_card_back).into(tradeUserCard2ImageView)
-                    Picasso.get().load(currentTrade!!.userCard2!!.pokemonCard.imageUrlHiRes).placeholder(R.drawable.pokemon_card_back).into(tradeUserCard1ImageView)
+                    Picasso.get().load(currentTrade.userCard1!!.pokemonCard.imageUrlHiRes).placeholder(R.drawable.pokemon_card_back).into(tradeUserCard2ImageView)
+                    Picasso.get().load(currentTrade.userCard2!!.pokemonCard.imageUrlHiRes).placeholder(R.drawable.pokemon_card_back).into(tradeUserCard1ImageView)
 
                     tradeToggleButton.isChecked = true
                     chooseACardButton.visibility = View.GONE
@@ -273,12 +262,12 @@ class TradeFragment : BaseFragment() {
                     tradeToggleButton.isEnabled = false
 
                 }
-                currentTrade!!.isValidated == false -> {
+                currentTrade.isValidated == false -> {
                     builder.setTitle("Trade refused")
 
                     builder.setMessage("Your trade has been refused, you card is back in your collection.")
-                    Picasso.get().load(currentTrade!!.userCard1!!.pokemonCard.imageUrlHiRes).placeholder(R.drawable.pokemon_card_back).into(tradeUserCard2ImageView)
-                    Picasso.get().load(currentTrade!!.userCard2!!.pokemonCard.imageUrlHiRes).placeholder(R.drawable.pokemon_card_back).into(tradeUserCard1ImageView)
+                    Picasso.get().load(currentTrade.userCard1!!.pokemonCard.imageUrlHiRes).placeholder(R.drawable.pokemon_card_back).into(tradeUserCard2ImageView)
+                    Picasso.get().load(currentTrade.userCard2!!.pokemonCard.imageUrlHiRes).placeholder(R.drawable.pokemon_card_back).into(tradeUserCard1ImageView)
 
                     tradeToggleButton.isChecked = true
                     chooseACardButton.visibility = View.GONE
@@ -292,8 +281,8 @@ class TradeFragment : BaseFragment() {
                     builder.setTitle("OngoingTrade")
 
                     builder.setMessage("You have a trade going.")
-                    Picasso.get().load(currentTrade!!.userCard1!!.pokemonCard.imageUrlHiRes).placeholder(R.drawable.pokemon_card_back).into(tradeUserCard2ImageView)
-                    Picasso.get().load(currentTrade!!.userCard2!!.pokemonCard.imageUrlHiRes).placeholder(R.drawable.pokemon_card_back).into(tradeUserCard1ImageView)
+                    Picasso.get().load(currentTrade.userCard1!!.pokemonCard.imageUrlHiRes).placeholder(R.drawable.pokemon_card_back).into(tradeUserCard2ImageView)
+                    Picasso.get().load(currentTrade.userCard2!!.pokemonCard.imageUrlHiRes).placeholder(R.drawable.pokemon_card_back).into(tradeUserCard1ImageView)
 
                     tradeToggleButton.isChecked = true
                     chooseACardButton.visibility = View.GONE

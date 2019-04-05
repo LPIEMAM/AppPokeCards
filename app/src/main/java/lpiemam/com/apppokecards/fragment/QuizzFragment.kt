@@ -202,7 +202,7 @@ class QuizzFragment : BaseFragment() {
                 user!!.coins += 50
                 userWonQuiz = true
             }
-            user?.dateLastQuizzEnded = Calendar.getInstance()
+            user?.dateLastQuizzEndedDate = Calendar.getInstance().time
             quizzViewModel.updateUserInDB(UserManager.user!!)
             updateUserInfos()
             endGame()
