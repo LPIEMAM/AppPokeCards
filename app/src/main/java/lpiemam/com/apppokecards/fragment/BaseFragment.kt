@@ -2,7 +2,7 @@ package lpiemam.com.apppokecards.fragment
 
 import android.content.Context
 import androidx.fragment.app.Fragment
-import lpiemam.com.apppokecards.MainActivityListener
+import lpiemam.com.apppokecards.listeners.MainActivityListener
 
 abstract class BaseFragment : Fragment() {
     var mainActivityListener: MainActivityListener? = null

@@ -6,13 +6,15 @@ class Trade(
     var userCard1: UserCard?,
     var user2: User?,
     var userCard2: UserCard?,
-    var isValidated: Boolean? = null
-    ): Comparable<Trade> {
+    var validated: Boolean? = null
+) : Comparable<Trade> {
     override fun compareTo(other: Trade): Int {
         return when {
             other.userCard1!!.pokemonCard.nationalPokedexNumber == null && this.userCard1!!.pokemonCard.nationalPokedexNumber != null -> -1
-            this.userCard1!!.pokemonCard.nationalPokedexNumber == null && other.userCard1!!.pokemonCard.nationalPokedexNumber != null-> 1
-            other.userCard1!!.pokemonCard.nationalPokedexNumber == null && this.userCard1!!.pokemonCard.nationalPokedexNumber == null -> this.userCard1!!.pokemonCard.supertype?.compareTo(other.userCard1!!.pokemonCard.supertype!!)!!
+            this.userCard1!!.pokemonCard.nationalPokedexNumber == null && other.userCard1!!.pokemonCard.nationalPokedexNumber != null -> 1
+            other.userCard1!!.pokemonCard.nationalPokedexNumber == null && this.userCard1!!.pokemonCard.nationalPokedexNumber == null -> this.userCard1!!.pokemonCard.supertype?.compareTo(
+                other.userCard1!!.pokemonCard.supertype!!
+            )!!
             else -> this.userCard1!!.pokemonCard.nationalPokedexNumber!!.compareTo(other.userCard1!!.pokemonCard.nationalPokedexNumber!!)
         }
     }

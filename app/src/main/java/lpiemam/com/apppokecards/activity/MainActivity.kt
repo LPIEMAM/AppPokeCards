@@ -1,10 +1,9 @@
-package lpiemam.com.apppokecards
+package lpiemam.com.apppokecards.activity
 
 import android.content.Context
 import android.graphics.Rect
 import android.os.Bundle
 import android.os.Handler
-import android.view.Menu
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
@@ -15,15 +14,18 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.nav_header_main.view.*
+import lpiemam.com.apppokecards.listeners.MainActivityListener
+import lpiemam.com.apppokecards.R
 import lpiemam.com.apppokecards.fragment.*
-import lpiemam.com.apppokecards.model.*
+import lpiemam.com.apppokecards.model.PokemonCard
+import lpiemam.com.apppokecards.model.UserCard
+import lpiemam.com.apppokecards.model.UserManager
 import lpiemam.com.apppokecards.viewmodel.PokemonCardsViewModel
 import java.util.*
 
@@ -61,7 +63,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         drawer = drawer_layout
         toggle = ActionBarDrawerToggle(
-            this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close
+            this, drawer_layout, toolbar,
+            R.string.navigation_drawer_open,
+            R.string.navigation_drawer_close
         )
         drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
@@ -74,30 +78,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
 
         updateUserInfos()
-//        pokemonCardsViewModel?.userLiveData?.observe(this, androidx.lifecycle.Observer {
-//            if(it != null) {
-//                UserManager.user = it
-//            } else {
-//                val calendar = Calendar.getInstance()
-//                calendar.timeInMillis = calendar.timeInMillis - 86400000
-//                val user =
-//                    User(
-//                        "Test",
-//                        "User",
-//                        "YOLO",
-//                        "lpiem@univ-lyon1.fr",
-//                        calendar,
-//                        300000,
-//                        300000
-//                    )
-//
-//                pokemonCardsViewModel?.saveUserToDB(user)
-//                UserManager.user = user
-//
-//            }
-//            updateUserInfos()
-//            pokemonCardsViewModel?.userLiveData?.removeObservers(this)
-//        })
 
         nav_view.setNavigationItemSelectedListener(this)
     }
@@ -115,8 +95,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun endQuizz() {
         toast!!.cancel()
-        UserManager.user?.dateLastQuizzEndedDate = Calendar.getInstance().time
-        pokemonCardsViewModel!!.updateUserInDB(UserManager.user!!)
+        UserManager.loggedUser?.dateLastQuizzEndedDate = Calendar.getInstance().time
+        pokemonCardsViewModel!!.updateUserInDB(UserManager.loggedUser!!)
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.mainActivityContainer, userCardsFragment, "userCardsFragment")
@@ -151,7 +131,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             when (currentFragment) {
                 is PokemonCardDetailFragment -> supportFragmentManager.popBackStack()
                 is FullScreenCardFragment -> supportFragmentManager.popBackStack()
-                is UserCardsFragment -> super.onBackPressed()
+                is UserCardsFragment -> {
+                    if(supportFragmentManager.backStackEntryCount > 0) {
+                        supportFragmentManager.popBackStack()
+                    } else {
+                        moveTaskToBack(true)
+                    }
+                }
+                is TradeListFragment -> supportFragmentManager.popBackStack()
                 is QuizzFragment -> {
                     warnQuizz()
                 }
@@ -168,28 +155,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-//    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        menuInflater.inflate(R.menu.main, menu)
-//        return true
-//    }
-//
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-//        when (item.itemId) {
-//            R.id.action_settings -> return true
-//            else -> return super.onOptionsItemSelected(item)
-//        }
-//
-//
-//    }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         when (item.itemId) {
             R.id.menuItemCollection -> {
+                for (i in 0 until supportFragmentManager.backStackEntryCount) {
+                    supportFragmentManager.popBackStack()
+                }
                 supportFragmentManager
                     .beginTransaction()
                     .replace(R.id.mainActivityContainer, userCardsFragment, "userCardsFragment")
@@ -210,7 +183,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             }
             R.id.menuItemTrade -> {
-                pokemonCardsViewModel?.initDummyTrades()
                 supportFragmentManager
                     .beginTransaction()
                     .replace(R.id.mainActivityContainer, TradeFragment.newInstance(), "tradeFragment")
@@ -352,6 +324,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             .addToBackStack(null)
             .commit()
     }
+
     override fun replaceWithFragment(fragment: androidx.fragment.app.Fragment, tag: String?) {
         supportFragmentManager
             .beginTransaction()
@@ -392,8 +365,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun updateUserInfos() {
-        drawer.nav_view.getHeaderView(0).userNickNameTextField.text = UserManager.user?.nickName
-        drawer.nav_view.getHeaderView(0).userCoinsTextField.text = UserManager.user?.coins.toString()
-        drawer.nav_view.getHeaderView(0).userDustsTextField.text = UserManager.user?.dusts.toString()
+        drawer.nav_view.getHeaderView(0).userNickNameTextField.text = UserManager.loggedUser?.nickName
+        drawer.nav_view.getHeaderView(0).userCoinsTextField.text = UserManager.loggedUser?.coins.toString()
+        drawer.nav_view.getHeaderView(0).userDustsTextField.text = UserManager.loggedUser?.dusts.toString()
     }
 }

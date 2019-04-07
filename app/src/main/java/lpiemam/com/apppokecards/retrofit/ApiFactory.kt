@@ -1,19 +1,16 @@
 package lpiemam.com.apppokecards.retrofit
 
-import okhttp3.Interceptor
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import timber.log.Timber
 
 object ApiFactory {
 
 
-    //Creating Auth Interceptor to add api_key query in front of all the requests.
     //REMOTE API
-    //private val baseURL = "https://apppokecards.herokuapp.com/"
+    private val baseURL = "https://apppokecards.herokuapp.com/"
     //LOCAL API
-    private val baseURL = "http://10.0.2.2:3003/"
+//    private val baseURL = "http://10.0.2.2:3003/"
 
 
     private val interceptorLog = HttpLoggingInterceptor().let {
@@ -35,6 +32,6 @@ object ApiFactory {
         .build()
 
 
-    val POKEMON_CARDS_WEB_SERVICE: PokemonCardsWebService = retrofit().create(PokemonCardsWebService::class.java)
+    val APP_POKE_CARDS_WEB_SERVICE: AppPokeCardsWebService = retrofit().create(AppPokeCardsWebService::class.java)
 
 }

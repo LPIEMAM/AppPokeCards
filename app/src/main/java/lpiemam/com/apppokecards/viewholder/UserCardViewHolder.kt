@@ -13,7 +13,7 @@ class UserCardViewHolder(itemView: View) : androidx.recyclerview.widget.Recycler
 
     fun bind(userCard: UserCard) {
         Picasso.get().load(userCard.pokemonCard.imageUrlHiRes).placeholder(R.drawable.pokemon_card_back).into(ivCard)
-        if (userCard.numberOfCard > 1) {
+        if (userCard.numberOfCardAvailable > 1) {
             itemView.numberCardsTextView.text = userCard.numberOfCard.toString()
             itemView.numberCardsTextView.visibility = View.VISIBLE
         } else {

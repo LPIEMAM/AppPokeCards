@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.fragment_pokemon_card_detail.*
 import kotlinx.android.synthetic.main.fragment_user_card_detail.*
 import lpiemam.com.apppokecards.R
 import lpiemam.com.apppokecards.model.UserCard
@@ -22,7 +21,7 @@ import lpiemam.com.apppokecards.viewmodel.PokemonCardsViewModel
  */
 class UserCardDetailFragment : BaseFragment() {
 
-    var user = UserManager.user
+    var user = UserManager.loggedUser
 
     lateinit var pokemonCardsViewModel: PokemonCardsViewModel
 
@@ -85,19 +84,19 @@ class UserCardDetailFragment : BaseFragment() {
             mainActivityListener?.replaceWithCollectionFragment()
         }
 
-            userCardDetailPokemonName.text = userCard.pokemonCard.name
+        userCardDetailPokemonName.text = userCard.pokemonCard.name
 
-        if (userCard.pokemonCard.nationalPokedexNumber.toString() != "null" ) {
+        if (userCard.pokemonCard.nationalPokedexNumber.toString() != "null") {
             userCardDetailPokedexNumber.text = userCard.pokemonCard.nationalPokedexNumber.toString()
             userDetailWithPokedexNumber.visibility = View.VISIBLE
-        } else{
+        } else {
             userDetailWithPokedexNumber.visibility = View.GONE
         }
 
         if (userCard.pokemonCard.rarity != "") {
             userCardRarity.text = userCard.pokemonCard.rarity
             userDetailWithRarity.visibility = View.VISIBLE
-        } else{
+        } else {
             userDetailWithRarity.visibility = View.GONE
         }
 

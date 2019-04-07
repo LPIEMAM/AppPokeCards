@@ -1,17 +1,15 @@
 package lpiemam.com.apppokecards.viewmodel
 
+//import lpiemam.com.apppokecards.room.UserCardsRepository
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
-import lpiemam.com.apppokecards.Utils
+import lpiemam.com.apppokecards.utils.Utils
 import lpiemam.com.apppokecards.model.*
-import lpiemam.com.apppokecards.retrofit.PokemonCardsRepository
-import lpiemam.com.apppokecards.retrofit.TradeRepository
-import lpiemam.com.apppokecards.retrofit.UserCardsRepository
-import lpiemam.com.apppokecards.retrofit.UsersRepository
-//import lpiemam.com.apppokecards.room.UserCardsRepository
-import java.util.*
-import kotlin.collections.ArrayList
+import lpiemam.com.apppokecards.retrofit.pokemoncards.PokemonCardsRepository
+import lpiemam.com.apppokecards.retrofit.trades.TradeRepository
+import lpiemam.com.apppokecards.retrofit.usercards.UserCardsRepository
+import lpiemam.com.apppokecards.retrofit.users.UsersRepository
 
 class PokemonCardsViewModel : ViewModel() {
 
@@ -33,50 +31,21 @@ class PokemonCardsViewModel : ViewModel() {
     var tradeForUserList = MutableLiveData<ArrayList<Trade>>()
     var currentTradeForUser = MutableLiveData<Trade>()
 
+    var affectedRowsUserCardsLiveData = MutableLiveData<Int>()
+
+    var userLookingForTrade = false
+
     fun initializeData() {
         fetchUserCardsForName("null")
     }
 
-    fun initDummyTrades() {
-        val calendar = Calendar.getInstance()
-        calendar.timeInMillis = calendar.timeInMillis - 86400000
-        val date = calendar.time
-        val trade = Trade(user1 = User(
-            "Test2",
-            "User2",
-            "YOLO",
-            "lpiem@univ-lyon1.fr",
-            date,
-            300000,
-            300000
-        ), userCard1 =  UserCard(PokemonCard("xyp-XY174", "Pikachu", 25, "130","https://images.pokemontcg.io/xyp/XY174_hires.png", ArrayList(), "XY174", "","", ArrayList(), ArrayList(), ArrayList(), ArrayList(), ArrayList(), 0, "", "", "", "")), user2 = null, userCard2 =  null)
-        tradeList.add(trade)
-        tradeList.add(trade)
-        tradeList.add(trade)
-        tradeList.add(trade)
-        val tradeUser = Trade(user1 = UserManager.user!!, userCard1 = userCardList[0] , user2 = User(
-            "Test2",
-            "User2",
-            "YOLO",
-            "lpiem@univ-lyon1.fr",
-            date,
-            300000,
-            300000
-        ), userCard2 = UserCard(PokemonCard("xyp-XY174", "Cubone", 25, "130","https://images.pokemontcg.io/dp6/90_hires.png",
-            java.util.ArrayList(), "XY174", "","",
-            java.util.ArrayList(),
-            java.util.ArrayList(),
-            java.util.ArrayList(),
-            java.util.ArrayList(),
-            java.util.ArrayList(), 0, "", "", "", "")))
-        //tradeList.add(tradeUser)
-    }
 
     fun fetchUserCardsForName(name: String) {
-        UserCardsRepository.fetchUserCardsForName(UserManager.user!!.userId, name).observeForever {
+        UserCardsRepository.fetchUserCardsForName(UserManager.loggedUser!!.userId, name).observeForever {
             userCardListLiveData.postValue(it)
         }
     }
+
 
     fun insertCardToDB(userCard: UserCard) {
         UserCardsRepository.postUserCard(userCard).observeForever {
@@ -85,11 +54,37 @@ class PokemonCardsViewModel : ViewModel() {
     }
 
     fun updateCardInDB(userCard: UserCard) {
-        UserCardsRepository.patchUserCard(userCard)
+        val rowsUpdatedLiveData = UserCardsRepository.patchUserCard(userCard)
+        rowsUpdatedLiveData.observeForever(object : Observer<Boolean> {
+            override fun onChanged(it: Boolean?) {
+                if (it == true) {
+                    if (affectedRowsUserCardsLiveData.value == null) {
+                        affectedRowsUserCardsLiveData.postValue(1)
+                    } else {
+                        affectedRowsUserCardsLiveData.postValue(affectedRowsUserCardsLiveData.value!! + 1)
+                    }
+                    rowsUpdatedLiveData.removeObserver(this)
+                }
+            }
+
+        })
     }
 
     fun deleteCardFromDB(userCard: UserCard) {
-        UserCardsRepository.deleteUserCard(userCard)
+        val rowDeletedLiveData = UserCardsRepository.deleteUserCard(userCard)
+        rowDeletedLiveData.observeForever(object : Observer<Boolean> {
+            override fun onChanged(it: Boolean?) {
+                if (it == true) {
+                    if (affectedRowsUserCardsLiveData.value == null) {
+                        affectedRowsUserCardsLiveData.postValue(1)
+                    } else {
+                        affectedRowsUserCardsLiveData.postValue(affectedRowsUserCardsLiveData.value!! + 1)
+                    }
+                    rowDeletedLiveData.removeObserver(this)
+                }
+            }
+
+        })
     }
 
     fun updateUserInDB(user: User) {
@@ -106,12 +101,13 @@ class PokemonCardsViewModel : ViewModel() {
         TradeRepository.patchTrade(trade)
     }
 
-    fun patchTradeTraite(trade: Trade) {
-        TradeRepository.patchTradeTraite(trade)
-    }
 
     fun patchTradeValidated(trade: Trade) {
         TradeRepository.patchTradeValidated(trade)
+    }
+
+    fun deleteTrade(trade: Trade) {
+        TradeRepository.deleteTrade(trade)
     }
 
     fun getTradesForUser(user: User) {
@@ -122,7 +118,7 @@ class PokemonCardsViewModel : ViewModel() {
 
     fun getCurrentTradeForUser(user: User) {
         TradeRepository.getCurrentTradeForUser(user).observeForever {
-            if(!it.isEmpty()) {
+            if (!it.isEmpty()) {
                 currentTradeForUser.postValue(it[0])
             } else {
                 currentTradeForUser.postValue(null)
@@ -173,7 +169,7 @@ class PokemonCardsViewModel : ViewModel() {
 
             var randomPage = (0..22).random()
             var randomPosition = 0
-            if(randomPage != 22) {
+            if (randomPage != 22) {
                 randomPosition = (0..500).random()
             } else {
                 randomPosition = (0..416).random()
@@ -201,6 +197,7 @@ class PokemonCardsViewModel : ViewModel() {
             if (card.isCardInArray(userCardList)) {
                 userCard = card.getInstanceOfUserCard(userCardList)
                 userCard.numberOfCard++
+                userCard.numberOfCardAvailable++
                 updateCardInDB(userCard)
             } else {
                 userCard = UserCard(card)
@@ -209,16 +206,55 @@ class PokemonCardsViewModel : ViewModel() {
             }
         }
         userCardList.sort()
-        UserManager.user!!.coins -= pack.costPack
-        updateUserInDB(UserManager.user!!)
+        UserManager.loggedUser!!.coins -= pack.costPack
+        updateUserInDB(UserManager.loggedUser!!)
     }
 
+    fun addUserCardForUser(userId: Int, pokemonCard: PokemonCard) {
+        UserCardsRepository.fetchUserCardsForName(userId, "null").observeForever {
+            var userCard: UserCard?
+            if (pokemonCard.isCardInArray(it)) {
+                userCard = pokemonCard.getInstanceOfUserCard(it)
+                userCard.numberOfCard++
+                userCard.numberOfCardAvailable++
+                updateCardInDB(userCard)
+            } else {
+                userCard = UserCard(pokemonCard)
+                userCard.userId = userId
+                if (userId == UserManager.loggedUser!!.userId) {
+                    userCardList.add(userCard)
+                }
+                insertCardToDB(userCard)
+            }
+        }
+    }
+
+    fun removeUserCardForUser(userId: Int, userCard: UserCard) {
+
+        if (userCard.numberOfCard > 1) {
+            userCard.numberOfCard--
+            if (userCard.userCardID != 0) {
+                updateCardInDB(userCard)
+            }
+        } else {
+            if (userCard.userCardID != 0) {
+                deleteCardFromDB(userCard)
+            }
+            if (userId == UserManager.loggedUser!!.userId) {
+                val userCardToRemove = userCard.pokemonCard.getInstanceOfUserCard(userCardList)
+                userCardList.remove(userCardToRemove)
+            }
+        }
+
+    }
 
     fun addUserCard(pokemonCard: PokemonCard) {
         var userCard: UserCard?
+
         if (pokemonCard.isCardInArray(userCardList)) {
             userCard = pokemonCard.getInstanceOfUserCard(userCardList)
             userCard.numberOfCard++
+            userCard.numberOfCardAvailable++
             updateCardInDB(userCard)
         } else {
             userCard = UserCard(pokemonCard)
@@ -226,13 +262,14 @@ class PokemonCardsViewModel : ViewModel() {
             insertCardToDB(userCard)
         }
         userCardList.sort()
-        UserManager.user!!.dusts -= pokemonCard.getCostToCraft()
-        updateUserInDB(UserManager.user!!)
+        UserManager.loggedUser!!.dusts -= pokemonCard.getCostToCraft()
+        updateUserInDB(UserManager.loggedUser!!)
     }
 
     fun removeUserCard(userCard: UserCard) {
         if (userCard.numberOfCard > 1) {
             userCard.numberOfCard--
+            userCard.numberOfCardAvailable--
             if (userCard.userCardID != 0) {
                 updateCardInDB(userCard)
             }
@@ -243,7 +280,7 @@ class PokemonCardsViewModel : ViewModel() {
             }
         }
         userCardList.sort()
-        UserManager.user!!.dusts += userCard.pokemonCard.getCostForDecraft()
-        updateUserInDB(UserManager.user!!)
+        UserManager.loggedUser!!.dusts += userCard.pokemonCard.getCostForDecraft()
+        updateUserInDB(UserManager.loggedUser!!)
     }
 }

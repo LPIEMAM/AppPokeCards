@@ -59,5 +59,5 @@ class User() {
 }
 
 object UserManager {
-    var user: User? = null
+    var loggedUser: User? = null
 }

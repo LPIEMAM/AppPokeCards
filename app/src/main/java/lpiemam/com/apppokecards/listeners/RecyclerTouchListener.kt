@@ -1,4 +1,4 @@
-package lpiemam.com.apppokecards
+package lpiemam.com.apppokecards.listeners
 
 import android.content.Context
 import android.view.GestureDetector

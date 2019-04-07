@@ -1,4 +1,4 @@
-package lpiemam.com.apppokecards
+package lpiemam.com.apppokecards.utils
 
 import lpiemam.com.apppokecards.model.CardsPack
 

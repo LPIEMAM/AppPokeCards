@@ -7,7 +7,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.pack_opening_dialog_layout.view.*
-import lpiemam.com.apppokecards.ImagePanel
+import lpiemam.com.apppokecards.utils.ImagePanel
 import lpiemam.com.apppokecards.R
 import lpiemam.com.apppokecards.model.PokemonCard
 import lpiemam.com.apppokecards.viewmodel.PokemonCardsViewModel

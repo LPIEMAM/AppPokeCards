@@ -16,7 +16,11 @@ class UserCardsAdapter(val userCardList: ArrayList<UserCard>) :
 
     fun setUpLists(userCardList: ArrayList<UserCard>) {
         this.userCardList.clear()
-        this.userCardList.addAll(userCardList)
+        for (userCard: UserCard in userCardList) {
+            if (userCard.numberOfCardAvailable > 0) {
+                this.userCardList.add(userCard)
+            }
+        }
         this.userCardsListFiltered.clear()
         this.userCardsListFiltered.addAll(this.userCardList)
     }
@@ -49,7 +53,7 @@ class UserCardsAdapter(val userCardList: ArrayList<UserCard>) :
 
                         // name match condition. this might differ depending on your requirement
                         // here we are looking for name or phone number match
-                        if (userCard.pokemonCard.name.toLowerCase().contains(charString.toLowerCase())) {
+                        if (userCard.pokemonCard.name.toLowerCase().contains(charString.toLowerCase()) && userCard.numberOfCardAvailable > 0) {
                             filteredList.add(userCard)
                         }
                     }

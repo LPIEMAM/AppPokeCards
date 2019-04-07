@@ -26,14 +26,14 @@ import kotlin.collections.ArrayList
  */
 class QuizzFragment : BaseFragment() {
 
-    var user = UserManager.user
+    var user = UserManager.loggedUser
 
     lateinit var quizzViewModel: QuizzViewModel
 
     private var mPokemonQuestions: PokemonQuestions? = null
     private var mCurrentQuestion: Question? = null
 
-    private var buttonList = ArrayList<Button?>()
+    private var buttonList = ArrayList<TextView?>()
 
     private var nbQuestion = 0
     private var nbCorrectAnswer = 0
@@ -182,6 +182,7 @@ class QuizzFragment : BaseFragment() {
     }
 
     private fun setUpQuestions() {
+
         activity_game_answer1_btn?.setBackgroundResource(R.drawable.unselected_quizz_answer)
         activity_game_answer2_btn?.setBackgroundResource(R.drawable.unselected_quizz_answer)
         activity_game_answer3_btn?.setBackgroundResource(R.drawable.unselected_quizz_answer)
@@ -203,7 +204,7 @@ class QuizzFragment : BaseFragment() {
                 userWonQuiz = true
             }
             user?.dateLastQuizzEndedDate = Calendar.getInstance().time
-            quizzViewModel.updateUserInDB(UserManager.user!!)
+            quizzViewModel.updateUserInDB(UserManager.loggedUser!!)
             updateUserInfos()
             endGame()
         }

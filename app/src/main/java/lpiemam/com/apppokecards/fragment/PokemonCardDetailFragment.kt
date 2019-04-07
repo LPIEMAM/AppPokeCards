@@ -11,8 +11,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_pokemon_card_detail.*
-import kotlinx.android.synthetic.main.fragment_user_card_detail.*
-import lpiemam.com.apppokecards.MainActivityListener
+import lpiemam.com.apppokecards.listeners.MainActivityListener
 import lpiemam.com.apppokecards.R
 import lpiemam.com.apppokecards.model.PokemonCard
 import lpiemam.com.apppokecards.model.UserManager
@@ -28,7 +27,7 @@ class PokemonCardDetailFragment : BaseFragment() {
     lateinit var pokemonCardsViewModel: PokemonCardsViewModel
 
     lateinit var pokemonCard: PokemonCard
-    var user = UserManager.user
+    var user = UserManager.loggedUser
 
     companion object {
 

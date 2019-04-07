@@ -1,4 +1,4 @@
-package lpiemam.com.apppokecards
+package lpiemam.com.apppokecards.utils
 
 import android.content.Context
 import android.util.AttributeSet
@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import com.squareup.picasso.Picasso
+import lpiemam.com.apppokecards.R
 
 /**
  * Created by CarouselView on 7/7/16.

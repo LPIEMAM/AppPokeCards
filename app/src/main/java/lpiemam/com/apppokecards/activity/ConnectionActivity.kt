@@ -1,22 +1,16 @@
-package lpiemam.com.apppokecards
+package lpiemam.com.apppokecards.activity
 
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.util.TypedValue
 import android.widget.ArrayAdapter
-import android.widget.SpinnerAdapter
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.activity_connection.*
-import kotlinx.android.synthetic.main.activity_connection.view.*
-import kotlinx.android.synthetic.main.fragment_quizz_start.view.*
+import lpiemam.com.apppokecards.R
 import lpiemam.com.apppokecards.model.User
 import lpiemam.com.apppokecards.model.UserManager
 import lpiemam.com.apppokecards.viewmodel.UsersViewModel
-import timber.log.Timber
-import java.util.*
 
 class ConnectionActivity : AppCompatActivity() {
 
@@ -28,7 +22,7 @@ class ConnectionActivity : AppCompatActivity() {
 
         userViewModel = ViewModelProviders.of(this).get(UsersViewModel::class.java)
 
-        userViewModel?.fetchUsers()!!.observe(this, androidx.lifecycle.Observer{
+        userViewModel?.fetchUsers()!!.observe(this, androidx.lifecycle.Observer {
             val spinnerAdapter = ArrayAdapter<User>(this, android.R.layout.simple_spinner_dropdown_item)
             spinnerAdapter.addAll(it)
             usersSpinner.adapter = spinnerAdapter
@@ -38,8 +32,8 @@ class ConnectionActivity : AppCompatActivity() {
 
         buttonPickUser.setOnClickListener {
             val selectedUser = usersSpinner.selectedItem as User
-            UserManager.user = selectedUser
-            Log.d("Connection : ", UserManager.user!!.toString())
+            UserManager.loggedUser = selectedUser
+            Log.d("Connection : ", UserManager.loggedUser!!.toString())
             startActivity(Intent(this, MainActivity::class.java))
         }
 

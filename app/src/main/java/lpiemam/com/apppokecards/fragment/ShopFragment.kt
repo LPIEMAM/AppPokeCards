@@ -12,7 +12,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_shop.*
 import lpiemam.com.apppokecards.R
-import lpiemam.com.apppokecards.RecyclerTouchListener
+import lpiemam.com.apppokecards.listeners.RecyclerTouchListener
 import lpiemam.com.apppokecards.adapter.ShopAdapter
 import lpiemam.com.apppokecards.model.CardsPack
 import lpiemam.com.apppokecards.model.UserManager
@@ -78,12 +78,12 @@ class ShopFragment : BaseFragment() {
             shopAdapter?.notifyDataSetChanged()
         }
 
-        userCoinsTextView.text = UserManager.user?.coins.toString()
+        userCoinsTextView.text = UserManager.loggedUser?.coins.toString()
 
         setUpRecyclerView()
 
         buyPackButton.setOnClickListener {
-            if(pokemonCardsViewModel.canClick) {
+            if (pokemonCardsViewModel.canClick) {
                 pokemonCardsViewModel.canClick = false
                 lateinit var selectedPack: CardsPack
                 var onePackSelected = false
@@ -94,7 +94,7 @@ class ShopFragment : BaseFragment() {
                     }
                 }
                 if (onePackSelected) {
-                    if (UserManager.user!!.canBuyAPack(selectedPack)) {
+                    if (UserManager.loggedUser!!.canBuyAPack(selectedPack)) {
                         try {
 
                             pokemonCardsViewModel.pokemonCardsForPackLiveData = MutableLiveData()
@@ -108,7 +108,7 @@ class ShopFragment : BaseFragment() {
                                 pokemonCardsViewModel.buyAPack(selectedPack)
                                 updateUserInfos()
                                 selectedPack.clearCardList()
-                                userCoinsTextView.text = UserManager.user?.coins.toString()
+                                userCoinsTextView.text = UserManager.loggedUser?.coins.toString()
                             })
 
                             pokemonCardsViewModel.generateRandomCards(selectedPack)
@@ -120,7 +120,8 @@ class ShopFragment : BaseFragment() {
                         }
 
                     } else {
-                        val snackbar = Snackbar.make(view, "Vous n'avez pas suffisament de pièces.", Snackbar.LENGTH_LONG)
+                        val snackbar =
+                            Snackbar.make(view, "Vous n'avez pas suffisament de pièces.", Snackbar.LENGTH_LONG)
                         snackbar.show()
                     }
                 }

@@ -1,4 +1,4 @@
-package lpiemam.com.apppokecards
+package lpiemam.com.apppokecards.listeners
 
 interface OnBottomReachedListener {
 

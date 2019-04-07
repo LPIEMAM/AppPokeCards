@@ -1,10 +1,11 @@
-package lpiemam.com.apppokecards.retrofit
+package lpiemam.com.apppokecards.retrofit.trades
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import lpiemam.com.apppokecards.model.Trade
 import lpiemam.com.apppokecards.model.User
-import lpiemam.com.apppokecards.model.UserCard
+import lpiemam.com.apppokecards.retrofit.AffectedRowsResponse
+import lpiemam.com.apppokecards.retrofit.ApiFactory
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -13,10 +14,10 @@ import timber.log.Timber
 object TradeRepository {
 
 
-    private var pokemonCardApi = ApiFactory.POKEMON_CARDS_WEB_SERVICE
+    private var pokemonCardApi = ApiFactory.APP_POKE_CARDS_WEB_SERVICE
 
 
-    fun postTrade(trade: Trade) : LiveData<Int>{
+    fun postTrade(trade: Trade): LiveData<Int> {
         val tradeIdLiveData = MutableLiveData<Int>()
         val call = pokemonCardApi.postTrade(trade)
 
@@ -42,12 +43,12 @@ object TradeRepository {
     fun patchTrade(trade: Trade) {
         val call = pokemonCardApi.patchTrade(trade)
 
-        call.enqueue(object : Callback<Int> {
-            override fun onFailure(call: Call<Int>, t: Throwable) {
+        call.enqueue(object : Callback<AffectedRowsResponse> {
+            override fun onFailure(call: Call<AffectedRowsResponse>, t: Throwable) {
 
             }
 
-            override fun onResponse(call: Call<Int>, response: Response<Int>) {
+            override fun onResponse(call: Call<AffectedRowsResponse>, response: Response<AffectedRowsResponse>) {
 
             }
 
@@ -58,39 +59,39 @@ object TradeRepository {
         val call = pokemonCardApi.patchTradeValidated(trade)
 
 
-        call.enqueue(object : Callback<Int> {
-            override fun onFailure(call: Call<Int>, t: Throwable) {
+        call.enqueue(object : Callback<AffectedRowsResponse> {
+            override fun onFailure(call: Call<AffectedRowsResponse>, t: Throwable) {
 
             }
 
-            override fun onResponse(call: Call<Int>, response: Response<Int>) {
-
-            }
-
-        })
-    }
-
-    fun patchTradeTraite(trade: Trade) {
-        val call = pokemonCardApi.patchTradeTraite(trade)
-
-        call.enqueue(object : Callback<Int> {
-            override fun onFailure(call: Call<Int>, t: Throwable) {
-
-            }
-
-            override fun onResponse(call: Call<Int>, response: Response<Int>) {
+            override fun onResponse(call: Call<AffectedRowsResponse>, response: Response<AffectedRowsResponse>) {
 
             }
 
         })
     }
 
-    fun getTradesForUser(user: User) : LiveData<ArrayList<Trade>> {
+    fun deleteTrade(trade: Trade) {
+        val call = pokemonCardApi.deleteTrade(trade.id)
+
+        call.enqueue(object : Callback<AffectedRowsResponse> {
+            override fun onFailure(call: Call<AffectedRowsResponse>, t: Throwable) {
+
+            }
+
+            override fun onResponse(call: Call<AffectedRowsResponse>, response: Response<AffectedRowsResponse>) {
+
+            }
+
+        })
+    }
+
+    fun getTradesForUser(user: User): LiveData<ArrayList<Trade>> {
         val tradeListLiveData = MutableLiveData<ArrayList<Trade>>()
 
         val call = pokemonCardApi.getTradesForUser(user.userId)
 
-        call.enqueue(object : Callback<TradesResponse>{
+        call.enqueue(object : Callback<TradesResponse> {
             override fun onFailure(call: Call<TradesResponse>, t: Throwable) {
                 Timber.e(t)
                 tradeListLiveData.postValue(ArrayList())
@@ -111,12 +112,12 @@ object TradeRepository {
 
     }
 
-    fun getCurrentTradeForUser(user: User) : LiveData<ArrayList<Trade>> {
+    fun getCurrentTradeForUser(user: User): LiveData<ArrayList<Trade>> {
         val tradeListLiveData = MutableLiveData<ArrayList<Trade>>()
 
         val call = pokemonCardApi.getCurrentTradeForUser(user.userId)
 
-        call.enqueue(object : Callback<TradesResponse>{
+        call.enqueue(object : Callback<TradesResponse> {
             override fun onFailure(call: Call<TradesResponse>, t: Throwable) {
                 Timber.e(t)
                 tradeListLiveData.postValue(ArrayList())
@@ -136,7 +137,6 @@ object TradeRepository {
         return tradeListLiveData
 
     }
-
 
 
 }

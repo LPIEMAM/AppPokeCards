@@ -2,8 +2,6 @@ package lpiemam.com.apppokecards.model
 
 import android.os.Parcel
 import android.os.Parcelable
-import androidx.room.Entity
-import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
 class UserCard() : Parcelable, Comparable<UserCard> {
@@ -16,6 +14,8 @@ class UserCard() : Parcelable, Comparable<UserCard> {
     lateinit var pokemonCard: PokemonCard
     @SerializedName("nbExemplaire")
     var numberOfCard: Int = 1
+    @SerializedName("nbExemplaireAvailable")
+    var numberOfCardAvailable: Int = 1
     var name: String = ""
 
     constructor(parcel: Parcel) : this() {
@@ -27,7 +27,7 @@ class UserCard() : Parcelable, Comparable<UserCard> {
     constructor(pokemonCard: PokemonCard) : this() {
         this.pokemonCard = pokemonCard
         this.name = pokemonCard.name
-        this.userId = UserManager.user!!.userId
+        this.userId = UserManager.loggedUser!!.userId
     }
 
 
@@ -55,8 +55,10 @@ class UserCard() : Parcelable, Comparable<UserCard> {
 
         return when {
             other.pokemonCard.nationalPokedexNumber == null && this.pokemonCard.nationalPokedexNumber != null -> -1
-            this.pokemonCard.nationalPokedexNumber == null && other.pokemonCard.nationalPokedexNumber != null-> 1
-            other.pokemonCard.nationalPokedexNumber == null && this.pokemonCard.nationalPokedexNumber == null -> this.pokemonCard.supertype?.compareTo(other.pokemonCard.supertype!!)!!
+            this.pokemonCard.nationalPokedexNumber == null && other.pokemonCard.nationalPokedexNumber != null -> 1
+            other.pokemonCard.nationalPokedexNumber == null && this.pokemonCard.nationalPokedexNumber == null -> this.pokemonCard.supertype?.compareTo(
+                other.pokemonCard.supertype!!
+            )!!
             else -> this.pokemonCard.nationalPokedexNumber!!.compareTo(other.pokemonCard.nationalPokedexNumber!!)
         }
     }

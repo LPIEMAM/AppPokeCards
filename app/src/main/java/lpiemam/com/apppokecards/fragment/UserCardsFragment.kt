@@ -11,9 +11,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.fragment_user_cards.*
 import lpiemam.com.apppokecards.R
-import lpiemam.com.apppokecards.RecyclerTouchListener
+import lpiemam.com.apppokecards.listeners.RecyclerTouchListener
 import lpiemam.com.apppokecards.adapter.UserCardsAdapter
-import lpiemam.com.apppokecards.model.UserManager
 import lpiemam.com.apppokecards.viewmodel.PokemonCardsViewModel
 import java.util.*
 
@@ -40,8 +39,15 @@ class UserCardsFragment : BaseFragment() {
 
     override fun onResume() {
 
-        setUpBackButton(false)
-        setDrawerEnabled(true)
+        if (useCase == "trade") {
+            setFragmentTitle("Pick A Card")
+            setDrawerEnabled(false)
+            setUpBackButton(true)
+        } else {
+            setFragmentTitle("My Pokemons")
+            setUpBackButton(false)
+            setDrawerEnabled(true)
+        }
 
         userCardAdapter?.filter?.filter(collectionSearchView.query)
         super.onResume()
@@ -55,6 +61,8 @@ class UserCardsFragment : BaseFragment() {
         setHasOptionsMenu(true)
         if (useCase == "trade") {
             setFragmentTitle("Pick A Card")
+            setDrawerEnabled(false)
+            setUpBackButton(true)
         } else {
             setFragmentTitle("My Pokemons")
         }

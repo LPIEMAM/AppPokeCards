@@ -79,14 +79,17 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="8dp" android:layout_marginBottom="68dp"
-            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintHorizontal_bias="0.498"/>
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintHorizontal_bias="0.5"/>
     <Button
             android:text="Done"
+            android:id="@+id/doneButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/doneButton" app:layout_constraintStart_toStartOf="@+id/validateButton"
-            app:layout_constraintTop_toTopOf="@+id/validateButton"
-            app:layout_constraintEnd_toEndOf="@+id/validateButton" android:visibility="gone"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp" android:layout_marginBottom="68dp"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintHorizontal_bias="0.5"
+            android:visibility="gone"/>
     <ImageView
             android:src="@drawable/ic_trade_black_24px"
             android:layout_width="48dp"

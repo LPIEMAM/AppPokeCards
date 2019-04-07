@@ -1,4 +1,4 @@
-package lpiemam.com.apppokecards.retrofit
+package lpiemam.com.apppokecards.retrofit.pokemoncards
 
 import lpiemam.com.apppokecards.model.PokemonCard
 

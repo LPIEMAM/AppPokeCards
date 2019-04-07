@@ -18,7 +18,7 @@ import java.util.*
  */
 class QuizzStartFragment : BaseFragment() {
 
-    var user = UserManager.user
+    var user = UserManager.loggedUser
 
     companion object {
         fun newInstance(): QuizzStartFragment {
@@ -55,7 +55,7 @@ class QuizzStartFragment : BaseFragment() {
             var dateOfDay = Calendar.getInstance()
             val calendar = Calendar.getInstance()
             calendar.time = user!!.dateLastQuizzEndedDate
-            if(dateOfDay.timeInMillis - calendar.timeInMillis >= 86400000) {
+            if (dateOfDay.timeInMillis - calendar.timeInMillis >= 86400000) {
                 quizzEndedGroup.visibility = View.GONE
                 quizzStartGroup.visibility = View.VISIBLE
             } else {

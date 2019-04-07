@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import lpiemam.com.apppokecards.model.PokemonQuestions
 import lpiemam.com.apppokecards.model.Question
 import lpiemam.com.apppokecards.model.User
-import lpiemam.com.apppokecards.retrofit.UsersRepository
+import lpiemam.com.apppokecards.retrofit.users.UsersRepository
 //import lpiemam.com.apppokecards.room.UserCardsRepository
 import java.util.*
 

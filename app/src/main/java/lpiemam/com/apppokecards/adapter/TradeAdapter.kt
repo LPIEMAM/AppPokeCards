@@ -9,7 +9,8 @@ import lpiemam.com.apppokecards.model.Trade
 import lpiemam.com.apppokecards.viewholder.UserCardViewHolder
 import java.util.*
 
-class TradeAdapter(val tradeList: ArrayList<Trade>): androidx.recyclerview.widget.RecyclerView.Adapter<UserCardViewHolder>(), Filterable {
+class TradeAdapter(val tradeList: ArrayList<Trade>) :
+    androidx.recyclerview.widget.RecyclerView.Adapter<UserCardViewHolder>(), Filterable {
     var tradeListFiltered: ArrayList<Trade> = ArrayList(tradeList)
 
     fun setUpLists(tradeList: ArrayList<Trade>) {

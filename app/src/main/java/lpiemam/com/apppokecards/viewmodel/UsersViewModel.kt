@@ -3,9 +3,9 @@ package lpiemam.com.apppokecards.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import lpiemam.com.apppokecards.model.User
-import lpiemam.com.apppokecards.retrofit.UsersRepository
+import lpiemam.com.apppokecards.retrofit.users.UsersRepository
 
-class UsersViewModel: ViewModel() {
+class UsersViewModel : ViewModel() {
 
 //    var usersLiveData = MutableLiveData<ArrayList<User>>()
 

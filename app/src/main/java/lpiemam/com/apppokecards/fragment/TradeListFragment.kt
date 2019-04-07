@@ -9,14 +9,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.fragment_trade_list.*
-import kotlinx.android.synthetic.main.fragment_user_cards.*
 import lpiemam.com.apppokecards.R
-import lpiemam.com.apppokecards.RecyclerTouchListener
+import lpiemam.com.apppokecards.listeners.RecyclerTouchListener
 import lpiemam.com.apppokecards.adapter.TradeAdapter
-import lpiemam.com.apppokecards.adapter.UserCardsAdapter
 import lpiemam.com.apppokecards.model.UserManager
 import lpiemam.com.apppokecards.viewmodel.PokemonCardsViewModel
-import java.util.ArrayList
+import java.util.*
 
 class TradeListFragment : BaseFragment() {
 
@@ -47,6 +45,8 @@ class TradeListFragment : BaseFragment() {
 
 
         setHasOptionsMenu(true)
+        setDrawerEnabled(false)
+        setUpBackButton(true)
         setFragmentTitle("Choose A Card")
 
         pokemonCardsViewModel = ViewModelProviders.of(activity!!).get(PokemonCardsViewModel::class.java)
@@ -60,16 +60,8 @@ class TradeListFragment : BaseFragment() {
             pokemonCardsViewModel.tradeForUserList = MutableLiveData()
         })
 
-        pokemonCardsViewModel.getTradesForUser(UserManager.user!!)
+        pokemonCardsViewModel.getTradesForUser(UserManager.loggedUser!!)
 
-//        pokemonCardsViewModel.userCardListLiveData.observe(this, Observer {
-//
-//            it.sort()
-////            tradeAdapter?.setUpLists(it)
-////            pokemonCardsViewModel.userCardList = it
-//            tradeAdapter?.notifyDataSetChanged()
-//
-//        })
 
         return inflater.inflate(R.layout.fragment_trade_list, container, false)
     }

@@ -1,4 +1,4 @@
-package lpiemam.com.apppokecards
+package lpiemam.com.apppokecards.listeners
 
 import lpiemam.com.apppokecards.model.PokemonCard
 import lpiemam.com.apppokecards.model.UserCard
