@@ -53,11 +53,16 @@ class TradeListFragment : BaseFragment() {
 
 
         pokemonCardsViewModel.tradeForUserList.observe(this, Observer {
-            it.sort()
-            tradeAdapter?.setUpLists(it)
-            tradeAdapter?.notifyDataSetChanged()
-            pokemonCardsViewModel.tradeList = it
-            pokemonCardsViewModel.tradeForUserList = MutableLiveData()
+            tradeListProgressBar.visibility = View.GONE
+            if(it!= null  && !it.isEmpty()) {
+                it.sort()
+                tradeAdapter?.setUpLists(it)
+                tradeAdapter?.notifyDataSetChanged()
+                pokemonCardsViewModel.tradeList = it
+                pokemonCardsViewModel.tradeForUserList = MutableLiveData()
+            } else {
+                tradeListNoCardTextView.visibility = View.VISIBLE
+            }
         })
 
         pokemonCardsViewModel.getTradesForUser(UserManager.loggedUser!!)

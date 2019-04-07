@@ -92,9 +92,7 @@ class PokemonCardDetailFragment : BaseFragment() {
             }
         }
 
-        if (pokemonCard.name != null) {
-            allCardsDetailPokemonName.text = pokemonCard.name
-        }
+        allCardsDetailPokemonName.text = pokemonCard.name
 
         if (pokemonCard.nationalPokedexNumber != null) {
             allCardsPokedexNumber.text = pokemonCard.nationalPokedexNumber.toString()

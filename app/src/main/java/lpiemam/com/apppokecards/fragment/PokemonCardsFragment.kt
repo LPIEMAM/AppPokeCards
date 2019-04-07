@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.fragment_pokemon_cards.*
+import kotlinx.android.synthetic.main.fragment_user_cards.*
 import lpiemam.com.apppokecards.listeners.OnBottomReachedListener
 import lpiemam.com.apppokecards.R
 import lpiemam.com.apppokecards.listeners.RecyclerTouchListener
@@ -85,7 +86,12 @@ class PokemonCardsFragment : BaseFragment() {
     private fun setUpRecyclerView() {
         val pokemonCardsAdapter = PokemonCardsAdapter()
         pokemonCardsViewModel.pokemonCardsForNameLiveData.observe(this, Observer {
-            pokemonCardsAdapter.setData(it)
+            pokemonCardsProgressBar.visibility = View.GONE
+            if(it != null && !it.isEmpty()) {
+                pokemonCardsAdapter.setData(it)
+            } else {
+                pokemonCardsNoCardTextView.visibility = View.VISIBLE
+            }
         })
 
         pokemonCardsAdapter.onBottomReachedListener = object :

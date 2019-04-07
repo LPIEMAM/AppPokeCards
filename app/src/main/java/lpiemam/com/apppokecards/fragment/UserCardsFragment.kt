@@ -71,10 +71,15 @@ class UserCardsFragment : BaseFragment() {
 
         pokemonCardsViewModel.userCardListLiveData.observe(this, Observer {
 
-            it.sort()
-            userCardAdapter?.setUpLists(it)
-            pokemonCardsViewModel.userCardList = it
-            userCardAdapter?.notifyDataSetChanged()
+            collectionProgressBar.visibility = View.GONE
+            if(it != null && !it.isEmpty()) {
+                it.sort()
+                userCardAdapter?.setUpLists(it)
+                pokemonCardsViewModel.userCardList = it
+                userCardAdapter?.notifyDataSetChanged()
+            } else {
+                collectionNoCardTextView.visibility = View.VISIBLE
+            }
 
         })
 
