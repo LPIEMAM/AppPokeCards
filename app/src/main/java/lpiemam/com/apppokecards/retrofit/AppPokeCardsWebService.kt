@@ -38,7 +38,7 @@ interface AppPokeCardsWebService {
     @GET("usercards/{userId}/{name}")
     fun getUserCardsForName(@Path("userId") userId: Int, @Path("name") name: String): Call<UserCardsResponse>
 
-    @POST("usercards")
+    @POST("usercard")
     fun postUserCard(@Body userCard: UserCard): Call<UserCardResponse>
 
     @PATCH("usercard")

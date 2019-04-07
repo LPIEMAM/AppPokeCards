@@ -81,8 +81,9 @@ class UserCardDetailFragment : BaseFragment() {
         userCardDetailButtonDust.setOnClickListener {
             pokemonCardsViewModel.removeUserCard(userCard)
             updateUserInfos()
-            mainActivityListener?.replaceWithCollectionFragment()
+            mainActivityListener?.popBackStack()
         }
+
 
         userCardDetailPokemonName.text = userCard.pokemonCard.name
 

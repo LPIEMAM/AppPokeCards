@@ -15,6 +15,7 @@ import lpiemam.com.apppokecards.adapter.TradeAdapter
 import lpiemam.com.apppokecards.model.UserManager
 import lpiemam.com.apppokecards.viewmodel.PokemonCardsViewModel
 import java.util.*
+import kotlin.collections.ArrayList
 
 class TradeListFragment : BaseFragment() {
 
@@ -58,7 +59,6 @@ class TradeListFragment : BaseFragment() {
                 it.sort()
                 tradeAdapter?.setUpLists(it)
                 tradeAdapter?.notifyDataSetChanged()
-                pokemonCardsViewModel.tradeList = it
                 pokemonCardsViewModel.tradeForUserList = MutableLiveData()
             } else {
                 tradeListNoCardTextView.visibility = View.VISIBLE
@@ -91,7 +91,7 @@ class TradeListFragment : BaseFragment() {
     }
 
     private fun setUpRecyclerView() {
-        tradeAdapter = TradeAdapter(ArrayList(pokemonCardsViewModel.tradeList))
+        tradeAdapter = TradeAdapter(ArrayList())
 
         tradeFragmentRecyclerView?.layoutManager = androidx.recyclerview.widget.GridLayoutManager(context, 4)
         tradeFragmentRecyclerView?.adapter = tradeAdapter

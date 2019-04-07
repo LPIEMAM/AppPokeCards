@@ -49,19 +49,27 @@ class TradeFragment : BaseFragment() {
         pokemonCardsViewModel = ViewModelProviders.of(activity!!).get(PokemonCardsViewModel::class.java)
 
         pokemonCardsViewModel.currentTradeForUser.observe(this, Observer {
+            loadingGroup.visibility = View.VISIBLE
+            tradeProgressBar.visibility = View.GONE
             if (it != null) {
                 showPopUp(it)
+            } else {
+                setFragmentTitle("Offer a Trade")
+                acceptRefuseTradeGroup.visibility = View.GONE
+                doneButton.visibility = View.GONE
+                pickYourCardButton.visibility = View.VISIBLE
+                validateButton.visibility = View.VISIBLE
             }
             pokemonCardsViewModel.currentTradeForUser = MutableLiveData()
         })
 
-        pokemonCardsViewModel.getCurrentTradeForUser(UserManager.loggedUser!!)
 
         return inflater.inflate(R.layout.fragment_trade, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        pokemonCardsViewModel.getCurrentTradeForUser(UserManager.loggedUser!!)
 
         setUpVisibility()
         setUpButtons()
@@ -81,9 +89,11 @@ class TradeFragment : BaseFragment() {
     private fun setUpVisibility() {
         if (pokemonCardsViewModel.userLookingForTrade) {
             validateButton.text = "Trade"
+            setFragmentTitle("Find a Trade")
             chooseACardButton.visibility = View.VISIBLE
         } else {
             validateButton.text = "Offer"
+            setFragmentTitle("Offer a Trade")
             chooseACardButton.visibility = View.GONE
         }
     }
@@ -135,6 +145,7 @@ class TradeFragment : BaseFragment() {
 
         tradeToggleButton.setOnClickListener {
             chooseACardButton.visibility = if (tradeToggleButton.isChecked) View.VISIBLE else View.GONE
+            setFragmentTitle(if (tradeToggleButton.isChecked) "Find a Trade" else "Offer a Trade")
             validateButton.text = if (tradeToggleButton.isChecked) "Trade" else "Offer"
             pokemonCardsViewModel.userLookingForTrade = tradeToggleButton.isChecked
         }
@@ -210,6 +221,7 @@ class TradeFragment : BaseFragment() {
 
         if (currentTrade.user1.userId == UserManager.loggedUser!!.userId) {
 
+            setFragmentTitle("Trade Offer")
             val builder = AlertDialog.Builder(context, R.style.AlertDialogCustom)
 
             if (currentTrade.validated == true) {
@@ -274,6 +286,7 @@ class TradeFragment : BaseFragment() {
         } else {
             val builder = AlertDialog.Builder(context, R.style.AlertDialogCustom)
 
+            setFragmentTitle("Trade Answer")
             when {
                 currentTrade.validated == true -> {
                     builder.setTitle("Trade accepted")

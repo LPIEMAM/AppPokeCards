@@ -59,7 +59,7 @@ class PokemonCardsViewModel : ViewModel() {
             override fun onChanged(it: Boolean?) {
                 if (it == true) {
                     if (affectedRowsUserCardsLiveData.value == null) {
-                        affectedRowsUserCardsLiveData.postValue(1)
+                        affectedRowsUserCardsLiveData.value = 1
                     } else {
                         affectedRowsUserCardsLiveData.postValue(affectedRowsUserCardsLiveData.value!! + 1)
                     }
@@ -76,7 +76,7 @@ class PokemonCardsViewModel : ViewModel() {
             override fun onChanged(it: Boolean?) {
                 if (it == true) {
                     if (affectedRowsUserCardsLiveData.value == null) {
-                        affectedRowsUserCardsLiveData.postValue(1)
+                        affectedRowsUserCardsLiveData.value = 1
                     } else {
                         affectedRowsUserCardsLiveData.postValue(affectedRowsUserCardsLiveData.value!! + 1)
                     }

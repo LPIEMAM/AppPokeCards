@@ -37,6 +37,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     lateinit var toggle: ActionBarDrawerToggle
     lateinit var drawer: androidx.drawerlayout.widget.DrawerLayout
 
+    var currentlySelectedDrawerItem: Int = 0
+
     lateinit var pokemonCardsFragment: PokemonCardsFragment
     lateinit var shopFragment: ShopFragment
     lateinit var userCardsFragment: UserCardsFragment
@@ -71,6 +73,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         toggle.syncState()
 
         if (savedInstanceState == null) {
+            currentlySelectedDrawerItem = R.id.menuItemCollection
             supportFragmentManager
                 .beginTransaction()
                 .add(R.id.mainActivityContainer, userCardsFragment, "userCardsFragment")
@@ -146,6 +149,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     for (i in 0 until supportFragmentManager.getBackStackEntryCount()) {
                         supportFragmentManager.popBackStack()
                     }
+                    currentlySelectedDrawerItem = R.id.menuItemCollection
                     supportFragmentManager
                         .beginTransaction()
                         .replace(R.id.mainActivityContainer, userCardsFragment, "userCardsFragment")
@@ -158,41 +162,44 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
-        when (item.itemId) {
-            R.id.menuItemCollection -> {
-                for (i in 0 until supportFragmentManager.backStackEntryCount) {
-                    supportFragmentManager.popBackStack()
+        if(currentlySelectedDrawerItem != item.itemId) {
+            currentlySelectedDrawerItem = item.itemId
+            when (item.itemId) {
+                R.id.menuItemCollection -> {
+                    for (i in 0 until supportFragmentManager.backStackEntryCount) {
+                        supportFragmentManager.popBackStack()
+                    }
+                    supportFragmentManager
+                        .beginTransaction()
+                        .replace(R.id.mainActivityContainer, userCardsFragment, "userCardsFragment")
+                        .commit()
                 }
-                supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.mainActivityContainer, userCardsFragment, "userCardsFragment")
-                    .commit()
-            }
-            R.id.menuItemShop -> {
-                supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.mainActivityContainer, shopFragment, "shopFragment")
-                    .commit()
-            }
-            R.id.menuItemQuizz -> {
+                R.id.menuItemShop -> {
+                    supportFragmentManager
+                        .beginTransaction()
+                        .replace(R.id.mainActivityContainer, shopFragment, "shopFragment")
+                        .commit()
+                }
+                R.id.menuItemQuizz -> {
 
-                supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.mainActivityContainer, QuizzStartFragment.newInstance(), "quizzStartFragment")
-                    .commit()
+                    supportFragmentManager
+                        .beginTransaction()
+                        .replace(R.id.mainActivityContainer, QuizzStartFragment.newInstance(), "quizzStartFragment")
+                        .commit()
 
-            }
-            R.id.menuItemTrade -> {
-                supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.mainActivityContainer, TradeFragment.newInstance(), "tradeFragment")
-                    .commit()
-            }
-            R.id.menuItemAllCards -> {
-                supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.mainActivityContainer, pokemonCardsFragment, "pokemonCardsFragment")
-                    .commit()
+                }
+                R.id.menuItemTrade -> {
+                    supportFragmentManager
+                        .beginTransaction()
+                        .replace(R.id.mainActivityContainer, TradeFragment.newInstance(), "tradeFragment")
+                        .commit()
+                }
+                R.id.menuItemAllCards -> {
+                    supportFragmentManager
+                        .beginTransaction()
+                        .replace(R.id.mainActivityContainer, pokemonCardsFragment, "pokemonCardsFragment")
+                        .commit()
+                }
             }
         }
 
@@ -244,14 +251,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 FullScreenCardFragment.newInstance(pokemonCard, boolean),
                 "fullScreenCardFragment"
             ).addToBackStack(null)
-            .commit()
-    }
-
-    override fun replaceWithCollectionFragment() {
-        val tempCollectionFragment = supportFragmentManager.findFragmentByTag("userCardsFragment")
-        supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.mainActivityContainer, tempCollectionFragment!!, "userCardsFragment")
             .commit()
     }
 
