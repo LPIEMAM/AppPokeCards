@@ -8,9 +8,9 @@ object ApiFactory {
 
 
     //REMOTE API
-//    private val baseURL = "https://apppokecards.herokuapp.com/"
+    private val baseURL = "https://apppokecards.herokuapp.com/"
     //LOCAL API
-    private val baseURL = "http://10.0.2.2:3003/"
+//    private val baseURL = "http://10.0.2.2:3003/"
 
 
     private val interceptorLog = HttpLoggingInterceptor().let {
