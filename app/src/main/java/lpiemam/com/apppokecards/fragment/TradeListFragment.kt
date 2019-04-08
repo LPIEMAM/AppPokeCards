@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.fragment_trade_list.*
+import kotlinx.android.synthetic.main.fragment_user_cards.*
 import lpiemam.com.apppokecards.R
 import lpiemam.com.apppokecards.listeners.RecyclerTouchListener
 import lpiemam.com.apppokecards.adapter.TradeAdapter
@@ -60,6 +61,7 @@ class TradeListFragment : BaseFragment() {
                 tradeAdapter?.setUpLists(it)
                 tradeAdapter?.notifyDataSetChanged()
                 pokemonCardsViewModel.tradeForUserList = MutableLiveData()
+                tradeListNoCardTextView.visibility = View.GONE
             } else {
                 tradeListNoCardTextView.visibility = View.VISIBLE
             }

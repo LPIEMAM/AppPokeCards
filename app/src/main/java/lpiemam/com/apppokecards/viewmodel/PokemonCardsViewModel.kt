@@ -36,7 +36,7 @@ class PokemonCardsViewModel : ViewModel() {
     var userLookingForTrade = false
 
     fun initializeData() {
-        fetchUserCardsForName("null")
+        //fetchUserCardsForName("null")
     }
 
 
@@ -233,8 +233,15 @@ class PokemonCardsViewModel : ViewModel() {
 
         if (userCard.numberOfCard > 1) {
             userCard.numberOfCard--
+            userCard.numberOfCardAvailable--
             if (userCard.userCardID != 0) {
                 updateCardInDB(userCard)
+            }
+
+            if (userId == UserManager.loggedUser!!.userId) {
+                val userCardToUpdate = userCard.pokemonCard.getInstanceOfUserCard(userCardList)
+                userCardToUpdate.numberOfCard--
+                userCardToUpdate.numberOfCardAvailable--
             }
         } else {
             if (userCard.userCardID != 0) {

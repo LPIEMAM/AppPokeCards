@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.fragment_user_cards.*
@@ -48,7 +49,9 @@ class UserCardsFragment : BaseFragment() {
             setUpBackButton(false)
             setDrawerEnabled(true)
         }
-
+        collectionProgressBar.visibility = View.VISIBLE
+        collectionNoCardTextView.visibility = View.GONE
+        userCardAdapter?.notifyDataSetChanged()
         userCardAdapter?.filter?.filter(collectionSearchView.query)
         super.onResume()
     }
@@ -69,6 +72,7 @@ class UserCardsFragment : BaseFragment() {
 
         pokemonCardsViewModel = ViewModelProviders.of(activity!!).get(PokemonCardsViewModel::class.java)
 
+        pokemonCardsViewModel.userCardList.clear()
         pokemonCardsViewModel.userCardListLiveData.observe(this, Observer {
 
             collectionProgressBar.visibility = View.GONE
@@ -77,6 +81,7 @@ class UserCardsFragment : BaseFragment() {
                 userCardAdapter?.setUpLists(it)
                 pokemonCardsViewModel.userCardList = it
                 userCardAdapter?.notifyDataSetChanged()
+                collectionNoCardTextView.visibility = View.GONE
             } else {
                 collectionNoCardTextView.visibility = View.VISIBLE
             }
@@ -92,7 +97,10 @@ class UserCardsFragment : BaseFragment() {
 
         super.onViewCreated(view, savedInstanceState)
 
+
+
         setUpRecyclerView()
+        pokemonCardsViewModel.fetchUserCardsForName(if(!collectionSearchView.query.isEmpty()) collectionSearchView.query.toString() else "null")
 
         collectionSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(s: String): Boolean {

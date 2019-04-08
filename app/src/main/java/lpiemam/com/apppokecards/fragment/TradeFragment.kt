@@ -36,6 +36,12 @@ class TradeFragment : BaseFragment() {
         }
     }
 
+    override fun onResume() {
+
+        setUpVisibility()
+        super.onResume()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -71,7 +77,6 @@ class TradeFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         pokemonCardsViewModel.getCurrentTradeForUser(UserManager.loggedUser!!)
 
-        setUpVisibility()
         setUpButtons()
 
 
@@ -197,6 +202,7 @@ class TradeFragment : BaseFragment() {
                 })
 
             } else {
+                pokemonCardsViewModel.deleteTrade(currentTrade!!)
                 currentTrade!!.userCard1!!.numberOfCardAvailable++
                 currentTrade!!.userCard2!!.numberOfCardAvailable++
                 pokemonCardsViewModel.updateCardInDB(currentTrade!!.userCard1!!)
@@ -224,7 +230,7 @@ class TradeFragment : BaseFragment() {
             setFragmentTitle("Trade Offer")
             val builder = AlertDialog.Builder(context, R.style.AlertDialogCustom)
 
-            if (currentTrade.validated == true) {
+            if (currentTrade.validated != null) {
                 builder.setTitle("Ongoing Trade")
 
                 builder.setMessage("Waiting for other player to terminate the trade.")

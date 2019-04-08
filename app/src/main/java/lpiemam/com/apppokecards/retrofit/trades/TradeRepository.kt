@@ -1,5 +1,6 @@
 package lpiemam.com.apppokecards.retrofit.trades
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import lpiemam.com.apppokecards.model.Trade
