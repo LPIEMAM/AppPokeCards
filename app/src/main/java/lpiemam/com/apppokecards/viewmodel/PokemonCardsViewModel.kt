@@ -234,24 +234,9 @@ class PokemonCardsViewModel : ViewModel() {
 
         if (userCard.numberOfCard > 1) {
             userCard.numberOfCard--
-            userCard.numberOfCardAvailable--
-            if (userCard.userCardID != 0) {
-                updateCardInDB(userCard)
-            }
-
-            if (userId == UserManager.loggedUser!!.userId) {
-                val userCardToUpdate = userCard.pokemonCard.getInstanceOfUserCard(userCardList)
-                userCardToUpdate.numberOfCard--
-                userCardToUpdate.numberOfCardAvailable--
-            }
+            updateCardInDB(userCard)
         } else {
-            if (userCard.userCardID != 0) {
-                deleteCardFromDB(userCard)
-            }
-            if (userId == UserManager.loggedUser!!.userId) {
-                val userCardToRemove = userCard.pokemonCard.getInstanceOfUserCard(userCardList)
-                userCardList.remove(userCardToRemove)
-            }
+            deleteCardFromDB(userCard)
         }
 
     }
