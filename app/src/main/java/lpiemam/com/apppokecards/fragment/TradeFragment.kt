@@ -10,7 +10,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_trade.*
-import lpiemam.com.apppokecards.R
 import lpiemam.com.apppokecards.model.Trade
 import lpiemam.com.apppokecards.model.UserManager
 import lpiemam.com.apppokecards.viewmodel.PokemonCardsViewModel
@@ -36,12 +35,6 @@ class TradeFragment : BaseFragment() {
         }
     }
 
-    override fun onResume() {
-
-        setUpVisibility()
-        super.onResume()
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -54,37 +47,62 @@ class TradeFragment : BaseFragment() {
 
         pokemonCardsViewModel = ViewModelProviders.of(activity!!).get(PokemonCardsViewModel::class.java)
 
+        pokemonCardsViewModel.cardSelectedLiveData = MutableLiveData()
+
         pokemonCardsViewModel.currentTradeForUser.observe(this, Observer {
             loadingGroup.visibility = View.VISIBLE
             tradeProgressBar.visibility = View.GONE
             if (it != null) {
                 showPopUp(it)
             } else {
-                setFragmentTitle("Offer a Trade")
+                setUpVisibility()
                 acceptRefuseTradeGroup.visibility = View.GONE
                 doneButton.visibility = View.GONE
-                pickYourCardButton.visibility = View.VISIBLE
                 validateButton.visibility = View.VISIBLE
             }
             pokemonCardsViewModel.currentTradeForUser = MutableLiveData()
         })
 
+        pokemonCardsViewModel.cardSelectedLiveData.observe(this, Observer {
+            if(tradeToggleButton.isChecked) {
+                if(it==2) {
+                    validateButton.isEnabled = true
+                    pokemonCardsViewModel.cardSelectedLiveData = MutableLiveData()
+                }
+            } else {
+                if(it==1) {
+                    validateButton.isEnabled = true
+                    pokemonCardsViewModel.cardSelectedLiveData = MutableLiveData()
+                }
+            }
+        })
 
         return inflater.inflate(R.layout.fragment_trade, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        validateButton.isEnabled = false
         pokemonCardsViewModel.getCurrentTradeForUser(UserManager.loggedUser!!)
 
         setUpButtons()
 
 
         if (pokemonCardsViewModel.selectedUserCardForTrade != null) {
+            if(pokemonCardsViewModel.cardSelectedLiveData.value == null) {
+                pokemonCardsViewModel.cardSelectedLiveData.postValue(1)
+            } else {
+                pokemonCardsViewModel.cardSelectedLiveData.postValue(pokemonCardsViewModel.cardSelectedLiveData.value!! + 1)
+            }
             Picasso.get().load(pokemonCardsViewModel.selectedUserCardForTrade!!.pokemonCard.imageUrlHiRes)
                 .placeholder(R.drawable.pokemon_card_back).into(tradeUserCard1ImageView)
         }
         if (pokemonCardsViewModel.selectedTrade != null) {
+            if(pokemonCardsViewModel.cardSelectedLiveData.value == null) {
+                pokemonCardsViewModel.cardSelectedLiveData.postValue(1)
+            } else {
+                pokemonCardsViewModel.cardSelectedLiveData.postValue(pokemonCardsViewModel.cardSelectedLiveData.value!! + 1)
+            }
             Picasso.get().load(pokemonCardsViewModel.selectedTrade!!.userCard1!!.pokemonCard.imageUrlHiRes)
                 .placeholder(R.drawable.pokemon_card_back).into(tradeUserCard2ImageView)
         }
@@ -101,6 +119,7 @@ class TradeFragment : BaseFragment() {
             setFragmentTitle("Offer a Trade")
             chooseACardButton.visibility = View.GONE
         }
+        pickYourCardButton.visibility = View.VISIBLE
     }
 
     private fun setUpButtons() {
@@ -153,6 +172,8 @@ class TradeFragment : BaseFragment() {
             setFragmentTitle(if (tradeToggleButton.isChecked) "Find a Trade" else "Offer a Trade")
             validateButton.text = if (tradeToggleButton.isChecked) "Trade" else "Offer"
             pokemonCardsViewModel.userLookingForTrade = tradeToggleButton.isChecked
+            validateButton.isEnabled = !(tradeToggleButton.isChecked && pokemonCardsViewModel.cardSelectedLiveData.value != 2)
+            validateButton.isEnabled = !(!tradeToggleButton.isChecked && pokemonCardsViewModel.cardSelectedLiveData.value != 1)
         }
 
 
