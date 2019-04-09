@@ -73,6 +73,7 @@ class UserCardsFragment : BaseFragment() {
         pokemonCardsViewModel = ViewModelProviders.of(activity!!).get(PokemonCardsViewModel::class.java)
 
         pokemonCardsViewModel.userCardList.clear()
+        pokemonCardsViewModel.userCardListLiveData = MutableLiveData()
         pokemonCardsViewModel.userCardListLiveData.observe(this, Observer {
 
             collectionProgressBar.visibility = View.GONE

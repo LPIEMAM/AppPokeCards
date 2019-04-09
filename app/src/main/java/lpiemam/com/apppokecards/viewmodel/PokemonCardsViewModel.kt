@@ -35,7 +35,6 @@ class PokemonCardsViewModel : ViewModel() {
 
     var userLookingForTrade = false
 
-    var cardSelectedLiveData = MutableLiveData<Int>()
 
     fun initializeData() {
         //fetchUserCardsForName("null")

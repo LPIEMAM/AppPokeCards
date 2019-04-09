@@ -1,14 +1,19 @@
 package lpiemam.com.apppokecards.fragment
 
 import android.app.AlertDialog
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
+import lpiemam.com.apppokecards.R
 import kotlinx.android.synthetic.main.fragment_trade.*
 import lpiemam.com.apppokecards.model.Trade
 import lpiemam.com.apppokecards.model.UserManager
@@ -31,6 +36,7 @@ class TradeFragment : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         arguments?.let {
         }
     }
@@ -46,9 +52,6 @@ class TradeFragment : BaseFragment() {
         setFragmentTitle("Trade")
 
         pokemonCardsViewModel = ViewModelProviders.of(activity!!).get(PokemonCardsViewModel::class.java)
-
-        pokemonCardsViewModel.cardSelectedLiveData = MutableLiveData()
-
         pokemonCardsViewModel.currentTradeForUser.observe(this, Observer {
             loadingGroup.visibility = View.VISIBLE
             tradeProgressBar.visibility = View.GONE
@@ -63,46 +66,22 @@ class TradeFragment : BaseFragment() {
             pokemonCardsViewModel.currentTradeForUser = MutableLiveData()
         })
 
-        pokemonCardsViewModel.cardSelectedLiveData.observe(this, Observer {
-            if(tradeToggleButton.isChecked) {
-                if(it==2) {
-                    validateButton.isEnabled = true
-                    pokemonCardsViewModel.cardSelectedLiveData = MutableLiveData()
-                }
-            } else {
-                if(it==1) {
-                    validateButton.isEnabled = true
-                    pokemonCardsViewModel.cardSelectedLiveData = MutableLiveData()
-                }
-            }
-        })
 
         return inflater.inflate(R.layout.fragment_trade, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        validateButton.isEnabled = false
-        pokemonCardsViewModel.getCurrentTradeForUser(UserManager.loggedUser!!)
 
+        pokemonCardsViewModel.getCurrentTradeForUser(UserManager.loggedUser!!)
         setUpButtons()
 
 
         if (pokemonCardsViewModel.selectedUserCardForTrade != null) {
-            if(pokemonCardsViewModel.cardSelectedLiveData.value == null) {
-                pokemonCardsViewModel.cardSelectedLiveData.postValue(1)
-            } else {
-                pokemonCardsViewModel.cardSelectedLiveData.postValue(pokemonCardsViewModel.cardSelectedLiveData.value!! + 1)
-            }
             Picasso.get().load(pokemonCardsViewModel.selectedUserCardForTrade!!.pokemonCard.imageUrlHiRes)
                 .placeholder(R.drawable.pokemon_card_back).into(tradeUserCard1ImageView)
         }
         if (pokemonCardsViewModel.selectedTrade != null) {
-            if(pokemonCardsViewModel.cardSelectedLiveData.value == null) {
-                pokemonCardsViewModel.cardSelectedLiveData.postValue(1)
-            } else {
-                pokemonCardsViewModel.cardSelectedLiveData.postValue(pokemonCardsViewModel.cardSelectedLiveData.value!! + 1)
-            }
             Picasso.get().load(pokemonCardsViewModel.selectedTrade!!.userCard1!!.pokemonCard.imageUrlHiRes)
                 .placeholder(R.drawable.pokemon_card_back).into(tradeUserCard2ImageView)
         }
@@ -147,6 +126,12 @@ class TradeFragment : BaseFragment() {
                     validateButton.visibility = View.GONE
                     acceptRefuseTradeGroup.visibility = View.GONE
                     tradeToggleButton.isEnabled = false
+                } else {
+                    val snackbar = Snackbar.make(view!!, "You must choose your card first",
+                        Snackbar.LENGTH_LONG)
+                    val snackbarView = snackbar.view
+                    snackbarView.setBackgroundColor(ContextCompat.getColor(context!!, R.color.secondaryColor))
+                    snackbar.show()
                 }
             } else {
                 if (pokemonCardsViewModel.selectedUserCardForTrade != null && pokemonCardsViewModel.selectedTrade != null) {
@@ -163,6 +148,12 @@ class TradeFragment : BaseFragment() {
                     validateButton.visibility = View.GONE
                     acceptRefuseTradeGroup.visibility = View.GONE
                     tradeToggleButton.isEnabled = false
+                } else {
+                    val snackbar = Snackbar.make(view!!, "You must choose your card first",
+                        Snackbar.LENGTH_LONG)
+                    val snackbarView = snackbar.view
+                    snackbarView.setBackgroundColor(ContextCompat.getColor(context!!, R.color.secondaryColor))
+                    snackbar.show()
                 }
             }
         }
@@ -172,8 +163,6 @@ class TradeFragment : BaseFragment() {
             setFragmentTitle(if (tradeToggleButton.isChecked) "Find a Trade" else "Offer a Trade")
             validateButton.text = if (tradeToggleButton.isChecked) "Trade" else "Offer"
             pokemonCardsViewModel.userLookingForTrade = tradeToggleButton.isChecked
-            validateButton.isEnabled = !(tradeToggleButton.isChecked && pokemonCardsViewModel.cardSelectedLiveData.value != 2)
-            validateButton.isEnabled = !(!tradeToggleButton.isChecked && pokemonCardsViewModel.cardSelectedLiveData.value != 1)
         }
 
 

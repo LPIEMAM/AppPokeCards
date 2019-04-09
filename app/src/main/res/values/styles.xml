@@ -15,6 +15,7 @@
         <item name="android:editTextColor">@color/textEditColor</item>
 
         <item name="dialogTheme">@style/Dialog.Fullscreen</item>
+        <item name="snackbarStyle">@style/SnackBarCustom</item>
     </style>
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
@@ -34,5 +35,8 @@
         <item name="android:weekSeparatorLineColor">@color/secondaryColor</item>
     </style>
 
+    <style name="SnackBarCustom" parent="Widget.MaterialComponents.Button.TextButton.Snackbar">
+        <item name="android:color">@color/secondaryColor</item>
+    </style>
 
 </resources>
